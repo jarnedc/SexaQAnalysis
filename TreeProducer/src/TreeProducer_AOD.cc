@@ -109,12 +109,13 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   UInt_t iT=0;
 	for (size_t i = 0; i < trackRef.size(); i++) {
+    if(trackRef[i]->pt()<0.200) continue;
 		_track_purity.push_back(trackRef[i]->highPurity);
 		_track_Nhits.push_back(trackRef[i]->numberOfValidHits());
 		_track_NpixHits.push_back(trackRef[i]->hitPattern().numberOfValidPixelHits());
 		if (trackRef[i]->vz() == 0) _track_fromPV.push_back(1);
-		else _track_fromPV.push_back(0);
-		_track_pt.push_back(trackRef[i]->pt());
+    else _track_fromPV.push_back(0);
+    _track_pt.push_back(trackRef[i]->pt());
 		_track_eta.push_back(trackRef[i]->eta());
 		_track_phi.push_back(trackRef[i]->phi());
 		_track_normalizedChi2.push_back(trackRef[i]->normalizedChi2());
@@ -124,8 +125,8 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		_track_dz.push_back(trackRef[i]->dz());
 		_track_dxy.push_back(trackRef[i]->dxy());
 		_track_d0.push_back(trackRef[i]->d0());
-		iT++ ;
-    if(iT>=nT) break;
+		//iT++ ;
+    //if(iT>=nT) break;
 	}
 
   _nTrack = iT;
@@ -240,51 +241,49 @@ TreeProducer_AOD::beginJob()
   // Vertices
   _tree->Branch("vtx_N",&_vtx_N,"vtx_N/I");
   _tree->Branch("vtx_N_stored",&_vtx_N_stored,"vtx_N_stored/I");
-  _tree->Branch("vtx_normalizedChi2",&_vtx_normalizedChi2,"vtx_normalizedChi2[vtx_N_stored]/D");
-  _tree->Branch("vtx_ndof",&_vtx_ndof,"vtx_ndof[vtx_N_stored]/I");
-  _tree->Branch("vtx_nTracks",&_vtx_nTracks,"vtx_nTracks[vtx_N_stored]/I");
-  _tree->Branch("vtx_d0",&_vtx_d0,"vtx_d0[vtx_N_stored]/D");
-  _tree->Branch("vtx_x",&_vtx_x,"vtx_x[vtx_N_stored]/D");
-  _tree->Branch("vtx_y",&_vtx_y,"vtx_y[vtx_N_stored]/D");
-  _tree->Branch("vtx_z",&_vtx_z,"vtx_z[vtx_N_stored]/D");
+  _tree->Branch("vtx_normalizedChi2",&_vtx_normalizedChi2);
+  _tree->Branch("vtx_ndof",&_vtx_ndof);
+  _tree->Branch("vtx_nTracks",&_vtx_nTracks);
+  _tree->Branch("vtx_d0",&_vtx_d0);
+  _tree->Branch("vtx_x",&_vtx_x);
+  _tree->Branch("vtx_y",&_vtx_y);
+  _tree->Branch("vtx_z",&_vtx_z);
   //
 	// Tracks
 	_tree->Branch("nTrack_stored",&_nTrack_stored,"nTrack_stored/I");
 	_tree->Branch("nTrack",&_nTrack,"nTrack/I");
 
-	_tree->Branch("track_pt",&_track_pt,"track_pt[nTrack_stored]/D");
-	_tree->Branch("track_eta",&_track_eta,"track_eta[nTrack_stored]/D");
-	_tree->Branch("track_phi",&_track_phi,"track_phi[nTrack_stored]/D");
-
-	_tree->Branch("track_normalizedChi2",&_track_normalizedChi2,"track_normalizedChi2[nTrack_stored]/D");
-	_tree->Branch("track_ndof",&_track_ndof,"track_ndof[nTrack_stored]/I");
-	_tree->Branch("track_ptError",&_track_ptError,"track_ptError[nTrack_stored]/D");
-	_tree->Branch("track_dzError",&_track_dzError,"track_dzError[nTrack_stored]/D");
-	_tree->Branch("track_dz",&_track_dz,"track_dz[nTrack_stored]/D");
-	_tree->Branch("track_fromPV",&_track_fromPV,"track_fromPV[nTrack_stored]/I");
-	_tree->Branch("track_purity",&_track_purity,"track_purity[nTrack_stored]/I");
-	_tree->Branch("track_nhits",&_track_Nhits,"track_nhits[nTrack_stored]/I");
-	_tree->Branch("track_nPixHits",&_track_NpixHits,"track_nPixHits[nTrack_stored]/I");
-	_tree->Branch("track_d0",&_track_d0,"track_d0[nTrack_stored]/D");
-	_tree->Branch("track_dxy",&_track_dxy,"track_dxy[nTrack_stored]/D");
+	_tree->Branch("track_pt",&_track_pt);
+	_tree->Branch("track_eta",&_track_eta);
+	_tree->Branch("track_phi",&_track_phi);
+	_tree->Branch("track_normalizedChi2",&_track_normalizedChi2);
+	_tree->Branch("track_ndof",&_track_ndof);
+	_tree->Branch("track_ptError",&_track_ptError);
+	_tree->Branch("track_dzError",&_track_dzError);
+	_tree->Branch("track_dz",&_track_dz);
+	_tree->Branch("track_fromPV",&_track_fromPV);
+	_tree->Branch("track_purity",&_track_purity);
+	_tree->Branch("track_nhits",&_track_Nhits);
+	_tree->Branch("track_nPixHits",&_track_NpixHits);
+	_tree->Branch("track_d0",&_track_d0);
+	_tree->Branch("track_dxy",&_track_dxy);
 
   // GenJets
   _tree->Branch("nGenJet_stored",&_nGenJet_stored,"nGenJet_stored/I");
   _tree->Branch("nGenJet",&_nGenJet,"nGenJet/I");
   //
-  _tree->Branch("genjetArea",&_genjet_area,"genjetArea[nGenJet_stored]/D");
+  _tree->Branch("genjetArea",&_genjet_area);
+  _tree->Branch("genjet_vx",&_genjet_vx);
+  _tree->Branch("genjet_vy",&_genjet_vy);
+  _tree->Branch("genjet_vz",&_genjet_vz);
   //
-  _tree->Branch("genjet_vx",&_genjet_vx,"genjet_vx[nGenJet_stored]/D");
-  _tree->Branch("genjet_vy",&_genjet_vy,"genjet_vy[nGenJet_stored]/D");
-  _tree->Branch("genjet_vz",&_genjet_vz,"genjet_vz[nGenJet_stored]/D");
+  _tree->Branch("genjet_eta",&_genjet_eta);
+  _tree->Branch("genjet_phi",&_genjet_phi);
+  _tree->Branch("genjet_pt",&_genjet_pt);
+  _tree->Branch("genjet_e",&_genjet_e);
+  _tree->Branch("genjet_m",&_genjet_m);
   //
-  _tree->Branch("genjet_eta",&_genjet_eta,"genjet_eta[nGenJet_stored]/D");
-  _tree->Branch("genjet_phi",&_genjet_phi,"genjet_phi[nGenJet_stored]/D");
-  _tree->Branch("genjet_pt",&_genjet_pt,"genjet_pt[nGenJet_stored]/D");
-  _tree->Branch("genjet_e",&_genjet_e,"genjet_e[nGenJet_stored]/D");
-  _tree->Branch("genjet_m",&_genjet_m,"genjet_m[nGenJet_stored]/D");
-  //
-  _tree->Branch("genjet_efrac_ch", &_genjet_efrac_ch, "genjet_efrac_ch[nGenJet_stored]/D");
+  _tree->Branch("genjet_efrac_ch", &_genjet_efrac_ch);
 
   //Trigger
   _tree->Branch("HLT_DiCentralPFJet170_CFMax0p1", &_dijet_170_0p1);
