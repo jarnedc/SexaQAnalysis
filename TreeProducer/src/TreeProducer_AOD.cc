@@ -5,27 +5,21 @@
 //
 TreeProducer_AOD::TreeProducer_AOD(const edm::ParameterSet& pset):
   _trigResultsTag(pset.getParameter<edm::InputTag>("triggerResults")),
-  _genjetCollectionTag(pset.getParameter<edm::InputTag>("genjetCollection")),
   _vertexCollectionTag(pset.getParameter<edm::InputTag>("vertexCollection")),
   _trackCollectionTag(pset.getParameter<edm::InputTag>("trackCollection")),
   _trigResultsToken(consumes<edm::TriggerResults>(_trigResultsTag)),
-  _genjetCollectionToken(consumes<vector<reco::GenJet> >(_genjetCollectionTag)),
   _vertexCollectionToken(consumes<vector<reco::Vertex> >(_vertexCollectionTag)),
   _trackCollectionToken(consumes<vector<reco::Track> >(_trackCollectionTag)),
   _isData(pset.getUntrackedParameter<bool>("isData")),
   hltPrescale_(pset, consumesCollector(), *this)
 {
  triggerNames_ = pset.getParameter<std::vector<std::string> > ("triggerName");
-
-
 }
 
 
 TreeProducer_AOD::~TreeProducer_AOD()
 {
-
 }
-
 
 //
 // member functions
@@ -46,9 +40,6 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   edm::Handle<vector<reco::Vertex> > H_vert;
   iEvent.getByToken(_vertexCollectionToken, H_vert);
-
-  edm::Handle<vector<reco::GenJet> > H_genjets;
-  iEvent.getByToken(_genjetCollectionToken , H_genjets);
 
   edm::Handle<vector<reco::Track> > H_track;
   iEvent.getByToken(_trackCollectionToken , H_track);
@@ -77,7 +68,6 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   // VERTICES //
   UInt_t vtx_counter=0;
   _vtx_N = H_vert->size();
-  _vtx_N_stored = nV;
 
   // select the primary vertex as the one with higest sum of (pt)^2 of tracks
   PrimaryVertexSorter PVSorter;
@@ -94,8 +84,10 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     _vtx_z.push_back(PV->z());
 
     vtx_counter++;
-    if(vtx_counter >= nV) break;
+    //if(vtx_counter >= nV) break;
   } // for loop on primary vertices
+  _vtx_N_stored = vtx_counter;
+
 
   // TRACKS //
 	vector<reco::TrackRef> trackRef;
@@ -125,68 +117,19 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 		_track_dz.push_back(trackRef[i]->dz());
 		_track_dxy.push_back(trackRef[i]->dxy());
 		_track_d0.push_back(trackRef[i]->d0());
-		//iT++ ;
+		iT++ ;
     //if(iT>=nT) break;
 	}
 
   _nTrack = iT;
   _nTrack_stored = nT;
 
-  UInt_t iGJ=0;
-  //
-	if(!_isData){
-    for (vector<reco::GenJet>::const_iterator theGenJet = H_genjets->begin(); theGenJet != H_genjets->end(); ++theGenJet){
-      if (theGenJet->pt() > 20){
-        //Area
-        _genjet_area.push_back(theGenJet->jetArea());
+//
+//	if(!_isData){
+//  }
 
-        // Vertex
-        _genjet_vx.push_back(theGenJet->vx());
-        _genjet_vy.push_back(theGenJet->vy());
-        _genjet_vz.push_back(theGenJet->vz());
-
-        // Kinematics
-        _genjet_pt.push_back(theGenJet->pt());
-        _genjet_eta.push_back(theGenJet->eta());
-        _genjet_phi.push_back(theGenJet->phi());
-        _genjet_e.push_back(theGenJet->energy());
-        _genjet_m.push_back(theGenJet->mass());
-
-        // Energy fractions
-        double efrac = 0;
-        for (size_t i = 0; i < theGenJet->numberOfDaughters(); i++){
-          const reco::Candidate * constituent = theGenJet->daughter(i);
-          if (constituent->charge() != 0) efrac += constituent->energy()/theGenJet->energy();
-        }
-        _genjet_efrac_ch.push_back(efrac);
-        iGJ++ ;
-      }
-      if(iGJ>=nGJ) break;
-    }
-    _nGenJet = iGJ;
-    _nGenJet_stored = nGJ;
-  }
-
-  //TRIGGER//
-  if (triggerPathsMap[triggerPathsVector[0]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[0]])) _dijet_170_0p1 = 1;
-  if (triggerPathsMap[triggerPathsVector[1]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[1]])) _dijet_220_0p3 = 1;
-  if (triggerPathsMap[triggerPathsVector[2]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[2]])) _dijet_330_0p5 = 1;
-  if (triggerPathsMap[triggerPathsVector[3]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[3]])) _dijet_430 = 1;
-  if (triggerPathsMap[triggerPathsVector[4]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[4]])) _dijet_170 = 1;
-  if (triggerPathsMap[triggerPathsVector[5]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[5]])) _singlejet_170_0p1 = 1;
-  if (triggerPathsMap[triggerPathsVector[6]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[6]])) _singlejet_450 = 1;
-  if (triggerPathsMap[triggerPathsVector[7]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[7]])) _singlejet_500 = 1;
-  if (triggerPathsMap[triggerPathsVector[8]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[8]])) _isomu24 = 1;
-  if (triggerPathsMap[triggerPathsVector[9]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[9]])) _isomu27 = 1;
-
-  //prescales
-//   const edm::TriggerNames &trignames = iEvent.triggerNames(*H_trig);
-// 	for (size_t i = 0; i < H_trig->size(); i++) {
-// 			if (trignames.triggerName(i).find("HLT_DiCentralPFJet170_v") != string::npos) _pswgt_dijet_170 = H_prescale->getPrescaleForIndex(i);
-// 			if (trignames.triggerName(i).find("HLT_SingleCentralPFJet170_CFMax0p1_v") != string::npos) _pswgt_singlejet_170_0p1 = H_prescale->getPrescaleForIndex(i);
-// 	}
-
-
+//TRIGGER//
+if (triggerPathsMap[triggerPathsVector[0]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[0]])) _singlejet_450 = 1;
 // sanity check
 assert(H_trig->size() == hltConfig_.size());
 //------ loop over all trigger names ---------
@@ -212,12 +155,10 @@ for(unsigned itrig=0;itrig<triggerNames_.size() ;itrig++) {
     preL1 = minind < l1prescalevals.size() ? l1prescalevals.at(minind) : -1 ;//commented for 76X
 
     //prescales
-    if(triggerNames_[itrig].find("HLT_DiCentralPFJet170_v") != std::string::npos)   _pswgt_dijet_170 = preL1 * preHLT;
-    if(triggerNames_[itrig].find("HLT_SingleCentralPFJet170_CFMax0p1_v") != std::string::npos)   _pswgt_singlejet_170_0p1 = preL1 * preHLT;
+    if(triggerNames_[itrig].find("HLT_PFJet450_v") != std::string::npos)   _pswgt_singlejet_450 = preL1 * preHLT;
 
+   }
   }
-  }
-
   _tree->Fill();
 }
 
@@ -231,8 +172,6 @@ TreeProducer_AOD::beginJob()
   _tree = fs->make <TTree>("SimpAnalysis","tree");
 
   // Declare tree's branches
-  //_tree->Branch("",&,"");
-  //
   // Event
   _tree->Branch("nEvent",&_nEvent,"nEvent/I");
   _tree->Branch("nRun",&_nRun,"nRun/I");
@@ -252,7 +191,6 @@ TreeProducer_AOD::beginJob()
 	// Tracks
 	_tree->Branch("nTrack_stored",&_nTrack_stored,"nTrack_stored/I");
 	_tree->Branch("nTrack",&_nTrack,"nTrack/I");
-
 	_tree->Branch("track_pt",&_track_pt);
 	_tree->Branch("track_eta",&_track_eta);
 	_tree->Branch("track_phi",&_track_phi);
@@ -268,46 +206,12 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("track_d0",&_track_d0);
 	_tree->Branch("track_dxy",&_track_dxy);
 
-  // GenJets
-  _tree->Branch("nGenJet_stored",&_nGenJet_stored,"nGenJet_stored/I");
-  _tree->Branch("nGenJet",&_nGenJet,"nGenJet/I");
-  //
-  _tree->Branch("genjetArea",&_genjet_area);
-  _tree->Branch("genjet_vx",&_genjet_vx);
-  _tree->Branch("genjet_vy",&_genjet_vy);
-  _tree->Branch("genjet_vz",&_genjet_vz);
-  //
-  _tree->Branch("genjet_eta",&_genjet_eta);
-  _tree->Branch("genjet_phi",&_genjet_phi);
-  _tree->Branch("genjet_pt",&_genjet_pt);
-  _tree->Branch("genjet_e",&_genjet_e);
-  _tree->Branch("genjet_m",&_genjet_m);
-  //
-  _tree->Branch("genjet_efrac_ch", &_genjet_efrac_ch);
 
   //Trigger
-  _tree->Branch("HLT_DiCentralPFJet170_CFMax0p1", &_dijet_170_0p1);
-  _tree->Branch("HLT_DiCentralPFJet220_CFMax0p3", &_dijet_220_0p3);
-  _tree->Branch("HLT_DiCentralPFJet330_CFMax0p5", &_dijet_330_0p5);
-  _tree->Branch("HLT_DiCentralPFJet430", &_dijet_430);
-  _tree->Branch("HLT_DiCentralPFJet170", &_dijet_170);
-  _tree->Branch("HLT_SingleCentralPFJet170_CFMax0p1", &_singlejet_170_0p1);
-  _tree->Branch("HLT_PFJet500", &_singlejet_500);
   _tree->Branch("HLT_PFJet450", &_singlejet_450);
-  _tree->Branch("HLT_IsoMu24", &_isomu24);
-  _tree->Branch("HLT_IsoMu27", &_isomu27);
-
   //prescales
-  _tree->Branch("pswgt_dijet_170", &_pswgt_dijet_170, "pswgt_dijet_170/D");
-  _tree->Branch("pswgt_singlejet_170_0p1", &_pswgt_singlejet_170_0p1, "pswgt_singlejet_170_0p1/D");
+  _tree->Branch("pswgt_singlejet_450", &_pswgt_singlejet_450, "pswgt_singlejet_450/D");
 
-  //MET filters
-  _tree->Branch("Flag_HBHENoiseFilter", &_HBHENoiseFlag);
-  _tree->Branch("Flag_HBHENoiseIsoFilter", &_HBHENoiseIsoFlag);
-  _tree->Branch("Flag_EcalDeadCellTriggerPrimitiveFilter", &_ECALFlag);
-  _tree->Branch("Flag_goodVertices", &_vertexFlag);
-  _tree->Branch("Flag_eeBadScFilter", &_eeFlag);
-  _tree->Branch("Flag_globalTightHalo2016Filter", &_beamhaloFlag);
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -320,18 +224,7 @@ TreeProducer_AOD::endJob()
 void
 TreeProducer_AOD::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup)
 {
-
-
-  triggerPathsVector.push_back("HLT_DiCentralPFJet170_CFMax0p1_v");
-  triggerPathsVector.push_back("HLT_DiCentralPFJet220_CFMax0p3_v");
-  triggerPathsVector.push_back("HLT_DiCentralPFJet330_CFMax0p5_v");
-  triggerPathsVector.push_back("HLT_DiCentralPFJet430_v");
-  triggerPathsVector.push_back("HLT_DiCentralPFJet170_v");
-  triggerPathsVector.push_back("HLT_SingleCentralPFJet170_CFMax0p1_v");
   triggerPathsVector.push_back("HLT_PFJet450_v");
-  triggerPathsVector.push_back("HLT_PFJet500_v");
-  triggerPathsVector.push_back("HLT_IsoMu24_v");
-  triggerPathsVector.push_back("HLT_IsoMu27_v");
 
   bool changedConfig = false;
   hltConfig_.init(iRun, iSetup, _trigResultsTag.process(), changedConfig);
@@ -413,77 +306,38 @@ TreeProducer_AOD::Init()
   _nEvent = _nRun = _nLumi = 0;
 
   //Trigger
-  _dijet_170_0p1 = 0;
-  _dijet_220_0p3 = 0;
-  _dijet_330_0p5 = 0;
-  _dijet_430 = 0;
-  _dijet_170 = 0;
-  _singlejet_170_0p1 = 0;
   _singlejet_450 = 0;
-  _singlejet_500 = 0;
-  _isomu24 = 0;
-  _isomu27 = 0;
   //prescales
-  _pswgt_dijet_170 = 1;
-  _pswgt_singlejet_170_0p1 = 1;
-
-  //MET filters
-  _HBHENoiseFlag = 0;
-  _HBHENoiseIsoFlag = 0;
-  _ECALFlag = 0;
-  _vertexFlag = 0;
-  _eeFlag = 0;
-  _beamhaloFlag = 0;
-
+  _pswgt_singlejet_450 = 1;
 
   // Vertices
   _vtx_N = 0;
   _vtx_N_stored = 0;
-  //for(UInt_t iv=0;iv<nV;iv++) {
-    _vtx_normalizedChi2.clear();
-    _vtx_ndof.clear();
-    _vtx_nTracks.clear();
-    _vtx_d0.clear();
-    _vtx_x.clear();
-    _vtx_y.clear();
-    _vtx_z.clear();
-      //}
+  _vtx_normalizedChi2.clear();
+  _vtx_ndof.clear();
+  _vtx_nTracks.clear();
+  _vtx_d0.clear();
+  _vtx_x.clear();
+  _vtx_y.clear();
+  _vtx_z.clear();
 
   //Tracks
   _nTrack = 0;
 	_nTrack_stored = 0;
-  //for(UInt_t it=0;it<nT;it++) {
-		_track_eta.clear();
-		_track_fromPV.clear();
-		_track_ndof.clear();
-		_track_Nhits.clear();
-		_track_normalizedChi2.clear();
-		_track_NpixHits.clear();
-		_track_phi.clear();
-		_track_pt.clear();
-		_track_ptError.clear();
-		_track_dzError.clear();
-		_track_dz.clear();
-		_track_d0.clear();
-		_track_dxy.clear();
-		_track_purity.clear();
-	//}
-
-  //GenJets
-  _nGenJet = 0;
-	_nGenJet_stored = 0;
-  //for(UInt_t i=0 ; i<nGJ ; i++) {
-    _genjet_vx.clear();
-    _genjet_vy.clear();
-    _genjet_vz.clear();
-    _genjet_area.clear();
-    _genjet_eta.clear();
-    _genjet_phi.clear();
-    _genjet_pt.clear();
-    _genjet_e.clear();
-    _genjet_m.clear();
-    _genjet_efrac_ch.clear();
-	//}
+  _track_eta.clear();
+  _track_fromPV.clear();
+  _track_ndof.clear();
+  _track_Nhits.clear();
+  _track_normalizedChi2.clear();
+  _track_NpixHits.clear();
+  _track_phi.clear();
+  _track_pt.clear();
+  _track_ptError.clear();
+  _track_dzError.clear();
+  _track_dz.clear();
+  _track_d0.clear();
+  _track_dxy.clear();
+  _track_purity.clear();
 
 }
 
