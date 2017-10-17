@@ -66,8 +66,6 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   _nEvent = iEvent.id().event();
 
   // VERTICES //
-  UInt_t vtx_counter=0;
-  _vtx_N = H_vert->size();
 
   // select the primary vertex as the one with higest sum of (pt)^2 of tracks
   PrimaryVertexSorter PVSorter;
@@ -76,53 +74,51 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   for( std::vector<reco::Vertex>::const_iterator PV = sortedVertices.begin(); PV != sortedVertices.end(); ++PV){
     _vtx_normalizedChi2.push_back(PV->normalizedChi2());
     _vtx_ndof.push_back(PV->ndof());
-    _vtx_nTracks.push_back(PV->tracksSize());
-//     _vtx_nTracks.push_back(PV->nTracks());
+    _vtx_nTracks.push_back(PV->nTracks());
+    _vtx_tracksSize.push_back(PV->tracksSize());
     _vtx_d0.push_back(PV->position().Rho());
     _vtx_x.push_back(PV->x());
     _vtx_y.push_back(PV->y());
     _vtx_z.push_back(PV->z());
-
-    vtx_counter++;
-    //if(vtx_counter >= nV) break;
+    _vtx_isValid.push_back(PV->isValid());
+    _vtx_isFake.push_back(PV->isFake());
+    _vtx_covariance.push_back(PV->covariance());
   } // for loop on primary vertices
-  _vtx_N_stored = vtx_counter;
+  _vtx_N = H_vert->size();
 
 
   // TRACKS //
-	vector<reco::TrackRef> trackRef;
-	for (vector<reco::Track>::const_iterator theTrack = H_track->begin(); theTrack != H_track->end(); ++theTrack){
-		reco::TrackRef ref(H_track, theTrack - H_track->begin());
-			trackRef.push_back(ref);
-	}
+    vector<reco::TrackRef> trackRef;
+    for (vector<reco::Track>::const_iterator theTrack = H_track->begin(); theTrack != H_track->end(); ++theTrack){
+            reco::TrackRef ref(H_track, theTrack - H_track->begin());
+                    trackRef.push_back(ref);
+    }
 
-	reco::RecoPtSorter<reco::TrackRef> trackSorter;
-	std::sort( trackRef.begin(), trackRef.end(), trackSorter);
+    reco::RecoPtSorter<reco::TrackRef> trackSorter;
+    std::sort( trackRef.begin(), trackRef.end(), trackSorter);
 
-  UInt_t iT=0;
-	for (size_t i = 0; i < trackRef.size(); i++) {
-    if(trackRef[i]->pt()<0.200) continue;
-		_track_purity.push_back(trackRef[i]->highPurity);
-		_track_Nhits.push_back(trackRef[i]->numberOfValidHits());
-		_track_NpixHits.push_back(trackRef[i]->hitPattern().numberOfValidPixelHits());
-		if (trackRef[i]->vz() == 0) _track_fromPV.push_back(1);
-    else _track_fromPV.push_back(0);
-    _track_pt.push_back(trackRef[i]->pt());
-		_track_eta.push_back(trackRef[i]->eta());
-		_track_phi.push_back(trackRef[i]->phi());
-		_track_normalizedChi2.push_back(trackRef[i]->normalizedChi2());
-		_track_ndof.push_back(trackRef[i]->ndof());
-		_track_ptError.push_back(trackRef[i]->ptError());
-		_track_dzError.push_back(trackRef[i]->dzError());
-		_track_dz.push_back(trackRef[i]->dz());
-		_track_dxy.push_back(trackRef[i]->dxy());
-		_track_d0.push_back(trackRef[i]->d0());
-		iT++ ;
-    //if(iT>=nT) break;
-	}
-
-  _nTrack = iT;
-  _nTrack_stored = nT;
+    for (size_t i = 0; i < trackRef.size(); i++) {
+            _track_purity.push_back(trackRef[i]->highPurity);
+            _track_Nhits.push_back(trackRef[i]->numberOfValidHits());
+            _track_NpixHits.push_back(trackRef[i]->hitPattern().numberOfValidPixelHits());
+            if (trackRef[i]->vz() == 0) _track_fromPV.push_back(1);
+            else _track_fromPV.push_back(0);
+            _track_pt.push_back(trackRef[i]->pt());
+            _track_px.push_back(trackRef[i]->px());
+            _track_py.push_back(trackRef[i]->py());
+            _track_pz.push_back(trackRef[i]->pz());
+            _track_eta.push_back(trackRef[i]->eta());
+            _track_phi.push_back(trackRef[i]->phi());
+            _track_normalizedChi2.push_back(trackRef[i]->normalizedChi2());
+            _track_ndof.push_back(trackRef[i]->ndof());
+            _track_ptError.push_back(trackRef[i]->ptError());
+            _track_dzError.push_back(trackRef[i]->dzError());
+            _track_dz.push_back(trackRef[i]->dz());
+            _track_dxy.push_back(trackRef[i]->dxy());
+            _track_d0.push_back(trackRef[i]->d0());
+            _track_covariance.push_back(trackRef[i]->covariance());
+    }
+    _nTrack = trackRef.size();
 
 //
 //	if(!_isData){
@@ -169,7 +165,7 @@ TreeProducer_AOD::beginJob()
 {
   // Initialize when class is created
   edm::Service<TFileService> fs ;
-  _tree = fs->make <TTree>("SimpAnalysis","tree");
+  _tree = fs->make <TTree>("HexaQAnalysis","tree");
 
   // Declare tree's branches
   // Event
@@ -187,12 +183,18 @@ TreeProducer_AOD::beginJob()
   _tree->Branch("vtx_x",&_vtx_x);
   _tree->Branch("vtx_y",&_vtx_y);
   _tree->Branch("vtx_z",&_vtx_z);
+  _tree->Branch("vtx_covariance",&_vtx_covariance);
+  _tree->Branch("vtx_isFake",&_vtx_isFake);
+  _tree->Branch("vtx_isValid",&_vtx_isValid);
   //
 	// Tracks
 	_tree->Branch("nTrack_stored",&_nTrack_stored,"nTrack_stored/I");
 	_tree->Branch("nTrack",&_nTrack,"nTrack/I");
 	_tree->Branch("track_pt",&_track_pt);
-	_tree->Branch("track_eta",&_track_eta);
+	_tree->Branch("track_px",&_track_px);
+	_tree->Branch("track_py",&_track_py);
+	_tree->Branch("track_pz",&_track_pz);
+    _tree->Branch("track_eta",&_track_eta);
 	_tree->Branch("track_phi",&_track_phi);
 	_tree->Branch("track_normalizedChi2",&_track_normalizedChi2);
 	_tree->Branch("track_ndof",&_track_ndof);
@@ -205,8 +207,8 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("track_nPixHits",&_track_NpixHits);
 	_tree->Branch("track_d0",&_track_d0);
 	_tree->Branch("track_dxy",&_track_dxy);
-
-
+	_tree->Branch("track_covariance",&_track_covariance);
+    
   //Trigger
   _tree->Branch("HLT_PFJet450", &_singlejet_450);
   //prescales
@@ -320,10 +322,14 @@ TreeProducer_AOD::Init()
   _vtx_x.clear();
   _vtx_y.clear();
   _vtx_z.clear();
+  _vtx_covariance.clear();
+  _vtx_isFake.clear();
+  _vtx_isValid.clear();
+
 
   //Tracks
   _nTrack = 0;
-	_nTrack_stored = 0;
+  _nTrack_stored = 0;
   _track_eta.clear();
   _track_fromPV.clear();
   _track_ndof.clear();
@@ -332,10 +338,14 @@ TreeProducer_AOD::Init()
   _track_NpixHits.clear();
   _track_phi.clear();
   _track_pt.clear();
+  _track_px.clear();
+  _track_py.clear();
+  _track_pz.clear();  
   _track_ptError.clear();
   _track_dzError.clear();
   _track_dz.clear();
   _track_d0.clear();
+  _track_covariance.clear();
   _track_dxy.clear();
   _track_purity.clear();
 

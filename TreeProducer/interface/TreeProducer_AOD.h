@@ -1,18 +1,15 @@
 // -*- C++ -*-
-//
 // Package:    TreeProducer_AOD
 // Class:      TreeProducer_AOD
 ///**\class TreeProducer_AOD TreeProducer_AOD.cc HexaAnalysis/TreeProducer/src/TreeProducer_AOD.cc
-/*
- Description: EDAnalyzer produce flat trees from AOD for HexaAnalysis
-
-*/
+// Description: EDAnalyzer produce flat trees from AOD for HexaAnalysis
 
 // C++ lib
 #include <vector>
 
 // ROOT
 #include "TTree.h"
+#include "TMatrixD.h"
 //#include "TLorentzVector.h"
 #include "TPRegexp.h"
 
@@ -35,20 +32,17 @@
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
 #include "DataFormats/TrackReco/interface/Track.h"
+#include "DataFormats/TrackReco/interface/TrackBase.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
 #include "DataFormats/Common/interface/TriggerResults.h"
 #include "DataFormats/L1Trigger/interface/L1EtMissParticle.h"
-
 #include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
 #include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
-
 #include "DataFormats/Math/interface/deltaR.h"
 
 // others
 using namespace std;
 int verbose=1;
-const UInt_t nV=3; // #vertices
-const UInt_t nT=10; // #tracks
 
 //
 // class declaration
@@ -101,12 +95,16 @@ class TreeProducer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources,e
   // Vertices
   int _vtx_N, _vtx_N_stored;
   std::vector<int> _vtx_ndof, _vtx_nTracks;
+  std::vector<int> _vtx_tracksSize;
+  std::vector<bool> _vtx_isValid, _vtx_isFake;
   std::vector<double> _vtx_x, _vtx_y, _vtx_z;
   std::vector<double> _vtx_normalizedChi2, _vtx_d0;
+  std::vector<reco::Vertex::CovarianceMatrix> _vtx_covariance;
 
 	//Tracks
 	std::vector<int> _track_fromPV, _track_Nhits, _track_NpixHits, _track_purity, _track_ndof;
-	std::vector<double> _track_eta, _track_pt, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
+	std::vector<double> _track_eta, _track_pt, _track_px, _track_py, _track_pz, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
+  std::vector<reco::TrackBase::CovarianceMatrix> _track_covariance;
 
   //Trigger
   std::vector<std::string> triggerPathsVector;

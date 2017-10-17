@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("SIMPTREE")
+process = cms.Process("HEXAQTREE")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
