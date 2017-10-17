@@ -39,6 +39,7 @@
 #include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
 #include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
 #include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 
 // others
 using namespace std;
@@ -77,6 +78,7 @@ class TreeProducer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources,e
   edm::EDGetTokenT<vector<reco::Vertex> > _vertexCollectionToken;
   edm::EDGetTokenT<vector<reco::Track> > _trackCollectionToken;
   bool _isData;
+  edm::EDGetToken  m_partons;
 
   HLTConfigProvider hltConfig_;
   HLTPrescaleProvider hltPrescale_;
@@ -106,16 +108,24 @@ class TreeProducer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources,e
 	std::vector<double> _track_eta, _track_pt, _track_px, _track_py, _track_pz, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
   std::vector<reco::TrackBase::CovarianceMatrix> _track_covariance;
 
+
+  //GenParticles
+  std::vector<double> _genp_px;
+  std::vector<double> _genp_py;
+  std::vector<double> _genp_pz;
+  std::vector<double> _genp_p;
+  std::vector<double> _genp_eta;
+  std::vector<double> _genp_phi;
+  std::vector<double> _genp_mass;
+  std::vector<double> _genp_energy;
+
+
   //Trigger
   std::vector<std::string> triggerPathsVector;
   std::map<std::string, int> triggerPathsMap;
   int _singlejet_450;
   //prescales
   double  _pswgt_singlejet_450;
-
-  //MET filters
-  std::vector<std::string>   filterPathsVector;
-  std::map<std::string, int> filterPathsMap;
 };
 
 namespace reco {

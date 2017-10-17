@@ -11,9 +11,11 @@ TreeProducer_AOD::TreeProducer_AOD(const edm::ParameterSet& pset):
   _vertexCollectionToken(consumes<vector<reco::Vertex> >(_vertexCollectionTag)),
   _trackCollectionToken(consumes<vector<reco::Track> >(_trackCollectionTag)),
   _isData(pset.getUntrackedParameter<bool>("isData")),
+  m_partons(consumes<vector<reco::GenParticle> >(pset.getParameter<edm::InputTag>("Partons_Source"))),
   hltPrescale_(pset, consumesCollector(), *this)
 {
  triggerNames_ = pset.getParameter<std::vector<std::string> > ("triggerName");
+ 
 }
 
 
@@ -43,6 +45,10 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   edm::Handle<vector<reco::Track> > H_track;
   iEvent.getByToken(_trackCollectionToken , H_track);
+
+  edm::Handle<vector<reco::GenParticle> > H_partons;
+  iEvent.getByToken(m_partons, H_partons);
+
 
   // Check validity
   if(!H_trig.isValid()) {
@@ -120,9 +126,25 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     }
     _nTrack = trackRef.size();
 
-//
-//	if(!_isData){
-//  }
+
+    if(!_isData){
+
+        for (vector<reco::GenParticle>::const_iterator thepartons = H_partons->begin();
+        thepartons != H_partons->end(); ++thepartons){
+
+        //   if(thepartons->fromHardProcessFinalState()){
+            _genp_px.push_back(thepartons->px());
+            _genp_py.push_back(thepartons->py());
+            _genp_pz.push_back(thepartons->pz());
+            _genp_p.push_back(thepartons->p());
+            _genp_eta.push_back(thepartons->eta());
+            _genp_phi.push_back(thepartons->phi());
+            _genp_mass.push_back(thepartons->mass());
+            _genp_energy.push_back(thepartons->energy());
+
+          // }//if HardProcess
+        }///for partons
+    }
 
 //TRIGGER//
 if (triggerPathsMap[triggerPathsVector[0]] != -1 && H_trig->accept(triggerPathsMap[triggerPathsVector[0]])) _singlejet_450 = 1;
@@ -208,8 +230,18 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("track_d0",&_track_d0);
 	_tree->Branch("track_dxy",&_track_dxy);
 	_tree->Branch("track_covariance",&_track_covariance);
-    
-  //Trigger
+
+    ///GenParticles
+	_tree->Branch("gen_px",&_genp_px);
+	_tree->Branch("gen_py",&_genp_py);
+	_tree->Branch("gen_pz",&_genp_pz);
+	_tree->Branch("gen_p",&_genp_p);
+	_tree->Branch("gen_eta",&_genp_eta);
+	_tree->Branch("gen_phi",&_genp_phi);
+	_tree->Branch("gen_mass",&_genp_mass);
+    _tree->Branch("gen_energy",&_genp_energy);
+
+    //Trigger
   _tree->Branch("HLT_PFJet450", &_singlejet_450);
   //prescales
   _tree->Branch("pswgt_singlejet_450", &_pswgt_singlejet_450, "pswgt_singlejet_450/D");
@@ -255,21 +287,19 @@ TreeProducer_AOD::beginRun(edm::Run const& iRun, edm::EventSetup const& iSetup)
       const unsigned int n(hltConfig_.size());
       for(unsigned itrig=0;itrig<triggerNames_.size();itrig++) {
         triggerIndex_.push_back(hltConfig_.triggerIndex(triggerNames_[itrig]));
-        cout<<triggerNames_[itrig]<<" "<<triggerIndex_[itrig]<<" ";
+        //cout<<triggerNames_[itrig]<<" "<<triggerIndex_[itrig]<<" ";
         if (triggerIndex_[itrig] >= n)
           cout<<"does not exist in the current menu"<<endl;
         else
           cout<<"exists"<<endl;
       }
       cout << "Available TriggerNames are: " << endl;
-      if (true)
-        hltConfig_.dump("Triggers");
+      //if (true)
+      //  hltConfig_.dump("Triggers");
     }
   }
   else {
-    cout << "ProcessedTreeProducerBTag::analyze:"
-         << " config extraction failure with process name "
-         << "HLT" << endl;
+    cout << "TreeProducer_AOD::analyze: config extraction failure with process name HLT" << endl;
 }
 
 }
@@ -348,6 +378,17 @@ TreeProducer_AOD::Init()
   _track_covariance.clear();
   _track_dxy.clear();
   _track_purity.clear();
+
+  //GenParticles
+  _genp_px.clear();
+  _genp_py.clear();
+  _genp_pz.clear();
+  _genp_p.clear();
+  _genp_eta.clear();
+  _genp_phi.clear();
+  _genp_mass.clear();
+  _genp_energy.clear();
+
 
 }
 

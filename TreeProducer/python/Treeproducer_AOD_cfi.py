@@ -9,5 +9,6 @@ tree = cms.EDAnalyzer(
     vertexCollection = cms.InputTag("offlinePrimaryVertices"),
     trackCollection    = cms.InputTag("generalTracks", "", "RECO"),
     isData = cms.untracked.bool(True),
-    triggerName = cms.vstring('HLT_DiCentralPFJet170_v1')
+    triggerName = cms.vstring('HLT_DiCentralPFJet170_v1'),
+    Partons_Source =  cms.InputTag("genParticles","","HLT"),
 )
