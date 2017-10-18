@@ -21,7 +21,9 @@ process.source = cms.Source("PoolSource",
 
 # Tree producer
 process.load("HexaAnalysis.TreeProducer.Treeproducer_AOD_cfi")
+process.tree.isData = cms.untracked.bool(False)
 process.p = cms.Path(process.tree)
+
 
 # Output
 process.TFileService = cms.Service('TFileService',
