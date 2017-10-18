@@ -101,24 +101,25 @@ class TreeProducer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources,e
   std::vector<bool> _vtx_isValid, _vtx_isFake;
   std::vector<double> _vtx_x, _vtx_y, _vtx_z;
   std::vector<double> _vtx_normalizedChi2, _vtx_d0;
-  std::vector<reco::Vertex::CovarianceMatrix> _vtx_covariance;
+  std::vector< std::vector<double> > _vtx_covariance;
 
 	//Tracks
 	std::vector<int> _track_fromPV, _track_Nhits, _track_NpixHits, _track_purity, _track_ndof;
 	std::vector<double> _track_eta, _track_pt, _track_px, _track_py, _track_pz, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
-  std::vector<reco::TrackBase::CovarianceMatrix> _track_covariance;
-
+  std::vector< std::vector<double> > _track_covariance;
+  std::vector<int> _track_charge;
 
   //GenParticles
   std::vector<double> _genp_px;
   std::vector<double> _genp_py;
   std::vector<double> _genp_pz;
+  std::vector<double> _genp_pt;
   std::vector<double> _genp_p;
   std::vector<double> _genp_eta;
   std::vector<double> _genp_phi;
   std::vector<double> _genp_mass;
   std::vector<double> _genp_energy;
-
+  std::vector<int> _genp_charge;
 
   //Trigger
   std::vector<std::string> triggerPathsVector;

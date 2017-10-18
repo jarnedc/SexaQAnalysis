@@ -88,7 +88,15 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     _vtx_z.push_back(PV->z());
     _vtx_isValid.push_back(PV->isValid());
     _vtx_isFake.push_back(PV->isFake());
-    _vtx_covariance.push_back(PV->covariance());
+
+    std::vector<double> cov;
+    for(int i=0; i<3; i++){
+      for(int j=0; j<3; j++){
+        cov.push_back(PV->covariance(i,j));
+      }
+    }
+    _vtx_covariance.push_back(cov);
+
   } // for loop on primary vertices
   _vtx_N = H_vert->size();
 
@@ -122,7 +130,16 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             _track_dz.push_back(trackRef[i]->dz());
             _track_dxy.push_back(trackRef[i]->dxy());
             _track_d0.push_back(trackRef[i]->d0());
-            _track_covariance.push_back(trackRef[i]->covariance());
+            _track_charge.push_back(trackRef[i]->charge());
+
+            std::vector<double> cov;
+            for(int k=0; k<4; k++){
+              for(int j=0; j<4; j++){
+                cov.push_back(trackRef[i]->covariance(k,j));
+              }
+            }
+            _track_covariance.push_back(cov);
+
     }
     _nTrack = trackRef.size();
 
@@ -137,10 +154,12 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             _genp_py.push_back(thepartons->py());
             _genp_pz.push_back(thepartons->pz());
             _genp_p.push_back(thepartons->p());
+            _genp_pt.push_back(thepartons->pt());
             _genp_eta.push_back(thepartons->eta());
             _genp_phi.push_back(thepartons->phi());
             _genp_mass.push_back(thepartons->mass());
             _genp_energy.push_back(thepartons->energy());
+            _genp_charge.push_back(thepartons->charge());
 
           // }//if HardProcess
         }///for partons
@@ -227,19 +246,22 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("track_purity",&_track_purity);
 	_tree->Branch("track_nhits",&_track_Nhits);
 	_tree->Branch("track_nPixHits",&_track_NpixHits);
-	_tree->Branch("track_d0",&_track_d0);
-	_tree->Branch("track_dxy",&_track_dxy);
+  _tree->Branch("track_d0",&_track_d0);
+  _tree->Branch("track_charge",&_track_charge);
+  _tree->Branch("track_dxy",&_track_dxy);
 	_tree->Branch("track_covariance",&_track_covariance);
 
     ///GenParticles
 	_tree->Branch("gen_px",&_genp_px);
 	_tree->Branch("gen_py",&_genp_py);
 	_tree->Branch("gen_pz",&_genp_pz);
-	_tree->Branch("gen_p",&_genp_p);
+  _tree->Branch("gen_p",&_genp_p);
+  _tree->Branch("gen_pt",&_genp_pt);
 	_tree->Branch("gen_eta",&_genp_eta);
 	_tree->Branch("gen_phi",&_genp_phi);
 	_tree->Branch("gen_mass",&_genp_mass);
-    _tree->Branch("gen_energy",&_genp_energy);
+  _tree->Branch("gen_energy",&_genp_energy);
+  _tree->Branch("gen_charge",&_genp_charge);
 
     //Trigger
   _tree->Branch("HLT_PFJet450", &_singlejet_450);
@@ -375,6 +397,7 @@ TreeProducer_AOD::Init()
   _track_dzError.clear();
   _track_dz.clear();
   _track_d0.clear();
+  _track_charge.clear();
   _track_covariance.clear();
   _track_dxy.clear();
   _track_purity.clear();
@@ -384,11 +407,13 @@ TreeProducer_AOD::Init()
   _genp_py.clear();
   _genp_pz.clear();
   _genp_p.clear();
+  _genp_pt.clear();  
   _genp_eta.clear();
   _genp_phi.clear();
   _genp_mass.clear();
   _genp_energy.clear();
-
+  _genp_charge.clear();
+  
 
 }
 
