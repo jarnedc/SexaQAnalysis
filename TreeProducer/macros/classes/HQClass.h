@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Tue Oct 17 15:16:47 2017 by ROOT version 6.06/01
+// Wed Oct 18 14:25:27 2017 by ROOT version 6.06/01
 // from TTree HexaQAnalysis/tree
 // found on file: MC_tree.root
 //////////////////////////////////////////////////////////
@@ -13,16 +13,14 @@
 #include <TFile.h>
 
 // Header file for the classes stored in the TTree if any.
-#include "Math/MatrixRepresentationsStatic.h"
 #include <vector>
+
 class HQClass {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
-   static const Int_t kMaxvtx_covariance = 43;
-   static const Int_t kMaxtrack_covariance = 1418;
 
    // Declaration of leaf types
    Int_t           nEvent;
@@ -37,8 +35,7 @@ public :
    vector<double>  *vtx_x;
    vector<double>  *vtx_y;
    vector<double>  *vtx_z;
-   Int_t           vtx_covariance_;
-   Double_t        vtx_covariance_fRep_fArray[kMaxvtx_covariance][6];   //[vtx_covariance_]
+   vector<vector<double> > *vtx_covariance;
    vector<bool>    *vtx_isFake;
    vector<bool>    *vtx_isValid;
    Int_t           nTrack_stored;
@@ -59,17 +56,19 @@ public :
    vector<int>     *track_nhits;
    vector<int>     *track_nPixHits;
    vector<double>  *track_d0;
+   vector<int>     *track_charge;
    vector<double>  *track_dxy;
-   Int_t           track_covariance_;
-   Double_t        track_covariance_fRep_fArray[kMaxtrack_covariance][15];   //[track_covariance_]
+   vector<vector<double> > *track_covariance;
    vector<double>  *gen_px;
    vector<double>  *gen_py;
    vector<double>  *gen_pz;
    vector<double>  *gen_p;
+   vector<double>  *gen_pt;
    vector<double>  *gen_eta;
    vector<double>  *gen_phi;
    vector<double>  *gen_mass;
    vector<double>  *gen_energy;
+   vector<int>     *gen_charge;
    Int_t           HLT_PFJet450;
    Double_t        pswgt_singlejet_450;
 
@@ -86,8 +85,7 @@ public :
    TBranch        *b_vtx_x;   //!
    TBranch        *b_vtx_y;   //!
    TBranch        *b_vtx_z;   //!
-   TBranch        *b_vtx_covariance_;   //!
-   TBranch        *b_vtx_covariance_fRep_fArray;   //!
+   TBranch        *b_vtx_covariance;   //!
    TBranch        *b_vtx_isFake;   //!
    TBranch        *b_vtx_isValid;   //!
    TBranch        *b_nTrack_stored;   //!
@@ -108,17 +106,19 @@ public :
    TBranch        *b_track_nhits;   //!
    TBranch        *b_track_nPixHits;   //!
    TBranch        *b_track_d0;   //!
+   TBranch        *b_track_charge;   //!
    TBranch        *b_track_dxy;   //!
-   TBranch        *b_track_covariance_;   //!
-   TBranch        *b_track_covariance_fRep_fArray;   //!
+   TBranch        *b_track_covariance;   //!
    TBranch        *b_gen_px;   //!
    TBranch        *b_gen_py;   //!
    TBranch        *b_gen_pz;   //!
    TBranch        *b_gen_p;   //!
+   TBranch        *b_gen_pt;   //!
    TBranch        *b_gen_eta;   //!
    TBranch        *b_gen_phi;   //!
    TBranch        *b_gen_mass;   //!
    TBranch        *b_gen_energy;   //!
+   TBranch        *b_gen_charge;   //!
    TBranch        *b_HLT_PFJet450;   //!
    TBranch        *b_pswgt_singlejet_450;   //!
 
@@ -128,24 +128,13 @@ public :
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
    virtual void     Init(TTree *tree);
-   //virtual void     Loop();
    virtual Bool_t   Notify();
    virtual void     Show(Long64_t entry = -1);
 };
 
+
 HQClass::HQClass(TTree *tree) : fChain(0) 
 {
-// if parameter tree is not specified (or zero), connect the file
-// used to generate this class and read the Tree.
-//    if (tree == 0) {
-//       TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("MC_tree.root");
-//       if (!f || !f->IsOpen()) {
-//          f = new TFile("MC_tree.root");
-//       }
-//       TDirectory * dir = (TDirectory*)f->Get("MC_tree.root:/tree");
-//       dir->GetObject("HexaQAnalysis",tree);
-
-//    }
    Init(tree);
 }
 
@@ -192,6 +181,7 @@ void HQClass::Init(TTree *tree)
    vtx_x = 0;
    vtx_y = 0;
    vtx_z = 0;
+   vtx_covariance = 0;
    vtx_isFake = 0;
    vtx_isValid = 0;
    track_pt = 0;
@@ -210,15 +200,19 @@ void HQClass::Init(TTree *tree)
    track_nhits = 0;
    track_nPixHits = 0;
    track_d0 = 0;
+   track_charge = 0;
    track_dxy = 0;
+   track_covariance = 0;
    gen_px = 0;
    gen_py = 0;
    gen_pz = 0;
    gen_p = 0;
+   gen_pt = 0;
    gen_eta = 0;
    gen_phi = 0;
    gen_mass = 0;
    gen_energy = 0;
+   gen_charge = 0;
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -237,8 +231,7 @@ void HQClass::Init(TTree *tree)
    fChain->SetBranchAddress("vtx_x", &vtx_x, &b_vtx_x);
    fChain->SetBranchAddress("vtx_y", &vtx_y, &b_vtx_y);
    fChain->SetBranchAddress("vtx_z", &vtx_z, &b_vtx_z);
-   fChain->SetBranchAddress("vtx_covariance", &vtx_covariance_, &b_vtx_covariance_);
-   fChain->SetBranchAddress("vtx_covariance.fRep.fArray[6]", vtx_covariance_fRep_fArray, &b_vtx_covariance_fRep_fArray);
+   fChain->SetBranchAddress("vtx_covariance", &vtx_covariance, &b_vtx_covariance);
    fChain->SetBranchAddress("vtx_isFake", &vtx_isFake, &b_vtx_isFake);
    fChain->SetBranchAddress("vtx_isValid", &vtx_isValid, &b_vtx_isValid);
    fChain->SetBranchAddress("nTrack_stored", &nTrack_stored, &b_nTrack_stored);
@@ -259,17 +252,19 @@ void HQClass::Init(TTree *tree)
    fChain->SetBranchAddress("track_nhits", &track_nhits, &b_track_nhits);
    fChain->SetBranchAddress("track_nPixHits", &track_nPixHits, &b_track_nPixHits);
    fChain->SetBranchAddress("track_d0", &track_d0, &b_track_d0);
+   fChain->SetBranchAddress("track_charge", &track_charge, &b_track_charge);
    fChain->SetBranchAddress("track_dxy", &track_dxy, &b_track_dxy);
-   fChain->SetBranchAddress("track_covariance", &track_covariance_, &b_track_covariance_);
-   fChain->SetBranchAddress("track_covariance.fRep.fArray[15]", track_covariance_fRep_fArray, &b_track_covariance_fRep_fArray);
+   fChain->SetBranchAddress("track_covariance", &track_covariance, &b_track_covariance);
    fChain->SetBranchAddress("gen_px", &gen_px, &b_gen_px);
    fChain->SetBranchAddress("gen_py", &gen_py, &b_gen_py);
    fChain->SetBranchAddress("gen_pz", &gen_pz, &b_gen_pz);
    fChain->SetBranchAddress("gen_p", &gen_p, &b_gen_p);
+   fChain->SetBranchAddress("gen_pt", &gen_pt, &b_gen_pt);
    fChain->SetBranchAddress("gen_eta", &gen_eta, &b_gen_eta);
    fChain->SetBranchAddress("gen_phi", &gen_phi, &b_gen_phi);
    fChain->SetBranchAddress("gen_mass", &gen_mass, &b_gen_mass);
    fChain->SetBranchAddress("gen_energy", &gen_energy, &b_gen_energy);
+   fChain->SetBranchAddress("gen_charge", &gen_charge, &b_gen_charge);
    fChain->SetBranchAddress("HLT_PFJet450", &HLT_PFJet450, &b_HLT_PFJet450);
    fChain->SetBranchAddress("pswgt_singlejet_450", &pswgt_singlejet_450, &b_pswgt_singlejet_450);
    Notify();
