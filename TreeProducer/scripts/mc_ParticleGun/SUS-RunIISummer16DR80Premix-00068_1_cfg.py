@@ -33,7 +33,7 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(500)
 # Input source
 process.source = cms.Source("PoolSource",
     dropDescendantsOfDroppedBranches = cms.untracked.bool(False),
-    fileNames = cms.untracked.vstring('file://../../../CMSSW_7_1_20_patch3/src/LambdaGun_GENSIM_IIDD.root'),
+    fileNames = cms.untracked.vstring('file://../../CMSSW_7_1_20_patch3/src/LambdaGun_GENSIM_IIDD.root'),
     secondaryFileNames = cms.untracked.vstring()
 )
 
