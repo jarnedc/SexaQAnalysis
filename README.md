@@ -17,14 +17,15 @@ cd ../..
 mkdir ./ParticleGun
 cd ./ParticleGun
 
-cmsrel CMSSW_7_1_20_patch3
+cmsrel 
+cp ../CMSSW_8_0_21/src/HexaAnalysis/TreeProducer/scripts/mc_ParticleGun/SUS-RunIISummer15GS-00146_GENSIM_cfg.py ./CMSSW_7_1_20_patch3/src/
 cd CMSSW_7_1_20_patch3/src
 cmsenv
 cmsRun SUS-RunIISummer15GS-00146_GENSIM_cfg.py
 
 cd ../..
 cmsrel CMSSW_8_0_21
-cmsenv
+cp ../CMSSW_8_0_21/src/HexaAnalysis/TreeProducer/scripts/mc_ParticleGun/SUS-RunIISummer16DR80Premix-00068_* CMSSW_8_0_21/src/
 cd CMSSW_8_0_21/src
 cmsenv
 cmsRun SUS-RunIISummer16DR80Premix-00068_Step1_cfg.py
