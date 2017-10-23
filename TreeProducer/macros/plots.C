@@ -30,7 +30,7 @@ void bookHistos(std::map<string, TH1F*>& histos_1d, std::map<string, TH2F*>& his
 
 
 
-void writeHistos(TFile*& outf, std::map<string, TH1F*> histos, std::map<string, TH2F*> histos2d){
+void writeHistos(TFile*& outf, const std::map<string, TH1F*>& histos, const std::map<string, TH2F*>& histos2d){
         outf->cd();
         for (std::pair<std::string, TH1F*> element : histos) {
                 std::string word = element.first;
@@ -73,20 +73,20 @@ void plots(){
 
         //cout<<hqhand.nTrack<<endl;
         for(int trk=0; trk<hqhand.nTrack; trk++){
-        //apply some cuts if needed
-        //if(hqhand.track_pt->at(trk)<0.5) continue;
+            //apply some cuts if needed
+            //if(hqhand.track_pt->at(trk)<0.5) continue;
 
-        histos_1d["track_pt"]->Fill(hqhand.track_pt->at(trk));
-        histos_1d["track_phi"]->Fill(hqhand.track_phi->at(trk));
+            histos_1d["track_pt"]->Fill(hqhand.track_pt->at(trk));
+            histos_1d["track_phi"]->Fill(hqhand.track_phi->at(trk));
 
-        histos_2d["track_phi_eta"]->Fill(hqhand.track_eta->at(trk), hqhand.track_phi->at(trk));
+            histos_2d["track_phi_eta"]->Fill(hqhand.track_eta->at(trk), hqhand.track_phi->at(trk));
 
-        //TLorentzVector proton;
-        //TLorentzVector pi;
-        //proton.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_eta->at(trk), hqhand.track_phi->at(trk), XXX);
-        //pi.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_eta->at(trk), hqhand.track_phi->at(trk), YYY);
-        //TLorentzVector sub = proton - pi;
-        //TLorentzVector add = proton + pi;
+            //TLorentzVector proton;
+            //TLorentzVector pi;
+            //proton.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_eta->at(trk), hqhand.track_phi->at(trk), XXX);
+            //pi.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_eta->at(trk), hqhand.track_phi->at(trk), YYY);
+            //TLorentzVector sub = proton - pi;
+            //TLorentzVector add = proton + pi;
 
         }
 
