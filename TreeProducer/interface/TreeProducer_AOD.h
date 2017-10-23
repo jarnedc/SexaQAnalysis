@@ -120,7 +120,9 @@ class TreeProducer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources,e
   std::vector<double> _genp_mass;
   std::vector<double> _genp_energy;
   std::vector<int> _genp_charge;
-
+  std::vector<int> _genp_pdgid;
+  std::vector<int> _genp_status;
+  
   //Trigger
   std::vector<std::string> triggerPathsVector;
   std::map<std::string, int> triggerPathsMap;

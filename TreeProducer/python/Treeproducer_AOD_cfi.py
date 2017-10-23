@@ -10,5 +10,5 @@ tree = cms.EDAnalyzer(
     trackCollection    = cms.InputTag("generalTracks", "", "RECO"),
     isData = cms.untracked.bool(True),
     triggerName = cms.vstring('HLT_DiCentralPFJet170_v1'),
-    Partons_Source =  cms.InputTag("genParticles","","HLT"),
+    genCollection =  cms.InputTag("genParticles","","HLT"),
 )

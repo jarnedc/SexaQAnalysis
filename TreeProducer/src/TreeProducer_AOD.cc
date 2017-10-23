@@ -11,7 +11,7 @@ TreeProducer_AOD::TreeProducer_AOD(const edm::ParameterSet& pset):
   _vertexCollectionToken(consumes<vector<reco::Vertex> >(_vertexCollectionTag)),
   _trackCollectionToken(consumes<vector<reco::Track> >(_trackCollectionTag)),
   _isData(pset.getUntrackedParameter<bool>("isData")),
-  m_partons(consumes<vector<reco::GenParticle> >(pset.getParameter<edm::InputTag>("Partons_Source"))),
+  m_partons(consumes<vector<reco::GenParticle> >(pset.getParameter<edm::InputTag>("genCollection"))),
   hltPrescale_(pset, consumesCollector(), *this)
 {
  triggerNames_ = pset.getParameter<std::vector<std::string> > ("triggerName");
@@ -66,6 +66,10 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     return;
   }
 
+  if(!H_partons.isValid()) {
+    if(verbose>0) cout << "Missing collection : genParticles ... skip entry !" << endl;
+    return;
+  }
   // GLOBAL EVENT INFORMATIONS //
   _nRun   = iEvent.id().run();
   _nLumi  = iEvent.luminosityBlock();
@@ -160,7 +164,9 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             _genp_mass.push_back(thepartons->mass());
             _genp_energy.push_back(thepartons->energy());
             _genp_charge.push_back(thepartons->charge());
-
+            _genp_pdgid.push_back(thepartons->pdgId());
+            _genp_status.push_back(thepartons->status());
+            
           // }//if HardProcess
         }///for partons
     }
@@ -262,7 +268,9 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("gen_mass",&_genp_mass);
   _tree->Branch("gen_energy",&_genp_energy);
   _tree->Branch("gen_charge",&_genp_charge);
-
+  _tree->Branch("gen_pdgid",&_genp_pdgid);
+  _tree->Branch("gen_status",&_genp_status);
+  
     //Trigger
   _tree->Branch("HLT_PFJet450", &_singlejet_450);
   //prescales
@@ -413,6 +421,8 @@ TreeProducer_AOD::Init()
   _genp_mass.clear();
   _genp_energy.clear();
   _genp_charge.clear();
+  _genp_pdgid.clear();
+  _genp_status.clear();
   
 
 }
