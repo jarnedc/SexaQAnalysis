@@ -69,6 +69,9 @@ public :
    vector<double>  *gen_mass;
    vector<double>  *gen_energy;
    vector<int>     *gen_charge;
+   vector<int>     *gen_pdgid;
+   vector<int>     *gen_status;
+   
    Int_t           HLT_PFJet450;
    Double_t        pswgt_singlejet_450;
 
@@ -119,6 +122,8 @@ public :
    TBranch        *b_gen_mass;   //!
    TBranch        *b_gen_energy;   //!
    TBranch        *b_gen_charge;   //!
+   TBranch        *b_gen_pdgid;   //!
+   TBranch        *b_gen_status;   //!   
    TBranch        *b_HLT_PFJet450;   //!
    TBranch        *b_pswgt_singlejet_450;   //!
 
@@ -213,6 +218,8 @@ void HQClass::Init(TTree *tree)
    gen_mass = 0;
    gen_energy = 0;
    gen_charge = 0;
+   gen_pdgid = 0;
+   gen_status = 0;   
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -265,6 +272,8 @@ void HQClass::Init(TTree *tree)
    fChain->SetBranchAddress("gen_mass", &gen_mass, &b_gen_mass);
    fChain->SetBranchAddress("gen_energy", &gen_energy, &b_gen_energy);
    fChain->SetBranchAddress("gen_charge", &gen_charge, &b_gen_charge);
+   fChain->SetBranchAddress("gen_pdgid", &gen_pdgid, &b_gen_pdgid);
+   fChain->SetBranchAddress("gen_status", &gen_status, &b_gen_status);   
    fChain->SetBranchAddress("HLT_PFJet450", &HLT_PFJet450, &b_HLT_PFJet450);
    fChain->SetBranchAddress("pswgt_singlejet_450", &pswgt_singlejet_450, &b_pswgt_singlejet_450);
    Notify();
