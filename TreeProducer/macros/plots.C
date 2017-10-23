@@ -81,11 +81,10 @@ void plots(){
 
         histos_2d["track_phi_eta"]->Fill(hqhand.track_eta->at(trk), hqhand.track_phi->at(trk));
 
-        ///Reconstruct lamdas here
         //TLorentzVector proton;
         //TLorentzVector pi;
-        //proton.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_pt->at(trk), hqhand.track_pt->at(trk), ProtonMASS);
-        //pi.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_pt->at(trk), hqhand.track_pt->at(trk), PiMASS);
+        //proton.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_eta->at(trk), hqhand.track_phi->at(trk), XXX);
+        //pi.SetPtEtaPhiM( hqhand.track_pt->at(trk) , hqhand.track_eta->at(trk), hqhand.track_phi->at(trk), YYY);
         //TLorentzVector sub = proton - pi;
         //TLorentzVector add = proton + pi;
 
