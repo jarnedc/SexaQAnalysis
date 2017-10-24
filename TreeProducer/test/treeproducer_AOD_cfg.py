@@ -1,7 +1,19 @@
 import FWCore.ParameterSet.Config as cms
 
 
-isData = False
+### CMSSW command line parameter parser
+from FWCore.ParameterSet.VarParsing import VarParsing
+options = VarParsing('python')
+
+## data or MC options
+options.register(
+	'isData',False,VarParsing.multiplicity.singleton,VarParsing.varType.bool,
+	'flag to indicate data or MC')
+
+options.register(
+	'maxEvts',-1,VarParsing.multiplicity.singleton,VarParsing.varType.int,
+	'flag to indicate max events to process')
+
 
 process = cms.Process("HEXAQTREE")
 process.load("FWCore.MessageService.MessageLogger_cfi")
@@ -14,12 +26,12 @@ process.load('Configuration/EventContent/EventContent_cff')
 
 from Configuration.AlCa.GlobalTag import GlobalTag
 
-if(isData==True):
+if(options.isData==True):
     process.GlobalTag = GlobalTag(process.GlobalTag, '80X_mcRun2_asymptotic_2016_TrancheIV_v8', '')
 else:
     process.GlobalTag = GlobalTag(process.GlobalTag, 'auto:run2_mc', '')
 
-process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) )
+process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvts))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(500)
 
 
@@ -35,26 +47,22 @@ process.load('RecoVertex/AdaptiveVertexFinder/inclusiveVertexFinder_cfi')
 
 # Tree producer
 process.load("HexaAnalysis.TreeProducer.Treeproducer_AOD_cfi")
-process.tree.isData = cms.untracked.bool(isData)
+process.tree.isData = cms.untracked.bool(options.isData)
 process.p = cms.Path(process.inclusiveVertexFinder + process.tree)
 #process.p = cms.Path(process.tree)
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('MC_tree.root')
+    fileName = cms.string('tree.root')
 )
 
+# #Keep edm output file only during debugging
+# process.out = cms.OutputModule("PoolOutputModule",
+#     outputCommands = cms.untracked.vstring(
+#         #'drop *',
+#         'keep *'
+# ),
+#    fileName = cms.untracked.string("outputfile_debug.root")
+# )
 
-
-##Keep edm output file only during debugging
-process.out = cms.OutputModule("PoolOutputModule",
-
-    outputCommands = cms.untracked.vstring(
-     #'drop *',
-     'keep *'
-
-),
-   fileName = cms.untracked.string("outputfile_debug.root")
-)
-
-process.output_step = cms.EndPath(process.out)
+# process.output_step = cms.EndPath(process.out)
