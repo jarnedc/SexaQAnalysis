@@ -48,7 +48,7 @@ root -l analysis.C
 ```
 
 ## Documentation
-### Adaprive Vertex Reco
+### Adaptive Vertex Reco
 - https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAdaptiveVertexReconstructor
 - http://cds.cern.ch/record/1166320/files/NOTE2008_033.pdf
 - http://iopscience.iop.org/article/10.1088/0954-3899/34/12/N01/pdf
