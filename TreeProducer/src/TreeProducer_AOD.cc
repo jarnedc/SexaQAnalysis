@@ -117,7 +117,13 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     reco::RecoPtSorter<reco::TrackRef> trackSorter;
     std::sort( trackRef.begin(), trackRef.end(), trackSorter);
 
+    ///FIXME: High pt cuts only for testing crab - Avoid large size files
+    if(trackRef.size()==0) return;
+    if(trackRef[0]->pt()<5.) return;
+
     for (size_t i = 0; i < trackRef.size(); i++) {
+            if(trackRef[1]->pt()<0.5) return;
+
             _track_purity.push_back(trackRef[i]->highPurity);
             _track_Nhits.push_back(trackRef[i]->numberOfValidHits());
             _track_NpixHits.push_back(trackRef[i]->hitPattern().numberOfValidPixelHits());
@@ -213,38 +219,38 @@ for(unsigned itrig=0;itrig<triggerNames_.size() ;itrig++) {
 void
 TreeProducer_AOD::beginJob()
 {
-  // Initialize when class is created
-  edm::Service<TFileService> fs ;
-  _tree = fs->make <TTree>("HexaQAnalysis","tree");
+        // Initialize when class is created
+        edm::Service<TFileService> fs ;
+        _tree = fs->make <TTree>("HexaQAnalysis","tree");
 
-  // Declare tree's branches
-  // Event
-  _tree->Branch("nEvent",&_nEvent,"nEvent/I");
-  _tree->Branch("nRun",&_nRun,"nRun/I");
-  _tree->Branch("nLumi",&_nLumi,"nLumi/I");
-  //
-  // Vertices
-  _tree->Branch("vtx_N",&_vtx_N,"vtx_N/I");
-  _tree->Branch("vtx_N_stored",&_vtx_N_stored,"vtx_N_stored/I");
-  _tree->Branch("vtx_normalizedChi2",&_vtx_normalizedChi2);
-  _tree->Branch("vtx_ndof",&_vtx_ndof);
-  _tree->Branch("vtx_nTracks",&_vtx_nTracks);
-  _tree->Branch("vtx_d0",&_vtx_d0);
-  _tree->Branch("vtx_x",&_vtx_x);
-  _tree->Branch("vtx_y",&_vtx_y);
-  _tree->Branch("vtx_z",&_vtx_z);
-  _tree->Branch("vtx_covariance",&_vtx_covariance);
-  _tree->Branch("vtx_isFake",&_vtx_isFake);
-  _tree->Branch("vtx_isValid",&_vtx_isValid);
-  //
+        // Declare tree's branches
+        // Event
+        _tree->Branch("nEvent",&_nEvent,"nEvent/I");
+        _tree->Branch("nRun",&_nRun,"nRun/I");
+        _tree->Branch("nLumi",&_nLumi,"nLumi/I");
+        //
+        // Vertices
+        _tree->Branch("vtx_N",&_vtx_N,"vtx_N/I");
+        _tree->Branch("vtx_N_stored",&_vtx_N_stored,"vtx_N_stored/I");
+        _tree->Branch("vtx_normalizedChi2",&_vtx_normalizedChi2);
+        _tree->Branch("vtx_ndof",&_vtx_ndof);
+        _tree->Branch("vtx_nTracks",&_vtx_nTracks);
+        _tree->Branch("vtx_d0",&_vtx_d0);
+        _tree->Branch("vtx_x",&_vtx_x);
+        _tree->Branch("vtx_y",&_vtx_y);
+        _tree->Branch("vtx_z",&_vtx_z);
+        _tree->Branch("vtx_covariance",&_vtx_covariance);
+        _tree->Branch("vtx_isFake",&_vtx_isFake);
+        _tree->Branch("vtx_isValid",&_vtx_isValid);
+        //
 	// Tracks
-	_tree->Branch("nTrack_stored",&_nTrack_stored,"nTrack_stored/I");
-	_tree->Branch("nTrack",&_nTrack,"nTrack/I");
-	_tree->Branch("track_pt",&_track_pt);
-	_tree->Branch("track_px",&_track_px);
-	_tree->Branch("track_py",&_track_py);
-	_tree->Branch("track_pz",&_track_pz);
-    _tree->Branch("track_eta",&_track_eta);
+        _tree->Branch("nTrack_stored",&_nTrack_stored,"nTrack_stored/I");
+        _tree->Branch("nTrack",&_nTrack,"nTrack/I");
+        _tree->Branch("track_pt",&_track_pt);
+        _tree->Branch("track_px",&_track_px);
+        _tree->Branch("track_py",&_track_py);
+        _tree->Branch("track_pz",&_track_pz);
+        _tree->Branch("track_eta",&_track_eta);
 	_tree->Branch("track_phi",&_track_phi);
 	_tree->Branch("track_normalizedChi2",&_track_normalizedChi2);
 	_tree->Branch("track_ndof",&_track_ndof);
@@ -255,29 +261,29 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("track_purity",&_track_purity);
 	_tree->Branch("track_nhits",&_track_Nhits);
 	_tree->Branch("track_nPixHits",&_track_NpixHits);
-  _tree->Branch("track_d0",&_track_d0);
-  _tree->Branch("track_charge",&_track_charge);
-  _tree->Branch("track_dxy",&_track_dxy);
+        _tree->Branch("track_d0",&_track_d0);
+        _tree->Branch("track_charge",&_track_charge);
+        _tree->Branch("track_dxy",&_track_dxy);
 	_tree->Branch("track_covariance",&_track_covariance);
 
     ///GenParticles
 	_tree->Branch("gen_px",&_genp_px);
 	_tree->Branch("gen_py",&_genp_py);
 	_tree->Branch("gen_pz",&_genp_pz);
-  _tree->Branch("gen_p",&_genp_p);
-  _tree->Branch("gen_pt",&_genp_pt);
+        _tree->Branch("gen_p",&_genp_p);
+        _tree->Branch("gen_pt",&_genp_pt);
 	_tree->Branch("gen_eta",&_genp_eta);
 	_tree->Branch("gen_phi",&_genp_phi);
 	_tree->Branch("gen_mass",&_genp_mass);
-  _tree->Branch("gen_energy",&_genp_energy);
-  _tree->Branch("gen_charge",&_genp_charge);
-  _tree->Branch("gen_pdgid",&_genp_pdgid);
-  _tree->Branch("gen_status",&_genp_status);
-  
-    //Trigger
-  _tree->Branch("HLT_PFJet450", &_singlejet_450);
-  //prescales
-  _tree->Branch("pswgt_singlejet_450", &_pswgt_singlejet_450, "pswgt_singlejet_450/D");
+        _tree->Branch("gen_energy",&_genp_energy);
+        _tree->Branch("gen_charge",&_genp_charge);
+        _tree->Branch("gen_pdgid",&_genp_pdgid);
+        _tree->Branch("gen_status",&_genp_status);
+        
+        //Trigger
+        _tree->Branch("HLT_PFJet450", &_singlejet_450);
+        //prescales
+        _tree->Branch("pswgt_singlejet_450", &_pswgt_singlejet_450, "pswgt_singlejet_450/D");
 
 }
 
