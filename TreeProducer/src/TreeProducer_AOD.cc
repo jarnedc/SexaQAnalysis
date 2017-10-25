@@ -47,7 +47,7 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   iEvent.getByToken(_trackCollectionToken , H_track);
 
   edm::Handle<vector<reco::GenParticle> > H_partons;
-  iEvent.getByToken(m_partons, H_partons);
+  if(!_isData) iEvent.getByToken(m_partons, H_partons);
 
 
   // Check validity
@@ -66,9 +66,11 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     return;
   }
 
-  if(!H_partons.isValid()) {
-    if(verbose>0) cout << "Missing collection : genParticles ... skip entry !" << endl;
-    return;
+  if(!_isData){
+   if(!H_partons.isValid()) {
+     if(verbose>0) cout << "Missing collection : genParticles ... skip entry !" << endl;
+     return;
+   }
   }
   // GLOBAL EVENT INFORMATIONS //
   _nRun   = iEvent.id().run();
@@ -202,6 +204,7 @@ for(unsigned itrig=0;itrig<triggerNames_.size() ;itrig++) {
 
    }
   }
+
   _tree->Fill();
 }
 
