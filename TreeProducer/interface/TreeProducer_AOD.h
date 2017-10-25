@@ -49,7 +49,7 @@ int verbose=1;
 // class declaration
 //
 
-class TreeProducer_AOD : public edm::one::EDAnalyzer<edm::one::SharedResources,edm::one::WatchRuns> {
+class TreeProducer_AOD : public edm::EDAnalyzer {
  public:
   explicit TreeProducer_AOD(const edm::ParameterSet&);
   ~TreeProducer_AOD();
