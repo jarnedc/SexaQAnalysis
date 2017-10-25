@@ -4,9 +4,8 @@
 ```
 mkdir ./Analysis/HexaQuark
 cd ./Analysis/HexaQuark
-cmsrel CMSSW_8_0_21
-cd CMSSW_8_0_21/src
-git cms-init
+cmsrel CMSSW_9_2_8
+cd CMSSW_9_2_8/src
 git clone https://github.com/gflouris/HexaAnalysis
 cmsenv
 scram b -j2
