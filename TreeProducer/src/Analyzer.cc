@@ -1,60 +1,68 @@
-#include "HexaAnalysis/TreeProducer/interface/Analyzer.h"
+#include "SexaQAnalysis/TreeProducer/interface/Analyzer.h"
 
 
 Analyzer::Analyzer(edm::ParameterSet const& pset):
   m_isData(pset.getUntrackedParameter<bool>("isData")),
-  m_vertexCollectionTag(pset.getParameter<edm::InputTag>("vertexCollection")),
-  m_trackCollectionTag(pset.getParameter<edm::InputTag>("trackCollection")),
-  m_partonsTag(pset.getParameter<edm::InputTag>("genCollection")),
-  m_vertexCollectionToken(consumes<vector<reco::Vertex> >(m_vertexCollectionTag)),
-  m_trackCollectionToken(consumes<vector<reco::Track> >(m_trackCollectionTag)),
-  m_partons(consumes<vector<reco::GenParticle> >(m_partonsTag))
+  m_bsTag    (pset.getParameter<edm::InputTag>("beamspot")),
+  m_vertexTag(pset.getParameter<edm::InputTag>("vertexCollection")),
+  m_rCandsTag(pset.getParameter<edm::InputTag>("resonCandidates")),
+  m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
+  m_bsToken    (consumes<reco::BeamSpot>(m_bsTag)),
+  m_vertexToken(consumes<vector<reco::Vertex> >(m_vertexTag)),
+  m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
+  m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag))
 {
-
-  m_isData       = pset.getUntrackedParameter<bool>             ("isData");
-
 }
 
 
-void Analyzer::beginJob()
-{
-  // Initialize when class is created
-  //_tree = fs->make <TTree>("HexaQAnalysis","tree");
-  histos_th1f["num_of_Vtx"] = m_fs->make<TH1F>("num_of_Vtx","num_of_Vtx",100,0.,100.);
-  histos_th1f["track_pt"] = m_fs->make<TH1F>("track_pt","track_pt",5000,0.,5000.);
-  histos_th1f["gen_pt"] = m_fs->make<TH1F>("gen_pt","gen_pt",5000,0.,5000.);
-
+void Analyzer::beginJob() {
+  histos_th1f["nVtx"]      = m_fs->make<TH1F>("nVtx",     "",100,0.,100.);
+  histos_th2f["vtx_rz"]    = m_fs->make<TH2F>("vtx_rz",   "",800,-200.,200.,200,0.,100.);
+  histos_th2f["vtx_xy"]    = m_fs->make<TH2F>("vtx_xy",   "",400,-100.,100.,400,-100.,100.);
+  histos_th1f["vtx_chi2"]  = m_fs->make<TH1F>("vtx_chi2", "",100,0.,10.);
+  histos_th1f["dxy"]       = m_fs->make<TH1F>("dxy",      "",200,0.,50.);
+  histos_th1f["dr"]        = m_fs->make<TH1F>("dr",       "",200,0.,50.);
+  histos_th1f["sdxy"]      = m_fs->make<TH1F>("sdxy",     "",100,0.,100.);
+  histos_th1f["sdr"]       = m_fs->make<TH1F>("sdr",      "",100,0.,100.);
+  histos_th1f["rCandMass"] = m_fs->make<TH1F>("rCandMass","",1000,0.,5.);
+  histos_th1f["sCandMass"] = m_fs->make<TH1F>("sCandMass","",1000,0.,5.);
 }
 
-void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup)
-{
-  // HANDLES //
-  // Get collections
-  //edm::Handle<edm::TriggerResults> H_trig;//, H_trig1, H_trig2;
-  //iEvent.getByToken(_trigResultsToken, H_trig);
 
-  edm::Handle<vector<reco::Vertex> > H_vert;
-  iEvent.getByToken(m_vertexCollectionToken, H_vert);
+void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) {
 
-  edm::Handle<vector<reco::Track> > H_track;
-  iEvent.getByToken(m_trackCollectionToken , H_track);
+  edm::Handle<reco::BeamSpot> h_bs;
+  iEvent.getByToken(m_bsToken, h_bs);
 
-  edm::Handle<vector<reco::GenParticle> > H_partons;
-  iEvent.getByToken(m_partons, H_partons);
+  edm::Handle<vector<reco::Vertex> > h_vert;
+  iEvent.getByToken(m_vertexToken, h_vert);
+
+  // resonance candidates
+  edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_rCands;
+  iEvent.getByToken(m_rCandsToken, h_rCands);
+
+  // sexaquark candidates
+  edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_sCands;
+  iEvent.getByToken(m_sCandsToken, h_sCands);
 
   // Check validity
-  if(!H_vert.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_vertexCollectionTag << " ... skip entry !" << endl;
+  if(!h_bs.isValid()) {
+    if(verbose>0) cout << "Missing collection : " << m_bsTag << " ... skip entry !" << endl;
     return;
   }
 
-  if(!H_track.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_trackCollectionTag << " ... skip entry !" << endl;
+  if(!h_vert.isValid()) {
+    if(verbose>0) cout << "Missing collection : " << m_vertexTag << " ... skip entry !" << endl;
     return;
   }
 
-  if(!H_partons.isValid()) {
-    if(verbose>0) cout << "Missing collection : "<< m_partonsTag <<"... skip entry !" << endl;
+  if(!h_rCands.isValid()) {
+    if(verbose>0) cout << "Missing collection : " << m_rCandsTag << " ... skip entry !" << endl;
+    return;
+  }
+
+  if(!h_sCands.isValid()) {
+    if(verbose>0) cout << "Missing collection : " << m_sCandsTag << " ... skip entry !" << endl;
     return;
   }
 
@@ -65,33 +73,56 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup)
 
   //std::cout<<m_nRun<<"\t"<<m_nLumi<<"\t"<<m_nEvent<<std::endl;
 
+  histos_th1f["nVtx"]->Fill(h_vert->size());
+  if (h_vert->size() == 0) return;
+  float vx = h_bs->x0();
+  float vy = h_bs->y0();
+  float vz = h_bs->z0();
 
-  histos_th1f["num_of_Vtx"]->Fill(H_vert->size());
+  for (unsigned int i = 0; i < h_rCands->size(); ++i) {
+    float x  = h_rCands->at(i).vx();
+    float y  = h_rCands->at(i).vy();
+    float z  = h_rCands->at(i).vz();
+    float xe = h_rCands->at(i).vertexCovariance(0,0);
+    float ye = h_rCands->at(i).vertexCovariance(1,1);
+    float ze = h_rCands->at(i).vertexCovariance(2,2);
+    histos_th2f["vtx_xy"]  ->Fill(x,y);
+    histos_th2f["vtx_rz"]  ->Fill(z,sqrt(pow(x,2)+pow(y,2)));
+//    histos_th1f["vtx_chi2"]->Fill(10*sqrt(xe+ye));
+    histos_th1f["dxy"] ->Fill(sqrt(pow(x-vx,2)+pow(y-vy,2)));
+    histos_th1f["dr"]  ->Fill(sqrt(pow(x-vx,2)+pow(y-vy,2)+pow(z-vz,2)));
+    histos_th1f["sdxy"]->Fill(sqrt((pow(x-vx,2)+pow(y-vy,2))/(xe+ye)));
+    histos_th1f["sdr"] ->Fill(sqrt((pow(x-vx,2)+pow(y-vy,2)+pow(z-vz,2))/(xe+ye+ze)));
 
-
-  // TRACKS //
-  vector<reco::TrackRef> trackRef;
-  for (vector<reco::Track>::const_iterator theTrack = H_track->begin(); theTrack != H_track->end(); ++theTrack){
-          reco::TrackRef ref(H_track, theTrack - H_track->begin());
-                  trackRef.push_back(ref);
+    float dxy = sqrt(pow(x-vx,2)+pow(y-vy,2));
+    float edxy = sqrt(xe+ye);
+    if (dxy < 0.1 && 
+        dxy < 3*edxy &&
+        edxy < .1 &&
+        sqrt(ze) < .1)
+      histos_th1f["rCandMass"]->Fill(h_rCands->at(i).mass());
   }
 
-  reco::RecoPtSorter<reco::TrackRef> trackSorter;
-  std::sort( trackRef.begin(), trackRef.end(), trackSorter);
+  for (unsigned int i = 0; i < h_sCands->size(); ++i) {
+    float x  = h_sCands->at(i).vx();
+    float y  = h_sCands->at(i).vy();
+    float xe = h_sCands->at(i).vertexCovariance(0,0);
+    float ye = h_sCands->at(i).vertexCovariance(1,1);
+    float ze = h_sCands->at(i).vertexCovariance(2,2);
 
-  for (size_t i = 0; i < trackRef.size(); i++) {
-          if(trackRef[i]->pt()<0.5) continue;
-          histos_th1f["track_pt"]->Fill(trackRef[i]->pt());
-  }
+/* to distinguish lambda from anti-lambda, one can use this info:
+    std::cout << h_sCands->at(i).daughterPtr(0)->mass() << " "
+              << h_sCands->at(i).daughterPtr(0)->daughter(0)->mass() << " "
+              << h_sCands->at(i).daughterPtr(0)->daughter(0)->charge()
+              << std::endl;
+*/
 
-  if(!m_isData){
-            for (vector<reco::GenParticle>::const_iterator thepartons = H_partons->begin();
-            thepartons != H_partons->end(); ++thepartons){
-
-                if(thepartons->status()!=2) continue;
-                histos_th1f["gen_pt"]->Fill(thepartons->pt());
-
-            }///for partons
+    float dxy = sqrt(pow(x,2)+pow(y,2));
+    float edxy = sqrt(xe+ye);
+    if (dxy > 2-3*edxy &&
+        edxy < .1 &&
+        sqrt(ze) < .1)
+      histos_th1f["sCandMass"]->Fill(h_sCands->at(i).mass());
   }
 
 

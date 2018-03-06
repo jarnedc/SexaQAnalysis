@@ -31,16 +31,10 @@ using namespace std;
 #include "RecoVertex/PrimaryVertexProducer/interface/PrimaryVertexSorter.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
 #include "DataFormats/VertexReco/interface/VertexFwd.h"
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/TrackReco/interface/TrackBase.h"
-#include "DataFormats/TrackReco/interface/TrackFwd.h"
-#include "DataFormats/Common/interface/TriggerResults.h"
-#include "DataFormats/L1Trigger/interface/L1EtMissParticle.h"
-#include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
-#include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
+#include "DataFormats/BeamSpot/interface/BeamSpot.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-
+#include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
 
   
 class Analyzer : public edm::EDAnalyzer
@@ -58,36 +52,24 @@ class Analyzer : public edm::EDAnalyzer
 
     int m_nEvent, m_nRun, m_nLumi;
     
-    edm::Service<TFileService> m_fs ;
+    edm::Service<TFileService> m_fs;
     
-    edm::InputTag m_vertexCollectionTag;
-    edm::InputTag m_trackCollectionTag;
-    edm::InputTag m_partonsTag;
+    edm::InputTag m_bsTag;
+    edm::InputTag m_vertexTag;
+    edm::InputTag m_rCandsTag;
+    edm::InputTag m_sCandsTag;
   
-    edm::EDGetTokenT<vector<reco::Vertex> > m_vertexCollectionToken;
-    edm::EDGetTokenT<vector<reco::Track> > m_trackCollectionToken;
-    edm::EDGetTokenT<vector<reco::GenParticle> >  m_partons;
+    edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
+    edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
     int verbose=1;
     
     //--------- Histogram Declaration --------------------//
-    // Vertices
-    std::map<TString, TH1F*> histos_th1f;
-    //TH1F *num_of_VtxGood;
-
-
+    std::map<TString, TH1F *> histos_th1f;
+    std::map<TString, TH2F *> histos_th2f;
 
  };
-
-
- namespace reco {
-  template<typename T>
-  class RecoPtSorter{
-  public:
-    bool operator ()(const T & i, const T & j) const {
-      return (i->pt() > j->pt());
-    }
-  };
-}
 
 #endif
 

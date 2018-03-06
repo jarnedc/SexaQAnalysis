@@ -1,7 +1,3 @@
-// -*- C++ -*-
-// Package:    TreeProducer_AOD
-// Class:      TreeProducer_AOD
-///**\class TreeProducer_AOD TreeProducer_AOD.cc HexaAnalysis/TreeProducer/src/TreeProducer_AOD.cc
 // Description: EDAnalyzer produce flat trees from AOD for HexaAnalysis
 
 // C++ lib
@@ -23,7 +19,6 @@
 #include "FWCore/Framework/interface/MakerMacros.h"
 #include "FWCore/ParameterSet/interface/ParameterSet.h"
 #include "FWCore/ServiceRegistry/interface/Service.h"
-#include "FWCore/Common/interface/TriggerNames.h"
 #include "CommonTools/UtilAlgos/interface/TFileService.h"
 
 // CMSSW specific lib
@@ -34,12 +29,10 @@
 #include "DataFormats/TrackReco/interface/Track.h"
 #include "DataFormats/TrackReco/interface/TrackBase.h"
 #include "DataFormats/TrackReco/interface/TrackFwd.h"
-#include "DataFormats/Common/interface/TriggerResults.h"
-#include "DataFormats/L1Trigger/interface/L1EtMissParticle.h"
-#include "HLTrigger/HLTcore/interface/HLTConfigProvider.h"
-#include "HLTrigger/HLTcore/interface/HLTPrescaleProvider.h"
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
+#include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
+#include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
 
 // others
 using namespace std;
@@ -73,18 +66,13 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   edm::InputTag _trigResultsTag;
   edm::InputTag _vertexCollectionTag;
   edm::InputTag _trackCollectionTag;
+  edm::InputTag _lambdaKshortCollectionTag;
 
-  edm::EDGetTokenT<edm::TriggerResults> _trigResultsToken;
   edm::EDGetTokenT<vector<reco::Vertex> > _vertexCollectionToken;
   edm::EDGetTokenT<vector<reco::Track> > _trackCollectionToken;
+  edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > _lambdaKshortCollectionToken;
   bool _isData;
   edm::EDGetToken  m_partons;
-
-  HLTConfigProvider hltConfig_;
-  HLTPrescaleProvider hltPrescale_;
-
-  std::vector<std::string> triggerNames_;
-  std::vector<unsigned int> triggerIndex_;
 
 //   GlobalPoint vertexPosition;
 
@@ -103,13 +91,34 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   std::vector<double> _vtx_normalizedChi2, _vtx_d0;
   std::vector< std::vector<double> > _vtx_covariance;
 
-	//Tracks
-	std::vector<int> _track_fromPV, _track_Nhits, _track_NpixHits, _track_purity, _track_ndof;
-	std::vector<double> _track_eta, _track_pt, _track_px, _track_py, _track_pz, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
+  //Tracks
+  std::vector<int> _track_Nhits, _track_NpixHits, _track_purity, _track_ndof;
+  std::vector<double> _track_eta, _track_pt, _track_px, _track_py, _track_pz, _track_x, _track_y, _track_z, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
   std::vector< std::vector<double> > _track_covariance;
   std::vector<int> _track_charge;
 
+  // Lambdas
+  int _lambda_N;
+  std::vector<int> _lambda_ndof, _lambda_d1ch, _lambda_d2ch;
+  std::vector<double> _lambda_normalizedChi2, _lambda_m;
+  std::vector<double> _lambda_x, _lambda_y, _lambda_z;
+  std::vector<double> _lambda_px, _lambda_py, _lambda_pz;
+  std::vector<double> _lambda_d1px, _lambda_d1py, _lambda_d1pz;
+  std::vector<double> _lambda_d2px, _lambda_d2py, _lambda_d2pz;
+
+  // Kshorts
+  int _kshort_N;
+  std::vector<int> _kshort_ndof;
+  std::vector<double> _kshort_normalizedChi2, _kshort_m;
+  std::vector<double> _kshort_x, _kshort_y, _kshort_z;
+  std::vector<double> _kshort_px, _kshort_py, _kshort_pz;
+  std::vector<double> _kshort_d1px, _kshort_d1py, _kshort_d1pz;
+  std::vector<double> _kshort_d2px, _kshort_d2py, _kshort_d2pz;
+
   //GenParticles
+  std::vector<double> _genp_x;
+  std::vector<double> _genp_y;
+  std::vector<double> _genp_z;
   std::vector<double> _genp_px;
   std::vector<double> _genp_py;
   std::vector<double> _genp_pz;
@@ -122,13 +131,11 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   std::vector<int> _genp_charge;
   std::vector<int> _genp_pdgid;
   std::vector<int> _genp_status;
+  std::vector<int> _genp_mom;
+  std::vector<int> _genp_m2;
+  std::vector<int> _genp_d1;
+  std::vector<int> _genp_d2;
   
-  //Trigger
-  std::vector<std::string> triggerPathsVector;
-  std::map<std::string, int> triggerPathsMap;
-  int _singlejet_450;
-  //prescales
-  double  _pswgt_singlejet_450;
 };
 
 namespace reco {

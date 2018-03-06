@@ -10,10 +10,12 @@
 TreeProducer_AOD::TreeProducer_AOD(const edm::ParameterSet& pset):
   _vertexCollectionTag(pset.getParameter<edm::InputTag>("vertexCollection")),
   _trackCollectionTag(pset.getParameter<edm::InputTag>("trackCollection")),
-  _lambdaKshortCollectionTag(pset.getParameter<edm::InputTag>("lambdaKshortCollection")),
+  _lambdaCollectionTag(pset.getParameter<edm::InputTag>("lambdaCollection")),
+  _kshortCollectionTag(pset.getParameter<edm::InputTag>("kshortCollection")),
   _vertexCollectionToken(consumes<vector<reco::Vertex> >(_vertexCollectionTag)),
   _trackCollectionToken(consumes<vector<reco::Track> >(_trackCollectionTag)),
-  _lambdaKshortCollectionToken(consumes<vector<reco::VertexCompositePtrCandidate> >(_lambdaKshortCollectionTag)),
+  _lambdaCollectionToken(consumes<vector<reco::VertexCompositeCandidate> >(_lambdaCollectionTag)),
+  _kshortCollectionToken(consumes<vector<reco::VertexCompositeCandidate> >(_kshortCollectionTag)),
   _isData(pset.getUntrackedParameter<bool>("isData")),
   m_partons(consumes<vector<reco::GenParticle> >(pset.getParameter<edm::InputTag>("genCollection")))
 {
@@ -48,14 +50,22 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     }
   }
 
-/*
-  edm::Handle<vector<reco::VertexCompositePtrCandidate> > H_lk;
-  iEvent.getByToken(_lambdaKshortCollectionToken , H_lk);
-  if(!H_lk.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << _lambdaKshortCollectionTag << " ... skip entry !" << endl;
+  edm::Handle<vector<reco::VertexCompositeCandidate> > H_lambda;
+  iEvent.getByToken(_lambdaCollectionToken , H_lambda);
+  if(!H_lambda.isValid()) {
+    if(verbose>0) cout << "Missing collection : " << _lambdaCollectionTag << " ... skip entry !" << endl;
     return;
   }
-*/
+  // throw away events on data without lambda - for MC we check gen
+  if (_isData && H_lambda->size() == 0) return; // only use events with at least one lambda
+  edm::Handle<vector<reco::VertexCompositeCandidate> > H_kshort;
+  iEvent.getByToken(_kshortCollectionToken , H_kshort);
+  if(!H_kshort.isValid()) {
+    if(verbose>0) cout << "Missing collection : " << _kshortCollectionTag << " ... skip entry !" << endl;
+    return;
+  }
+  // throw away events on data without kshort - for MC we check gen
+  if (_isData && H_kshort->size() == 0) return; // only use events with at least one kshort
 
   edm::Handle<vector<reco::Vertex> > H_vert;
   iEvent.getByToken(_vertexCollectionToken, H_vert);
@@ -111,7 +121,7 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       _genp_charge.push_back(theparton->charge());
       _genp_pdgid.push_back(theparton->pdgId());
       _genp_status.push_back(theparton->status());
-      _genp_mom.push_back(theparton->numberOfMothers()>0 ? theparton->motherRef(0).key() : 0);
+      _genp_m1.push_back(theparton->numberOfMothers()>0 ? theparton->motherRef(0).key() : 0);
       _genp_m2.push_back(theparton->numberOfMothers()>1 ? theparton->motherRef(1).key() : 0);
       _genp_d1.push_back(theparton->numberOfDaughters()>0 ? theparton->daughterRef(0).key() : 0);
       _genp_d2.push_back(theparton->numberOfDaughters()>1 ? theparton->daughterRef(1).key() : 0);
@@ -176,11 +186,10 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   }
   _nTrack = H_track->size();
 
-/*
+
   // LAMBDAS //
 
-  for(vector<reco::VertexCompositePtrCandidate>::const_iterator lk = H_lk->begin(); lk != H_lk->end(); ++lk){
-    const reco::VertexCompositeCandidate * lambda = dynamic_cast<const reco::VertexCompositeCandidate *>(lk->daughter(0));
+  for(std::vector<reco::VertexCompositeCandidate>::const_iterator lambda = H_lambda->begin(); lambda != H_lambda->end(); ++lambda){
     if (lambda->numberOfDaughters() == 2) {
       _lambda_normalizedChi2.push_back(lambda->vertexNormalizedChi2());
       _lambda_ndof.push_back(lambda->vertexNdof());
@@ -203,8 +212,13 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       cout << "%%% Lambda vertex with " << lambda->numberOfDaughters() << " daughters" << std::endl;
       continue;
     }
+  } // for loop on lambdas
+  _lambda_N = H_lambda->size();
 
-    const reco::VertexCompositeCandidate * kshort = dynamic_cast<const reco::VertexCompositeCandidate *>(lk->daughter(1));
+
+  // KSHORT //
+
+  for(std::vector<reco::VertexCompositeCandidate>::const_iterator kshort = H_kshort->begin(); kshort != H_kshort->end(); ++kshort){
     if (kshort->numberOfDaughters() == 2) {
       _kshort_normalizedChi2.push_back(kshort->vertexNormalizedChi2());
       _kshort_ndof.push_back(kshort->vertexNdof());
@@ -225,14 +239,8 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
       cout << "%%% kshort vertex with " << kshort->numberOfDaughters() << " daughters" << std::endl;
       continue;
     }
-  } // for loop on lambda-kshort pairs
-*/
-
-// counting of lambdas and kaons is now a little trickier, since we need to
-// check overlaps to avoid doublecounting (otherwise #lambdas = #kaons by
-// construction)
-//  _lambda_N = H_lambda->size();
-//  _kshort_N = H_kshort->size();
+  } // for loop on kshorts
+  _kshort_N = H_kshort->size();
 
 /*
   for(std::vector<reco::VertexCompositeCandidate>::const_iterator lambda = H_lambda->begin(); lambda != H_lambda->end(); ++lambda){
@@ -363,7 +371,7 @@ TreeProducer_AOD::beginJob()
         _tree->Branch("gen_charge",&_genp_charge);
         _tree->Branch("gen_pdgid",&_genp_pdgid);
         _tree->Branch("gen_status",&_genp_status);
-        _tree->Branch("gen_mom",&_genp_mom);
+        _tree->Branch("gen_m1",&_genp_m1);
         _tree->Branch("gen_m2",&_genp_m2);
         _tree->Branch("gen_d1",&_genp_d1);
         _tree->Branch("gen_d2",&_genp_d2);
@@ -510,7 +518,7 @@ TreeProducer_AOD::Init()
   _genp_charge.clear();
   _genp_pdgid.clear();
   _genp_status.clear();
-  _genp_mom.clear();
+  _genp_m1.clear();
   _genp_m2.clear();
   _genp_d1.clear();
   _genp_d2.clear();
