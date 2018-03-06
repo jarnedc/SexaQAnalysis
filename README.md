@@ -1,4 +1,4 @@
-# HexaQuark Analysis
+# SexaQuark Analysis
 
 ## Check-out code
 ```
