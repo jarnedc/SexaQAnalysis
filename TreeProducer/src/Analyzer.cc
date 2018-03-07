@@ -47,22 +47,22 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
   // Check validity
   if(!h_bs.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_bsTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during Analyzer: " << m_bsTag << " ... skip entry !" << endl;
     return;
   }
 
   if(!h_vert.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_vertexTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during Analyzer: " << m_vertexTag << " ... skip entry !" << endl;
     return;
   }
 
   if(!h_rCands.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_rCandsTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during Analyzer: " << m_rCandsTag << " ... skip entry !" << endl;
     return;
   }
 
   if(!h_sCands.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_sCandsTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during Analyzer: " << m_sCandsTag << " ... skip entry !" << endl;
     return;
   }
 

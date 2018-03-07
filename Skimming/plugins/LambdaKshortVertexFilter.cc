@@ -7,38 +7,51 @@ LambdaKshortVertexFilter::LambdaKshortVertexFilter(edm::ParameterSet const& pset
   //collections
   lambdaCollectionTag_		(pset.getParameter<edm::InputTag>("lambdaCollection")),
   kshortCollectionTag_		(pset.getParameter<edm::InputTag>("kshortCollection")),
+  //beamspotCollectionTag_	(pset.getParameter<edm::InputTag>("beamspotCollection")),
+  //genCollectionTag_   (pset.getParameter<edm::InputTag>("genCollection")),
   //parameters
   maxchi2ndofVertexFit_  	(pset.getParameter<double>("maxchi2ndofVertexFit"))
 {
   //collections
   lambdaCollectionToken_ = consumes<reco::CandidatePtrVector>(lambdaCollectionTag_);
   kshortCollectionToken_ = consumes<reco::CandidatePtrVector>(kshortCollectionTag_);
+  //beamspotCollectionToken_ = consumes<reco::BeamSpot>(beamspotCollectionTag_);
+  //genCollectionToken_    = consumes<std::vector<reco::GenParticle> > (genCollectionTag_);
   //producer
-  produces<std::vector<reco::VertexCompositePtrCandidate> >("");
+  produces<std::vector<reco::Track> >("sParticlesTracks");
+  produces<std::vector<reco::VertexCompositeCandidate> >("sParticles");
 }
 
 
 //the real filter
 bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
 { 
-
   // initialize the transient track builder
   edm::ESHandle<TransientTrackBuilder> theB;
   iSetup.get<TransientTrackRecord>().get("TransientTrackBuilder",theB);
 
-  auto sParticles = std::make_unique<std::vector<reco::VertexCompositePtrCandidate> >();
+  //these are for the producer
+  auto sParticlesTracks = std::make_unique<std::vector<reco::Track>>();
+  auto sParticles = std::make_unique<std::vector<reco::VertexCompositeCandidate> >();
+
 
   // collections
   edm::Handle<reco::CandidatePtrVector> h_lambda;
   iEvent.getByToken(lambdaCollectionToken_, h_lambda);
   edm::Handle<reco::CandidatePtrVector> h_kshort;
   iEvent.getByToken(kshortCollectionToken_ , h_kshort);
+  //edm::Handle<reco::BeamSpot> h_beamspot;
+  //iEvent.getByToken(beamspotCollectionToken_ , h_beamspot);
+ 
   //check all the above collections and return false if any of them is invalid
   if (!allCollectionValid(h_lambda, h_kshort)) return false;
 
+  //to save the results from the kinfit
+  std::vector<int> chargeProton;
   std::vector<RefCountedKinematicParticle> lambdaKinFitted, kshortKinFitted;
-  std::vector<unsigned int> lambdaIdx, kshortIdx;
+  std::vector<RefCountedKinematicVertex> lambdaKinFittedVertex, kshortKinFittedVertex;
 
+  
   // loop over all the lambdas in an event
   for (unsigned int l = 0; l < h_lambda->size(); ++l) {
     //get the daughters from the Lambdas
@@ -56,6 +69,8 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
       TrackV0LambdasDaughterProton = V0LambdasDaughter2->bestTrack();
       TrackV0LambdasDaughterPion = V0LambdasDaughter1->bestTrack();
     }
+    //save the charge of the proton: if pos then we know the lamda was a particle if neg we know it was an antilambda
+    chargeProton.push_back(TrackV0LambdasDaughterProton->charge());
     //get the ttracks
     TransientTrack TTrackV0LambdasDaughterProton = (*theB).build(TrackV0LambdasDaughterProton);
     TransientTrack TTrackV0LambdasDaughterPion = (*theB).build(TrackV0LambdasDaughterPion);
@@ -63,11 +78,11 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
     RefCountedKinematicTree LambdaTree = KinfitTwoTTracks(TTrackV0LambdasDaughterPion, TTrackV0LambdasDaughterProton, charged_pi_mass, charged_pi_mass_sigma, proton_mass, proton_mass_sigma, LambdaMass, LambdaMassSigma);
     //check if the LambdaTree is not a null pointer, isValid and is not empty. i.e.: the fit succeeded
     if(!checkRefCountedKinematicTree(LambdaTree)){cout << "Lambda tree not succesfully build" << endl; return false;}
-    //get the Lambda particle from the tree
-    lambdaKinFitted.push_back(getTopParticleFromTree(LambdaTree));
-    lambdaIdx.push_back(l);
+    //get the Lambda particle from the tree and save it to a vector
+    LambdaTree->movePointerToTheTop();
+    lambdaKinFitted.push_back(LambdaTree->currentParticle());
+    lambdaKinFittedVertex.push_back(LambdaTree->currentDecayVertex());
   }
-
 
   // loop over all kaons in the event
   for(unsigned int k = 0; k < h_kshort->size(); ++k){
@@ -81,66 +96,112 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
     TransientTrack TTrackV0KaonsDaughter1 = (*theB).build(TrackV0KaonsDaughter1);
     TransientTrack TTrackV0KaonsDaughter2 = (*theB).build(TrackV0KaonsDaughter2);
     //now do a kinfit to the two transient tracks
-    RefCountedKinematicTree KshortTree = KinfitTwoTTracks(TTrackV0KaonsDaughter1, TTrackV0KaonsDaughter2, charged_pi_mass, charged_pi_mass_sigma, charged_pi_mass, charged_pi_mass_sigma, KshortMass, KshortMassSigma);
+    RefCountedKinematicTree  KshortTree = KinfitTwoTTracks(TTrackV0KaonsDaughter1, TTrackV0KaonsDaughter2, charged_pi_mass, charged_pi_mass_sigma, charged_pi_mass, charged_pi_mass_sigma, KshortMass, KshortMassSigma);
     if(!checkRefCountedKinematicTree(KshortTree)){cout << "Kshort tree not succesfully build" << endl; return false;}
-    //get the Kshort particle from the tree
-    kshortKinFitted.push_back(getTopParticleFromTree(KshortTree));
-    kshortIdx.push_back(k);
+    //get the Kshort particle from the tree and put in a vector
+   KshortTree->movePointerToTheTop(); 
+   kshortKinFitted.push_back(KshortTree->currentParticle());
+   kshortKinFittedVertex.push_back(KshortTree->currentDecayVertex());
+
   }
 
   for (unsigned int l = 0; l < lambdaKinFitted.size(); ++l) {
     for(unsigned int k = 0; k < kshortKinFitted.size(); ++k){
+      //put the supposed daughters of the S togethers
       vector<RefCountedKinematicParticle> daughtersS; 
       daughtersS.push_back(lambdaKinFitted.at(l));
       daughtersS.push_back(kshortKinFitted.at(k));
       //fit the S daughters to a common vertex
       KinematicParticleVertexFitter kpvFitter;
       RefCountedKinematicTree STree = kpvFitter.fit(daughtersS);
+      //check succesfulness of the kpvFitter
       if(!checkRefCountedKinematicTree(STree)){cout << "S tree not succesfully build" << endl; return false;};
+      //get the S particle
       STree->movePointerToTheTop();
       RefCountedKinematicParticle Sparticle = STree->currentParticle();
-      const reco::TransientTrack SparticleTrasientTrack = Sparticle->refittedTransientTrack();
-      const reco::Track SparticleTrack = SparticleTrasientTrack.track();
+      //get the decay vertex of the S
       RefCountedKinematicVertex STreeVertex = STree->currentDecayVertex();
 
-      //cut on some things now related to the Sparticle: the chi2 of the vertex fit, the the vertex location compared to the closest primary vertex, the fact if the reconstructed S momentum points to the primary vertex. 	
+      //cut on some things now related to the Sparticle: the chi2 of the vertex fit, the vertex location compared to the closest primary vertex, the fact if the reconstructed S momentum points to the primary vertex. 	
       if(STreeVertex->chiSquared()/STreeVertex->degreesOfFreedom() > maxchi2ndofVertexFit_)continue;
+      //get the track associated with this particle
+      const reco::TransientTrack SparticleTrasientTrack = Sparticle->refittedTransientTrack();
+      const reco::Track SparticleTrack = SparticleTrasientTrack.track();
 
-      //now that you passed all these cuts can start making the Sparticle candidate as a VertexCompositeCandidate
+      //now that you passed cuts you can start making the Sparticle candidate as a VertexCompositeCandidate
+      //momentum
       const reco::Particle::LorentzVector SparticleP(Sparticle->currentState().globalMomentum().x(), Sparticle->currentState().globalMomentum().y(), Sparticle->currentState().globalMomentum().z(),sqrt(pow(Sparticle->currentState().globalMomentum().x()+Sparticle->currentState().globalMomentum().y()+Sparticle->currentState().globalMomentum().z(),2) + pow(Sparticle->currentState().kinematicParameters().mass(),2)));
-      //reco::VertexCompositeCandidate* theSparticle = new reco::VertexCompositeCandidate(0,SparticleP, STreeVertex, STreeVertex.covariance(), STreeVertex->chiSquared(), STreeVertex->degreesOfFreedom());
-      //Charge SCharge= 0;
-      Point STreeVertexPoint(STreeVertex->position().x(),STreeVertex->position().y(),STreeVertex->position().z());
-      //reco::CompositeCandidate* theSparticleCompositeCandidate = new reco::CompositeCandidate(0.,SparticleP, STreeVertexPoint, 0, 0, true, "Sparticle");
-      //reco::VertexCompositeCandidate* theSparticleVertexCompositeCandidate = new reco::VertexCompositeCandidate(*theSparticleCompositeCandidate);
-      reco::VertexCompositePtrCandidate theSparticleVertexCompositePtrCandidate(0, SparticleP, STreeVertexPoint);
-      //adding daughters to the Sparticle
-      theSparticleVertexCompositePtrCandidate.addDaughter((*h_lambda)[l]);
-      theSparticleVertexCompositePtrCandidate.addDaughter((*h_kshort)[k]);
-      // set the vertex info
-      theSparticleVertexCompositePtrCandidate.setChi2AndNdof(STreeVertex->chiSquared(),STreeVertex->degreesOfFreedom());
-      theSparticleVertexCompositePtrCandidate.setCovariance(STreeVertex->error().matrix());
-      // adding Sparticles to the event
-      sParticles->push_back(std::move(theSparticleVertexCompositePtrCandidate));
+      //decay vertex
+      Point STreeVertexPoint(STreeVertex->position().x(),STreeVertex->position().y(),STreeVertex->position().z()); 
+      //covariance matrix of the vertex
+      //ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  CovMatrixSVertex = FillCovarianceVertex(Sparticle->currentState().kinematicParametersError());
+
+      //will use the charge in the VertexCompositeCandidate constructor to indicate if in the decay there is an antiproton present if the antiproton
+      //create the S as VertexCompositeCandidate
+     // reco::VertexCompositeCandidate theSparticleVertexCompositeCandidate(chargeProton[l], SparticleP, STreeVertexPoint, CovMatrixSVertex, (double)STreeVertex->chiSquared(),(double)STreeVertex->degreesOfFreedom(), 0,0, true);
+      reco::VertexCompositeCandidate theSparticleVertexCompositeCandidate(chargeProton[l], SparticleP, STreeVertexPoint);
+     theSparticleVertexCompositeCandidate.setCovariance(STreeVertex->error().matrix());
+     theSparticleVertexCompositeCandidate.setChi2AndNdof(STreeVertex->chiSquared(),STreeVertex->degreesOfFreedom());
+     
+
+      //making daughters to the Sparticle
+      //Lambda      
+      //momentum
+      const reco::Particle::LorentzVector LambdaDaughterP(lambdaKinFitted.at(l)->currentState().globalMomentum().x(), lambdaKinFitted.at(l)->currentState().globalMomentum().y(), lambdaKinFitted.at(l)->currentState().globalMomentum().z(),sqrt(pow(lambdaKinFitted.at(l)->currentState().globalMomentum().x()+lambdaKinFitted.at(l)->currentState().globalMomentum().y()+lambdaKinFitted.at(l)->currentState().globalMomentum().z(),2) + pow(lambdaKinFitted.at(l)->currentState().kinematicParameters().mass(),2)));
+      //vertex
+      const Point LambdaDaughterPoint(lambdaKinFittedVertex.at(l)->position().x(),lambdaKinFittedVertex.at(l)->position().y(),lambdaKinFittedVertex.at(l)->position().z());
+     //daughter
+     LeafCandidate LambdaDaughter(0,  LambdaDaughterP, LambdaDaughterPoint);
+      //Kshort
+      //momentum
+      const reco::Particle::LorentzVector KshortDaughterP(kshortKinFitted.at(k)->currentState().globalMomentum().x(), kshortKinFitted.at(k)->currentState().globalMomentum().y(), kshortKinFitted.at(k)->currentState().globalMomentum().z(),sqrt(pow(kshortKinFitted.at(k)->currentState().globalMomentum().x()+kshortKinFitted.at(k)->currentState().globalMomentum().y()+kshortKinFitted.at(k)->currentState().globalMomentum().z(),2) + pow(kshortKinFitted.at(k)->currentState().kinematicParameters().mass(),2)));
+     //vertex
+     const Point KshortDaughterPoint(kshortKinFittedVertex.at(k)->position().x(),kshortKinFittedVertex.at(k)->position().y(),kshortKinFittedVertex.at(k)->position().z()); 
+     //daughter
+     LeafCandidate KshortDaughter(0,  KshortDaughterP, KshortDaughterPoint);
+     //add daughters to the S
+     theSparticleVertexCompositeCandidate.addDaughter(LambdaDaughter);
+     theSparticleVertexCompositeCandidate.addDaughter(KshortDaughter);
+     
+     //calculating the S vertex covariance along the connection line with the beamspot
+     //placeholder beamspot:
+    // vector<double> PlaceHolderBeamspot; PlaceHolderBeamspot.push_back((*h_beamspot).x0()); PlaceHolderBeamspot.push_back((*h_beamspot).y0());
+    // cout << "beamspot coordinates: " << PlaceHolderBeamspot[0] << ", " << PlaceHolderBeamspot[1] << endl;
+    // cout << "S vertex covariance along connection line with beamspot :" <<  XYVarAlongLine(CovMatrixSVertex,  PlaceHolderBeamspot, STreeVertexPoint) << endl;
+
+       //adding SparticlesTracks to the event
+      sParticlesTracks->push_back(std::move(SparticleTrack));
+       //adding Sparticles to the event
+      sParticles->push_back(std::move(theSparticleVertexCompositeCandidate));
     }//end loop over kshort
   }//end loop over lambda
+
+
+
+
   
   int ns = sParticles->size();
-  iEvent.put(std::move(sParticles)); 
+  iEvent.put(std::move(sParticlesTracks),"sParticlesTracks");
+  iEvent.put(std::move(sParticles),"sParticles"); 
   return (ns > 0);
-}
+
+}//end filter
 
 
 //check the validness of all collections needed in the filter
 bool LambdaKshortVertexFilter::allCollectionValid(edm::Handle<reco::CandidatePtrVector> h_lambda,edm::Handle<reco::CandidatePtrVector> h_kshort){
   if(!h_lambda.isValid()) {
-      std::cout << "Missing collection : " << lambdaCollectionTag_   << " ... skip entry !" << std::endl;
+      std::cout << "Missing collection during LambdaKshortVertexFilter: " << lambdaCollectionTag_   << " ... skip entry !" << std::endl;
       return false;
   }
   else if(!h_kshort.isValid()) {
-      std::cout << "Missing collection : " << kshortCollectionTag_   << " ... skip entry !" << std::endl;
+      std::cout << "Missing collection during LambdaKshortVertexFilter: " << kshortCollectionTag_   << " ... skip entry !" << std::endl;
       return false;
   }
+/*  else if(!h_beamspot.isValid()) {
+      std::cout << "Missing collection : " << beamspotCollectionTag_   << " ... skip entry !" << std::endl;
+      return false;
+  }*/
   else {
       return true;
   }
@@ -210,7 +271,28 @@ RefCountedKinematicVertex LambdaKshortVertexFilter::returnVertexFromTree(const R
   return dec_vertex;
 }
 
+//VertexCovarianceMatrix  LambdaKshortVertexFilter::FillCovarianceVertex(const KinematicParametersError& ErrorMatrix) const{
+/*ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  LambdaKshortVertexFilter::FillCovarianceVertex(const KinematicParametersError& ErrorMatrix) const{
+  VertexCovarianceMatrix CovMatrixSVertex;
+//  const reco::TrackBase::CovarianceMatrix  CovMatrixSVertex;
+  for(int i = 0; i < 3; i++){
+    for(int j = 0; j < 3; j++){
+	CovMatrixSVertex(i,j) = ErrorMatrix.matrix()(i,j);  
+	cout << i << " " << j << " " << ErrorMatrix.matrix()(i,j) << endl;
+    }
+  }
 
+  return CovMatrixSVertex;
+}*/
+
+double LambdaKshortVertexFilter::XYVarAlongLine(ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  CovMatrixSVertex, vector<double> beamspot, Point vertex){
+  //calculate the line between the beam spot and the vertex
+  vector<double> Line;
+  Line.push_back(vertex.x() - beamspot[0]); Line.push_back(vertex.y() - beamspot[1]); //this is the x and y coordinate of the line connecting beam spot and vertex
+  double angle_Line_x_axis = TMath::ATan(Line[1]/Line[0]); //This is the angle between the line connecting beamspot and vertex and the x axis
+  return pow(pow(CovMatrixSVertex(0,0)*TMath::Cos(angle_Line_x_axis),2)+pow(CovMatrixSVertex(1,1)*TMath::Sin(angle_Line_x_axis),2),0.5);
+
+}
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 DEFINE_FWK_MODULE(LambdaKshortVertexFilter);

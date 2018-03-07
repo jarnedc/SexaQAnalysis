@@ -8,4 +8,5 @@
 <use name="CommonTools/Utils"/>
 <use name="DataFormats/TrackReco"/>
 <use name="RecoVertex/PrimaryVertexProducer"/>
+<use   name="CondFormats/BeamSpotObjects"/>
 <flags EDM_PLUGIN="1"/>

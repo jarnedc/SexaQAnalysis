@@ -7,7 +7,7 @@
 #include "FWCore/Framework/interface/EventSetup.h"
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 
-#include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
+#include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
 
   
 class SMassFilter : public edm::EDFilter {
@@ -21,7 +21,7 @@ class SMassFilter : public edm::EDFilter {
   private:
 
     edm::InputTag lkPairCollectionTag_;
-    edm::EDGetTokenT<std::vector<reco::VertexCompositePtrCandidate> > lkPairCollectionToken_;
+    edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > lkPairCollectionToken_;
     double minMass_, maxMass_, targetMass_;
     unsigned int prescaleFalse_, nreject_;
     reco::LeafCandidate::LorentzVector n_;

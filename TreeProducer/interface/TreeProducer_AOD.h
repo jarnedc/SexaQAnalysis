@@ -67,10 +67,15 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   edm::InputTag _vertexCollectionTag;
   edm::InputTag _trackCollectionTag;
   edm::InputTag _lambdaKshortCollectionTag;
+  edm::InputTag _sCollectionTag;
+  edm::InputTag _sTracksCollectionTag;
 
   edm::EDGetTokenT<vector<reco::Vertex> > _vertexCollectionToken;
   edm::EDGetTokenT<vector<reco::Track> > _trackCollectionToken;
   edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > _lambdaKshortCollectionToken;
+  edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > _sCollectionToken;
+  edm::EDGetTokenT<vector<reco::Track> > _sTracksCollectionToken;
+  
   bool _isData;
   edm::EDGetToken  m_partons;
 
@@ -115,6 +120,15 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   std::vector<double> _kshort_d1px, _kshort_d1py, _kshort_d1pz;
   std::vector<double> _kshort_d2px, _kshort_d2py, _kshort_d2pz;
 
+  // S
+  int _S_N;
+  std::vector<int> _S_ndof;
+  std::vector<double> _S_normalizedChi2, _S_m;
+  std::vector<double> _S_x, _S_y, _S_z;
+  std::vector<double> _S_px, _S_py, _S_pz;
+  std::vector<double> _S_d1px, _S_d1py, _S_d1pz;
+  std::vector<double> _S_d2px, _S_d2py, _S_d2pz;
+
   //GenParticles
   std::vector<double> _genp_x;
   std::vector<double> _genp_y;
@@ -135,7 +149,14 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   std::vector<int> _genp_m2;
   std::vector<int> _genp_d1;
   std::vector<int> _genp_d2;
-  
+ 
+  //S Tracks
+  int _SnTrack, _SnTrack_stored;
+  std::vector<int> _Strack_Nhits, _Strack_NpixHits, _Strack_purity, _Strack_ndof;
+  std::vector<double> _Strack_eta, _Strack_pt, _Strack_px, _Strack_py, _Strack_pz, _Strack_x, _Strack_y, _Strack_z, _Strack_phi, _Strack_ptError, _Strack_dxy, _Strack_d0, _Strack_dzError, _Strack_dz, _Strack_normalizedChi2;
+  std::vector< std::vector<double> > _Strack_covariance;
+  std::vector<int> _Strack_charge;
+ 
 };
 
 namespace reco {

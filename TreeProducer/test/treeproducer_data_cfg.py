@@ -69,9 +69,10 @@ process.lambdaKshortFilter.prescaleFalse = 0
 process.load("SexaQAnalysis.Skimming.LambdaKshortVertexFilter_cfi")
 process.lambdaKshortVertexFilter.lambdaCollection = cms.InputTag("lambdaKshortFilter","lambda")
 process.lambdaKshortVertexFilter.kshortCollection = cms.InputTag("lambdaKshortFilter","kshort")
+process.lambdaKshortVertexFilter.maxchi2ndofVertexFit = 10.
 
 from SexaQAnalysis.Skimming.SMassFilter_cfi import massFilter
-massFilter.lambdakshortCollection = cms.InputTag("lambdaKshortVertexFilter")
+massFilter.lambdakshortCollection = cms.InputTag("lambdaKshortVertexFilter","sParticles")
 massFilter.minMass = -10000 # effectively no filter
 massFilter.maxMass = 10000  # effectively no filter
 process.rMassFilter = massFilter.clone()
@@ -82,6 +83,8 @@ process.sMassFilter.targetMass = 0.939565
 
 process.load("SexaQAnalysis.TreeProducer.Treeproducer_AOD_cfi")
 process.tree.genCollection = cms.InputTag("genParticlePlusGEANT")
+process.tree.sCollection = cms.InputTag("lambdaKshortVertexFilter","sParticles")
+process.tree.sTrackCollection = cms.InputTag("lambdaKshortVertexFilter","sParticlesTracks")
 process.tree.isData = cms.untracked.bool(options.isData)
 
 process.p = cms.Path(

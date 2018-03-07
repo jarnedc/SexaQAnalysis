@@ -11,9 +11,13 @@ TreeProducer_AOD::TreeProducer_AOD(const edm::ParameterSet& pset):
   _vertexCollectionTag(pset.getParameter<edm::InputTag>("vertexCollection")),
   _trackCollectionTag(pset.getParameter<edm::InputTag>("trackCollection")),
   _lambdaKshortCollectionTag(pset.getParameter<edm::InputTag>("lambdaKshortCollection")),
+  _sCollectionTag(pset.getParameter<edm::InputTag>("sCollection")),
+  _sTracksCollectionTag(pset.getParameter<edm::InputTag>("sTrackCollection")),
   _vertexCollectionToken(consumes<vector<reco::Vertex> >(_vertexCollectionTag)),
   _trackCollectionToken(consumes<vector<reco::Track> >(_trackCollectionTag)),
   _lambdaKshortCollectionToken(consumes<vector<reco::VertexCompositePtrCandidate> >(_lambdaKshortCollectionTag)),
+  _sCollectionToken(consumes<vector<reco::VertexCompositeCandidate> >(_sCollectionTag)),
+  _sTracksCollectionToken(consumes<vector<reco::Track> >(_sTracksCollectionTag)),
   _isData(pset.getUntrackedParameter<bool>("isData")),
   m_partons(consumes<vector<reco::GenParticle> >(pset.getParameter<edm::InputTag>("genCollection")))
 {
@@ -43,34 +47,52 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   if(!_isData){
     iEvent.getByToken(m_partons, H_partons);
     if(!H_partons.isValid()) {
-      if(verbose>0) cout << "Missing collection : genParticles ... skip entry !" << endl;
+      if(verbose>0) cout << "Missing collection during TreeProducer_AOD: genParticles ... skip entry !" << endl;
       return;
     }
   }
 
-/*
+
   edm::Handle<vector<reco::VertexCompositePtrCandidate> > H_lk;
   iEvent.getByToken(_lambdaKshortCollectionToken , H_lk);
   if(!H_lk.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << _lambdaKshortCollectionTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during TreeProducer_AOD: " << _lambdaKshortCollectionTag << " ... skip entry !" << endl;
     return;
   }
-*/
+
 
   edm::Handle<vector<reco::Vertex> > H_vert;
   iEvent.getByToken(_vertexCollectionToken, H_vert);
   if(!H_vert.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << _vertexCollectionTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during TreeProducer_AOD: " << _vertexCollectionTag << " ... skip entry !" << endl;
     return;
   }
 
   edm::Handle<vector<reco::Track> > H_track;
   iEvent.getByToken(_trackCollectionToken , H_track);
   if(!H_track.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << _trackCollectionTag << " ... skip entry !" << endl;
+    if(verbose>0) cout << "Missing collection during TreeProducer_AOD: " << _trackCollectionTag << " ... skip entry !" << endl;
     return;
   }
 
+  edm::Handle<vector<reco::VertexCompositeCandidate> > H_S;
+  iEvent.getByToken(_sCollectionToken , H_S);
+  if(!H_S.isValid()) {
+    if(verbose>0) cout << "Missing collection during TreeProducer_AOD : " << _sCollectionTag << " ... skip entry !" << endl;
+    return;
+  }
+  // throw away events on data withouts - for MC we check gen
+  if (_isData && H_S->size() == 0) return; // only use events with at least one s
+
+
+  edm::Handle<vector<reco::Track> > H_S_tracks;
+  iEvent.getByToken(_sTracksCollectionToken , H_S_tracks);
+  if(!H_S_tracks.isValid()) {
+    if(verbose>0) cout << "Missing collection during TreeProducer_AOD : " << _sTracksCollectionTag << " ... skip entry !" << endl;
+    return;
+  }
+  // throw away events on data withouts - for MC we check gen
+  if (_isData && H_S_tracks->size() == 0) return; // only use events with at least one s
 
   // GLOBAL EVENT INFORMATIONS //
 
@@ -175,6 +197,64 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     _track_covariance.push_back(cov);
   }
   _nTrack = H_track->size();
+
+// S //
+
+  for(std::vector<reco::VertexCompositeCandidate>::const_iterator s = H_S->begin(); s != H_S->end(); ++s){
+    if (s->numberOfDaughters() == 2) {
+      _S_normalizedChi2.push_back(s->vertexNormalizedChi2());
+      _S_ndof.push_back(s->vertexNdof());
+      _S_x.push_back(s->vx());
+      _S_y.push_back(s->vy());
+      _S_z.push_back(s->vz());
+      _S_px.push_back(s->px());
+      _S_py.push_back(s->py());
+      _S_pz.push_back(s->pz());
+      _S_m.push_back(s->mass());
+      _S_d1px.push_back(s->daughter(0)->px());
+      _S_d1py.push_back(s->daughter(0)->py());
+      _S_d1pz.push_back(s->daughter(0)->pz());
+      _S_d2px.push_back(s->daughter(1)->px());
+      _S_d2py.push_back(s->daughter(1)->py());
+      _S_d2pz.push_back(s->daughter(1)->pz());
+    } else {
+      cout << "%%%s vertex with " << s->numberOfDaughters() << " daughters" << std::endl;
+      continue;
+    }
+  } // for loop on s
+  _S_N = H_S->size();
+
+  // S TRACKS //
+  for (vector<reco::Track>::const_iterator theTrack = H_S_tracks->begin(); theTrack != H_S_tracks->end(); ++theTrack){
+    _Strack_purity.push_back(theTrack->highPurity);
+    _Strack_Nhits.push_back(theTrack->numberOfValidHits());
+    _Strack_NpixHits.push_back(theTrack->hitPattern().numberOfValidPixelHits());
+    _Strack_pt.push_back(theTrack->pt());
+    _Strack_px.push_back(theTrack->px());
+    _Strack_py.push_back(theTrack->py());
+    _Strack_pz.push_back(theTrack->pz());
+    _Strack_x.push_back(theTrack->vx());
+    _Strack_y.push_back(theTrack->vy());
+    _Strack_z.push_back(theTrack->vz());
+    _Strack_eta.push_back(theTrack->eta());
+    _Strack_phi.push_back(theTrack->phi());
+    _Strack_normalizedChi2.push_back(theTrack->normalizedChi2());
+    _Strack_ndof.push_back(theTrack->ndof());
+    _Strack_ptError.push_back(theTrack->ptError());
+    _Strack_dzError.push_back(theTrack->dzError());
+    _Strack_dz.push_back(theTrack->dz());
+    _Strack_dxy.push_back(theTrack->dxy());
+    _Strack_d0.push_back(theTrack->d0());
+    _Strack_charge.push_back(theTrack->charge());
+    std::vector<double> cov;
+    for(int k=0; k<4; k++){
+      for(int j=0; j<4; j++){
+        cov.push_back(theTrack->covariance(k,j));
+      }
+    }
+    _Strack_covariance.push_back(cov);
+  }
+  _SnTrack = H_S_tracks->size();
 
 /*
   // LAMBDAS //
@@ -347,6 +427,24 @@ TreeProducer_AOD::beginJob()
 	_tree->Branch("kshort_d2py",&_kshort_d2py);
 	_tree->Branch("kshort_d2pz",&_kshort_d2pz);
 
+	// s
+	_tree->Branch("nS",&_S_N,"nKshort/I");
+	_tree->Branch("S_normalizedChi2",&_S_normalizedChi2);
+	_tree->Branch("S_ndof",&_S_ndof);
+	_tree->Branch("S_x",&_S_x);
+	_tree->Branch("S_y",&_S_y);
+	_tree->Branch("S_z",&_S_z);
+	_tree->Branch("S_px",&_S_px);
+	_tree->Branch("S_py",&_S_py);
+	_tree->Branch("S_pz",&_S_pz);
+	_tree->Branch("S_m",&_S_m);
+	_tree->Branch("S_d1px",&_S_d1px);
+	_tree->Branch("S_d1py",&_S_d1py);
+	_tree->Branch("S_d1pz",&_S_d1pz);
+	_tree->Branch("S_d2px",&_S_d2px);
+	_tree->Branch("S_d2py",&_S_d2py);
+	_tree->Branch("S_d2pz",&_S_d2pz);
+
     ///GenParticles
 	_tree->Branch("gen_x",&_genp_x);
 	_tree->Branch("gen_y",&_genp_y);
@@ -367,7 +465,33 @@ TreeProducer_AOD::beginJob()
         _tree->Branch("gen_m2",&_genp_m2);
         _tree->Branch("gen_d1",&_genp_d1);
         _tree->Branch("gen_d2",&_genp_d2);
-        
+ 
+        ///S tracks
+       	// Tracks
+        _tree->Branch("SnTrack_stored",&_SnTrack_stored,"SnTrack_stored/I");
+        _tree->Branch("SnTrack",&_SnTrack,"SnTrack/I");
+        _tree->Branch("Strack_pt",&_Strack_pt);
+        _tree->Branch("Strack_px",&_Strack_px);
+        _tree->Branch("Strack_py",&_Strack_py);
+        _tree->Branch("Strack_pz",&_Strack_pz);
+        _tree->Branch("Strack_x",&_Strack_x);
+        _tree->Branch("Strack_y",&_Strack_y);
+        _tree->Branch("Strack_z",&_Strack_z);
+        _tree->Branch("Strack_eta",&_Strack_eta);
+	_tree->Branch("Strack_phi",&_Strack_phi);
+	_tree->Branch("Strack_normalizedChi2",&_Strack_normalizedChi2);
+	_tree->Branch("Strack_ndof",&_Strack_ndof);
+	_tree->Branch("Strack_ptError",&_Strack_ptError);
+	_tree->Branch("Strack_dzError",&_Strack_dzError);
+	_tree->Branch("Strack_dz",&_Strack_dz);
+	_tree->Branch("Strack_purity",&_Strack_purity);
+	_tree->Branch("Strack_nhits",&_Strack_Nhits);
+	_tree->Branch("Strack_nPixHits",&_Strack_NpixHits);
+        _tree->Branch("Strack_d0",&_Strack_d0);
+        _tree->Branch("Strack_charge",&_Strack_charge);
+        _tree->Branch("Strack_dxy",&_Strack_dxy);
+	_tree->Branch("Strack_covariance",&_Strack_covariance);
+       
 }
 
 // ------------ method called once each job just after ending the event loop  ------------
@@ -493,6 +617,23 @@ TreeProducer_AOD::Init()
   _kshort_d2py.clear();
   _kshort_d2pz.clear();
   
+  //S
+  _S_N = 0;
+  _S_normalizedChi2.clear();
+  _S_ndof.clear();
+  _S_x.clear();
+  _S_y.clear();
+  _S_z.clear();
+  _S_px.clear();
+  _S_py.clear();
+  _S_pz.clear();
+  _S_m.clear();
+  _S_d1px.clear();
+  _S_d1py.clear();
+  _S_d1pz.clear();
+  _S_d2px.clear();
+  _S_d2py.clear();
+  _S_d2pz.clear();
 
   //GenParticles
   _genp_x.clear();
@@ -514,6 +655,31 @@ TreeProducer_AOD::Init()
   _genp_m2.clear();
   _genp_d1.clear();
   _genp_d2.clear();
+
+    //Tracks
+  _SnTrack = 0;
+  _SnTrack_stored = 0;
+  _Strack_eta.clear();
+  _Strack_ndof.clear();
+  _Strack_Nhits.clear();
+  _Strack_normalizedChi2.clear();
+  _Strack_NpixHits.clear();
+  _Strack_phi.clear();
+  _Strack_pt.clear();
+  _Strack_px.clear();
+  _Strack_py.clear();
+  _Strack_pz.clear();  
+  _Strack_x.clear();
+  _Strack_y.clear();
+  _Strack_z.clear();
+  _Strack_ptError.clear();
+  _Strack_dzError.clear();
+  _Strack_dz.clear();
+  _Strack_d0.clear();
+  _Strack_charge.clear();
+  _Strack_covariance.clear();
+  _Strack_dxy.clear();
+  _Strack_purity.clear();
 
 }
 

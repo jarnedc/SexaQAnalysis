@@ -42,14 +42,14 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
     edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_lambda;
     iEvent.getByToken(lambdaCollectionToken_, h_lambda);
     if(!h_lambda.isValid()) {
-      std::cout << "Missing collection : " << lambdaCollectionTag_ << " ... skip entry !" << std::endl;
+      std::cout << "Missing collection during LambdaKshortFilter : " << lambdaCollectionTag_ << " ... skip entry !" << std::endl;
       return false;
     }
     // read out kaons
     edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_kshort;
     iEvent.getByToken(kshortCollectionToken_ , h_kshort);
     if(!h_kshort.isValid()) {
-      std::cout << "Missing collection : " << kshortCollectionTag_ << " ... skip entry !" << std::endl;
+      std::cout << "Missing collection during LambdaKshortFilter : " << kshortCollectionTag_ << " ... skip entry !" << std::endl;
       return false;
     }
 

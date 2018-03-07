@@ -29,6 +29,7 @@
 #include "RecoVertex/KinematicFit/interface/MassKinematicConstraint.h"
 #include "RecoVertex/KinematicFit/interface/KinematicParticleFitter.h"
 //#include "FWCore/ServiceRegistry/interface/Service.h"
+#include "DataFormats/BeamSpot/interface/BeamSpot.h"
 
 
 class LambdaKshortVertexFilter : public edm::EDFilter {
@@ -56,8 +57,12 @@ class LambdaKshortVertexFilter : public edm::EDFilter {
 
     edm::InputTag lambdaCollectionTag_;
     edm::InputTag kshortCollectionTag_;
+  //  edm::InputTag beamspotCollectionTag_;
+    
     edm::EDGetTokenT<reco::CandidatePtrVector> lambdaCollectionToken_;
     edm::EDGetTokenT<reco::CandidatePtrVector> kshortCollectionToken_;
+  //  edm::EDGetTokenT<reco::BeamSpot> beamspotCollectionToken_;
+
     double maxchi2ndofVertexFit_;
 
     //functions 
@@ -66,7 +71,9 @@ class LambdaKshortVertexFilter : public edm::EDFilter {
     RefCountedKinematicTree KinfitTwoTTracks(reco::TransientTrack ttrack1, reco::TransientTrack ttrack2, ParticleMass trackMass1, float trackMassSigma1, ParticleMass trackMass2, float trackMassSigma2, ParticleMass combinedMass, float combinedMassSigma);
     RefCountedKinematicParticle getTopParticleFromTree(RefCountedKinematicTree Tree);
     RefCountedKinematicVertex returnVertexFromTree(const RefCountedKinematicTree& myTree) const;
-
+    
+//    ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> > FillCovarianceVertex(const KinematicParametersError& ErrorMatrix) const;
+    double XYVarAlongLine(ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  CovMatrixSVertex, std::vector<double> beamspot, Point vertex);
 };
 
 

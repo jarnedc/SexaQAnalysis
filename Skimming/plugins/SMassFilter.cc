@@ -11,32 +11,32 @@ SMassFilter::SMassFilter(edm::ParameterSet const & pset) :
   targetMass_         (pset.getParameter<double>("targetMass")),
   prescaleFalse_      (pset.getParameter<unsigned int>("prescaleFalse"))
 {
-  lkPairCollectionToken_ = consumes<std::vector<reco::VertexCompositePtrCandidate> >(lkPairCollectionTag_);
+  lkPairCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(lkPairCollectionTag_);
   n_ = reco::LeafCandidate::LorentzVector(0,0,0,targetMass_);
   nreject_ = 0;
-  produces<std::vector<reco::VertexCompositePtrCandidate> >();
+  produces<std::vector<reco::VertexCompositeCandidate> >();
 }
 
 
 bool SMassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
 {
 
-  edm::Handle<std::vector<reco::VertexCompositePtrCandidate> > h_lkPair;
+  edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_lkPair;
   iEvent.getByToken(lkPairCollectionToken_, h_lkPair);
   if(!h_lkPair.isValid()) {
-    std::cout << "Missing collection : " << lkPairCollectionTag_ << " ... skip entry !" << std::endl;
+    std::cout << "Missing collection during SMassFilter: " << lkPairCollectionTag_ << " ... skip entry !" << std::endl;
     return false;
   }
 
-  auto lkPairs = std::make_unique<std::vector<reco::VertexCompositePtrCandidate> >();
+  auto lkPairs = std::make_unique<std::vector<reco::VertexCompositeCandidate> >();
 
   // find any Lambda - Kshort pair that matches the mass window
   for (auto lk : *h_lkPair) {
     // calculate the missing mass
-    reco::LeafCandidate::LorentzVector m = lk.daughterPtr(0)->p4() + lk.daughterPtr(1)->p4() - n_;
+    reco::LeafCandidate::LorentzVector m = lk.daughter(0)->p4() + lk.daughter(1)->p4() - n_;
     // impose the mass window
     if (m.M() > minMass_ && m.M() < maxMass_) {
-      reco::VertexCompositePtrCandidate lkPass = lk;
+      reco::VertexCompositeCandidate lkPass = lk;
       lkPass.setP4(m);
       lkPairs->push_back(std::move(lkPass));
     }
