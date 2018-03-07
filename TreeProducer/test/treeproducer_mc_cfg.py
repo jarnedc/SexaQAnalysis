@@ -71,7 +71,7 @@ process.load("SexaQAnalysis.Skimming.LambdaKshortVertexFilter_cfi")
 process.lambdaKshortVertexFilter.lambdaCollection = cms.InputTag("lambdaKshortFilter","lambda")
 process.lambdaKshortVertexFilter.kshortCollection = cms.InputTag("lambdaKshortFilter","kshort")
 
-process.load("SexaQAnalysis.Skimming.SMassFilter_cfi")
+process.load("SexaQAnalysis.Skimming.MassFilter_cfi")
 #process.massFilter.lambdaCollection = cms.InputTag("lambdaKshortFilter","lambda")
 #process.massFilter.kshortCollection = cms.InputTag("lambdaKshortFilter","kshort")
 #process.massFilter.prescaleFalse = 0

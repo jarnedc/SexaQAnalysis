@@ -71,7 +71,7 @@ process.lambdaKshortVertexFilter.lambdaCollection = cms.InputTag("lambdaKshortFi
 process.lambdaKshortVertexFilter.kshortCollection = cms.InputTag("lambdaKshortFilter","kshort")
 process.lambdaKshortVertexFilter.maxchi2ndofVertexFit = 10.
 
-from SexaQAnalysis.Skimming.SMassFilter_cfi import massFilter
+from SexaQAnalysis.Skimming.MassFilter_cfi import massFilter
 massFilter.lambdakshortCollection = cms.InputTag("lambdaKshortVertexFilter","sParticles")
 massFilter.minMass = -10000 # effectively no filter
 massFilter.maxMass = 10000  # effectively no filter

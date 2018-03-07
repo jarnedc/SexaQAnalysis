@@ -1,5 +1,5 @@
-#ifndef SMassFilter_h
-#define SMassFilter_h
+#ifndef MassFilter_h
+#define MassFilter_h
  
 #include "FWCore/Framework/interface/Event.h"
 #include "FWCore/Framework/interface/EDFilter.h"
@@ -10,12 +10,12 @@
 #include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
 
   
-class SMassFilter : public edm::EDFilter {
+class MassFilter : public edm::EDFilter {
 
   public:
 
-    explicit SMassFilter(edm::ParameterSet const& cfg);
-    virtual ~SMassFilter() {}
+    explicit MassFilter(edm::ParameterSet const& cfg);
+    virtual ~MassFilter() {}
     virtual bool filter(edm::Event & iEvent, edm::EventSetup const & iSetup);
 
   private:

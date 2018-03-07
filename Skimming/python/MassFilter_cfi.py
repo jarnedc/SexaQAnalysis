@@ -1,7 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 massFilter = cms.EDFilter(
-    'SMassFilter',
+    'MassFilter',
     lambdakshortCollection = cms.InputTag("lambdaKshortVertexFilter", "sParticles"),
     minMass = cms.double(-10000),
     maxMass = cms.double(10000),

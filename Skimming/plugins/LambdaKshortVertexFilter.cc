@@ -7,7 +7,6 @@ LambdaKshortVertexFilter::LambdaKshortVertexFilter(edm::ParameterSet const& pset
   //collections
   lambdaCollectionTag_		(pset.getParameter<edm::InputTag>("lambdaCollection")),
   kshortCollectionTag_		(pset.getParameter<edm::InputTag>("kshortCollection")),
-  //beamspotCollectionTag_	(pset.getParameter<edm::InputTag>("beamspotCollection")),
   //genCollectionTag_   (pset.getParameter<edm::InputTag>("genCollection")),
   //parameters
   maxchi2ndofVertexFit_  	(pset.getParameter<double>("maxchi2ndofVertexFit"))
@@ -15,7 +14,6 @@ LambdaKshortVertexFilter::LambdaKshortVertexFilter(edm::ParameterSet const& pset
   //collections
   lambdaCollectionToken_ = consumes<reco::CandidatePtrVector>(lambdaCollectionTag_);
   kshortCollectionToken_ = consumes<reco::CandidatePtrVector>(kshortCollectionTag_);
-  //beamspotCollectionToken_ = consumes<reco::BeamSpot>(beamspotCollectionTag_);
   //genCollectionToken_    = consumes<std::vector<reco::GenParticle> > (genCollectionTag_);
   //producer
   produces<std::vector<reco::Track> >("sParticlesTracks");
@@ -40,8 +38,6 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
   iEvent.getByToken(lambdaCollectionToken_, h_lambda);
   edm::Handle<reco::CandidatePtrVector> h_kshort;
   iEvent.getByToken(kshortCollectionToken_ , h_kshort);
-  //edm::Handle<reco::BeamSpot> h_beamspot;
-  //iEvent.getByToken(beamspotCollectionToken_ , h_beamspot);
  
   //check all the above collections and return false if any of them is invalid
   if (!allCollectionValid(h_lambda, h_kshort)) return false;
@@ -133,12 +129,9 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
       const reco::Particle::LorentzVector SparticleP(Sparticle->currentState().globalMomentum().x(), Sparticle->currentState().globalMomentum().y(), Sparticle->currentState().globalMomentum().z(),sqrt(pow(Sparticle->currentState().globalMomentum().x()+Sparticle->currentState().globalMomentum().y()+Sparticle->currentState().globalMomentum().z(),2) + pow(Sparticle->currentState().kinematicParameters().mass(),2)));
       //decay vertex
       Point STreeVertexPoint(STreeVertex->position().x(),STreeVertex->position().y(),STreeVertex->position().z()); 
-      //covariance matrix of the vertex
-      //ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  CovMatrixSVertex = FillCovarianceVertex(Sparticle->currentState().kinematicParametersError());
 
       //will use the charge in the VertexCompositeCandidate constructor to indicate if in the decay there is an antiproton present if the antiproton
       //create the S as VertexCompositeCandidate
-     // reco::VertexCompositeCandidate theSparticleVertexCompositeCandidate(chargeProton[l], SparticleP, STreeVertexPoint, CovMatrixSVertex, (double)STreeVertex->chiSquared(),(double)STreeVertex->degreesOfFreedom(), 0,0, true);
       reco::VertexCompositeCandidate theSparticleVertexCompositeCandidate(chargeProton[l], SparticleP, STreeVertexPoint);
      theSparticleVertexCompositeCandidate.setCovariance(STreeVertex->error().matrix());
      theSparticleVertexCompositeCandidate.setChi2AndNdof(STreeVertex->chiSquared(),STreeVertex->degreesOfFreedom());
@@ -163,11 +156,6 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
      theSparticleVertexCompositeCandidate.addDaughter(LambdaDaughter);
      theSparticleVertexCompositeCandidate.addDaughter(KshortDaughter);
      
-     //calculating the S vertex covariance along the connection line with the beamspot
-     //placeholder beamspot:
-    // vector<double> PlaceHolderBeamspot; PlaceHolderBeamspot.push_back((*h_beamspot).x0()); PlaceHolderBeamspot.push_back((*h_beamspot).y0());
-    // cout << "beamspot coordinates: " << PlaceHolderBeamspot[0] << ", " << PlaceHolderBeamspot[1] << endl;
-    // cout << "S vertex covariance along connection line with beamspot :" <<  XYVarAlongLine(CovMatrixSVertex,  PlaceHolderBeamspot, STreeVertexPoint) << endl;
 
        //adding SparticlesTracks to the event
       sParticlesTracks->push_back(std::move(SparticleTrack));
@@ -271,28 +259,7 @@ RefCountedKinematicVertex LambdaKshortVertexFilter::returnVertexFromTree(const R
   return dec_vertex;
 }
 
-//VertexCovarianceMatrix  LambdaKshortVertexFilter::FillCovarianceVertex(const KinematicParametersError& ErrorMatrix) const{
-/*ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  LambdaKshortVertexFilter::FillCovarianceVertex(const KinematicParametersError& ErrorMatrix) const{
-  VertexCovarianceMatrix CovMatrixSVertex;
-//  const reco::TrackBase::CovarianceMatrix  CovMatrixSVertex;
-  for(int i = 0; i < 3; i++){
-    for(int j = 0; j < 3; j++){
-	CovMatrixSVertex(i,j) = ErrorMatrix.matrix()(i,j);  
-	cout << i << " " << j << " " << ErrorMatrix.matrix()(i,j) << endl;
-    }
-  }
 
-  return CovMatrixSVertex;
-}*/
-
-double LambdaKshortVertexFilter::XYVarAlongLine(ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  CovMatrixSVertex, vector<double> beamspot, Point vertex){
-  //calculate the line between the beam spot and the vertex
-  vector<double> Line;
-  Line.push_back(vertex.x() - beamspot[0]); Line.push_back(vertex.y() - beamspot[1]); //this is the x and y coordinate of the line connecting beam spot and vertex
-  double angle_Line_x_axis = TMath::ATan(Line[1]/Line[0]); //This is the angle between the line connecting beamspot and vertex and the x axis
-  return pow(pow(CovMatrixSVertex(0,0)*TMath::Cos(angle_Line_x_axis),2)+pow(CovMatrixSVertex(1,1)*TMath::Sin(angle_Line_x_axis),2),0.5);
-
-}
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 DEFINE_FWK_MODULE(LambdaKshortVertexFilter);
