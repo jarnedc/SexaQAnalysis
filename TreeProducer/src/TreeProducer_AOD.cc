@@ -42,7 +42,6 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
   // HANDLES //
   // Get collections
-
   edm::Handle<vector<reco::GenParticle> > H_partons;
   if(!_isData){
     iEvent.getByToken(m_partons, H_partons);
@@ -54,10 +53,12 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
 
   edm::Handle<vector<reco::VertexCompositePtrCandidate> > H_lk;
-  iEvent.getByToken(_lambdaKshortCollectionToken , H_lk);
-  if(!H_lk.isValid()) {
-    if(verbose>0) cout << "Missing collection during TreeProducer_AOD: " << _lambdaKshortCollectionTag << " ... skip entry !" << endl;
-    return;
+  if(_isData){
+   iEvent.getByToken(_lambdaKshortCollectionToken , H_lk);
+   if(!H_lk.isValid()) {
+     if(verbose>0) cout << "Missing collection during TreeProducer_AOD: " << _lambdaKshortCollectionTag << " ... skip entry !" << endl;
+     return;
+   }
   }
 
 
@@ -76,20 +77,24 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   }
 
   edm::Handle<vector<reco::VertexCompositeCandidate> > H_S;
-  iEvent.getByToken(_sCollectionToken , H_S);
-  if(!H_S.isValid()) {
+  if(_isData){
+   iEvent.getByToken(_sCollectionToken , H_S);
+   if(!H_S.isValid()) {
     if(verbose>0) cout << "Missing collection during TreeProducer_AOD : " << _sCollectionTag << " ... skip entry !" << endl;
     return;
+   }
   }
   // throw away events on data withouts - for MC we check gen
   if (_isData && H_S->size() == 0) return; // only use events with at least one s
 
 
   edm::Handle<vector<reco::Track> > H_S_tracks;
-  iEvent.getByToken(_sTracksCollectionToken , H_S_tracks);
-  if(!H_S_tracks.isValid()) {
+  if(_isData){
+   iEvent.getByToken(_sTracksCollectionToken , H_S_tracks);
+   if(!H_S_tracks.isValid()) {
     if(verbose>0) cout << "Missing collection during TreeProducer_AOD : " << _sTracksCollectionTag << " ... skip entry !" << endl;
     return;
+   }
   }
   // throw away events on data withouts - for MC we check gen
   if (_isData && H_S_tracks->size() == 0) return; // only use events with at least one s
@@ -199,7 +204,7 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
   _nTrack = H_track->size();
 
 // S //
-
+  if(_isData){
   for(std::vector<reco::VertexCompositeCandidate>::const_iterator s = H_S->begin(); s != H_S->end(); ++s){
     if (s->numberOfDaughters() == 2) {
       _S_normalizedChi2.push_back(s->vertexNormalizedChi2());
@@ -223,8 +228,11 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     }
   } // for loop on s
   _S_N = H_S->size();
+  }
+
 
   // S TRACKS //
+  if(_isData){
   for (vector<reco::Track>::const_iterator theTrack = H_S_tracks->begin(); theTrack != H_S_tracks->end(); ++theTrack){
     _Strack_purity.push_back(theTrack->highPurity);
     _Strack_Nhits.push_back(theTrack->numberOfValidHits());
@@ -255,7 +263,7 @@ TreeProducer_AOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     _Strack_covariance.push_back(cov);
   }
   _SnTrack = H_S_tracks->size();
-
+  }
 /*
   // LAMBDAS //
 

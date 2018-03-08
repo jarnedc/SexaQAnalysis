@@ -8,6 +8,7 @@
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 
 #include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
+#include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
 
   
 class SMassFilter : public edm::EDFilter {

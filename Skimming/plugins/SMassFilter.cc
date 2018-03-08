@@ -14,7 +14,7 @@ SMassFilter::SMassFilter(edm::ParameterSet const & pset) :
   lkPairCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(lkPairCollectionTag_);
   n_ = reco::LeafCandidate::LorentzVector(0,0,0,targetMass_);
   nreject_ = 0;
-  produces<std::vector<reco::VertexCompositeCandidate> >();
+  produces<std::vector<reco::VertexCompositePtrCandidate> >("sVertexCompositePtrCandidate");
 }
 
 
@@ -28,7 +28,7 @@ bool SMassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
     return false;
   }
 
-  auto lkPairs = std::make_unique<std::vector<reco::VertexCompositeCandidate> >();
+  auto lkPairs = std::make_unique<std::vector<reco::VertexCompositePtrCandidate> >();
 
   // find any Lambda - Kshort pair that matches the mass window
   for (auto lk : *h_lkPair) {
@@ -36,7 +36,7 @@ bool SMassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
     reco::LeafCandidate::LorentzVector m = lk.daughter(0)->p4() + lk.daughter(1)->p4() - n_;
     // impose the mass window
     if (m.M() > minMass_ && m.M() < maxMass_) {
-      reco::VertexCompositeCandidate lkPass = lk;
+      reco::VertexCompositePtrCandidate  lkPass(lk.charge(), lk.p4(), lk.vertex(), lk.vertexCovariance(), lk.vertexChi2(), lk.vertexNdof(), 0, 0, true);
       lkPass.setP4(m);
       lkPairs->push_back(std::move(lkPass));
     }
@@ -45,7 +45,7 @@ bool SMassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
   // get the vector size before they disappear when putting in the event
   unsigned int n = lkPairs->size();
 
-  iEvent.put(std::move(lkPairs));
+  iEvent.put(std::move(lkPairs),"sVertexCompositePtrCandidate");
 
   // throw away events on data without good lambda-kshort pairs
   if (n == 0) {
