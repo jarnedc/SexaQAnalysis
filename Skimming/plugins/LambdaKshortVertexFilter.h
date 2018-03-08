@@ -72,8 +72,6 @@ class LambdaKshortVertexFilter : public edm::EDFilter {
     RefCountedKinematicParticle getTopParticleFromTree(RefCountedKinematicTree Tree);
     RefCountedKinematicVertex returnVertexFromTree(const RefCountedKinematicTree& myTree) const;
     
-//    ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> > FillCovarianceVertex(const KinematicParametersError& ErrorMatrix) const;
-    double XYVarAlongLine(ROOT::Math::SMatrix<double, 3u, 3u, ROOT::Math::MatRepSym<double, 3u> >  CovMatrixSVertex, std::vector<double> beamspot, Point vertex);
 };
 
 

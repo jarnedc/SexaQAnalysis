@@ -1,8 +1,8 @@
 
-#include "SexaQAnalysis/Skimming/plugins/SMassFilter.h"
+#include "SexaQAnalysis/Skimming/plugins/MassFilter.h"
 
 
-SMassFilter::SMassFilter(edm::ParameterSet const & pset) :
+MassFilter::MassFilter(edm::ParameterSet const & pset) :
   lkPairCollectionTag_(pset.getParameter<edm::InputTag>("lambdakshortCollection")),
   minMass_            (pset.getParameter<double>("minMass")),
   maxMass_            (pset.getParameter<double>("maxMass")),
@@ -18,13 +18,13 @@ SMassFilter::SMassFilter(edm::ParameterSet const & pset) :
 }
 
 
-bool SMassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
+bool MassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
 {
 
   edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_lkPair;
   iEvent.getByToken(lkPairCollectionToken_, h_lkPair);
   if(!h_lkPair.isValid()) {
-    std::cout << "Missing collection during SMassFilter: " << lkPairCollectionTag_ << " ... skip entry !" << std::endl;
+    std::cout << "Missing collection during MassFilter: " << lkPairCollectionTag_ << " ... skip entry !" << std::endl;
     return false;
   }
 
@@ -60,4 +60,4 @@ bool SMassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
 
 #include "FWCore/Framework/interface/MakerMacros.h"
 
-DEFINE_FWK_MODULE(SMassFilter);
+DEFINE_FWK_MODULE(MassFilter);
