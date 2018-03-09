@@ -48,6 +48,7 @@ process.source = cms.Source("PoolSource",
 
 process.nEvTotal        = cms.EDProducer("EventCountProducer")
 process.nEvLambdaKshort = cms.EDProducer("EventCountProducer")
+process.nEvLambdaKshortVertex = cms.EDProducer("EventCountProducer")
 process.nEvSMass        = cms.EDProducer("EventCountProducer")
 
 process.genParticlePlusGEANT = cms.EDProducer("GenPlusSimParticleProducer",
@@ -91,18 +92,19 @@ process.p = cms.Path(
 #  process.genParticlePlusGEANT *
   process.nEvTotal *
   process.lambdaKshortFilter *
+  process.nEvLambdaKshort *
   process.lambdaKshortVertexFilter *
-#  process.nEvLambdaKshort *
+  process.nEvLambdaKshortVertex *
   process.rMassFilter *
-  process.sMassFilter
-#  process.nEvSMass *
-#  process.tree
+  process.sMassFilter *
+  process.nEvSMass *
+  process.tree 
 )
 
 # Output
-#process.TFileService = cms.Service('TFileService',
-#    fileName = cms.string('tree.root')
-#)
+process.TFileService = cms.Service('TFileService',
+    fileName = cms.string('tree.root')
+)
 
 #Keep edm output file only during debugging
 process.out = cms.OutputModule("PoolOutputModule",

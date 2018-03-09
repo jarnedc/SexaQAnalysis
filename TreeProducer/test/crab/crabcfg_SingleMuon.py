@@ -18,7 +18,7 @@ config.Data.splitting = 'EventAwareLumiBased'
 config.Data.unitsPerJob = 1000000
 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions16/13TeV/ReReco/Final/Cert_271036-284044_13TeV_23Sep2016ReReco_Collisions16_JSON.txt'
 config.Data.runRange = ''
-config.Data.outLFNDirBase = '/store/user/lowette/'
+config.Data.outLFNDirBase = '/store/user/jdeclerc/'
 config.Data.publication = False
 config.Data.outputDatasetTag = 'SingleMuon_Run2016G'
 
