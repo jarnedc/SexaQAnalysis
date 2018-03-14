@@ -123,7 +123,9 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
       //get the track associated with this particle
       const reco::TransientTrack SparticleTrasientTrack = Sparticle->refittedTransientTrack();
       const reco::Track SparticleTrack = SparticleTrasientTrack.track();
-
+      //get parameters from this track to put them back in later with a higher momentum...(no better way to do this?)
+      const Vector & StrackArtificialMomentum =  SparticleTrack.momentum()*1000.;
+      const reco::Track SparticleTrackArtificial = Track(SparticleTrack.chi2(),SparticleTrack.ndof(),SparticleTrack.referencePoint(),StrackArtificialMomentum, SparticleTrack.charge(), SparticleTrack.covariance(), SparticleTrack.algo(), reco::TrackBase::undefQuality); 
       //now that you passed cuts you can start making the Sparticle candidate as a VertexCompositeCandidate
       //momentum
       const reco::Particle::LorentzVector SparticleP(Sparticle->currentState().globalMomentum().x(), Sparticle->currentState().globalMomentum().y(), Sparticle->currentState().globalMomentum().z(),sqrt(pow(Sparticle->currentState().globalMomentum().x()+Sparticle->currentState().globalMomentum().y()+Sparticle->currentState().globalMomentum().z(),2) + pow(Sparticle->currentState().kinematicParameters().mass(),2)));
@@ -158,7 +160,7 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
      
 
        //adding SparticlesTracks to the event
-      sParticlesTracks->push_back(std::move(SparticleTrack));
+      sParticlesTracks->push_back(std::move(SparticleTrackArtificial));
        //adding Sparticles to the event
       sParticles->push_back(std::move(theSparticleVertexCompositeCandidate));
     }//end loop over kshort

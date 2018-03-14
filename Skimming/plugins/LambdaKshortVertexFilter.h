@@ -30,12 +30,13 @@
 #include "RecoVertex/KinematicFit/interface/KinematicParticleFitter.h"
 //#include "FWCore/ServiceRegistry/interface/Service.h"
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
-
+#include "DataFormats/Math/interface/Vector.h"
 
 class LambdaKshortVertexFilter : public edm::EDFilter {
 
   public:
     typedef math::XYZPoint Point;
+    typedef math::XYZVector Vector;
 
     explicit LambdaKshortVertexFilter(edm::ParameterSet const& cfg);
     virtual ~LambdaKshortVertexFilter() {}
