@@ -27,8 +27,19 @@ void simulation()
     Double_t m_n = 0.9395654133;//Lambda mass
     Double_t M_S_n = M_S + m_n;//Lambda mass
 
+    //TSalis distribution for the S momentum (https://arxiv.org/pdf/1401.4835.pdf)
+    Double_t A = 10.;//factor in front of the TSalis function = g*V/(2*pi)^3, not important actually as it will not change the shape of the distribution
+    Double_t q = 1.15; //q from the TSalis function 1.15 for CMS at 7TeV according to https://arxiv.org/pdf/1401.4835.pdf
+    Double_t T = 0.080;//T in the TSalis function. 80MeV according to https://arxiv.org/pdf/1401.4835.pdf 
+    TF1 *fTSalisSpt = new TF1("fTSalisSpt","[0]*x*pow(x*x+[1]*[1],0.5)*pow(1+([2]-1)*pow(x*x+[1]*[1],0.5)/[3],-[2]/([2]-1))",0,10);
+    fTSalisSpt->SetParameter(0,A);
+    fTSalisSpt->SetParameter(1,M_S);
+    fTSalisSpt->SetParameter(2,q);
+    fTSalisSpt->SetParameter(3,T);
+
     //plots
     //S partilce
+    TH1F *h_S_pt = new TH1F("h_S_pt", "h_S_pt", 500, 0,10);
     TH2F *h_S_p_xy = new TH2F("h_S_p_xy", "h_S_p_xy", 1000, -10, 10,1000, -10, 10);
     TH2F *h_S_p_xz = new TH2F("h_S_p_xz", "h_S_p_xz", 1000, -10, 10,1000, -10, 10);
     TH2F *h_S_p_yz = new TH2F("h_S_p_yz", "h_S_p_yz", 1000, -10, 10,1000, -10, 10);
@@ -40,16 +51,16 @@ void simulation()
     TH1F *h_m_l_star = new TH1F("m_l_star","m_l_star", 200, 0,20);
     TH1F *h_p_Ks_star = new TH1F("h_p_Ks_star", "h_p_Ks_star", 200, 0, 20);
     TH1F *h_p_l_star = new TH1F("h_p_l_star", "h_p_l_star", 200, 0, 20);
-    TH2F *h_Ks_start_p_xy = new TH2F("h_Ks_start_p_xy", "h_Ks_start_p_xy", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_Ks_start_p_xz = new TH2F("h_Ks_start_p_xz", "h_Ks_start_p_xz", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_Ks_start_p_yz = new TH2F("h_Ks_start_p_yz", "h_Ks_start_p_yz", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_l_start_p_xy = new TH2F("h_l_start_p_xy", "h_l_start_p_xy", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_l_start_p_xz = new TH2F("h_l_start_p_xz", "h_l_start_p_xz", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_l_start_p_yz = new TH2F("h_l_start_p_yz", "h_l_start_p_yz", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_Ks_star_p_xy = new TH2F("h_Ks_star_p_xy", "h_Ks_star_p_xy", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_Ks_star_p_xz = new TH2F("h_Ks_star_p_xz", "h_Ks_star_p_xz", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_Ks_star_p_yz = new TH2F("h_Ks_star_p_yz", "h_Ks_star_p_yz", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_l_star_p_xy = new TH2F("h_l_star_p_xy", "h_l_star_p_xy", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_l_star_p_xz = new TH2F("h_l_star_p_xz", "h_l_star_p_xz", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_l_star_p_yz = new TH2F("h_l_star_p_yz", "h_l_star_p_yz", 1000, -10, 10,1000, -10, 10);
 
-    TH2F *h_Ks_l_start_p_x = new TH2F("h_Ks_l_start_p_x", "h_Ks_l_start_p_x", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_Ks_l_start_p_y = new TH2F("h_Ks_l_start_p_y", "h_Ks_l_start_p_y", 1000, -10, 10,1000, -10, 10);
-    TH2F *h_Ks_l_start_p_z = new TH2F("h_Ks_l_start_p_z", "h_Ks_l_start_p_z", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_Ks_l_star_p_x = new TH2F("h_Ks_l_star_p_x", "h_Ks_l_star_p_x", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_Ks_l_star_p_y = new TH2F("h_Ks_l_star_p_y", "h_Ks_l_star_p_y", 1000, -10, 10,1000, -10, 10);
+    TH2F *h_Ks_l_star_p_z = new TH2F("h_Ks_l_star_p_z", "h_Ks_l_star_p_z", 1000, -10, 10,1000, -10, 10);
 
     TH2F *h_Ks_l_p_x = new TH2F("h_Ks_l_p_x", "h_Ks_l_p_x", 1000, -10, 10,1000, -10, 10);
     TH2F *h_Ks_l_p_y = new TH2F("h_Ks_l_p_y", "h_Ks_l_p_y", 1000, -10, 10,1000, -10, 10);
@@ -64,18 +75,21 @@ void simulation()
     int i = 0; 
     bool verbose = false;  
  
-    while(i<10000000){
+    while(i<100000){
 
 	if(verbose)cout << "---------------------------------------------------------------------------------" << endl;
 	//******************calculate the S particle parameters******************************************//
 	//given
-	//p_S the size of the 3 momentum of the S particle, should become a distribution at some point, p_t goes exponential?
-	Double_t p_S = 2.;
+	//p_S the size of the 3 momentum of the S particle, should become a distribution at some point
+	Double_t pt_S = fTSalisSpt->GetRandom();	
+	cout << "pt_S: " << pt_S << endl;
+	h_S_pt->Fill(pt_S);
 	//theta of the S, should also be a distribution at some point
 	//from https://arxiv.org/pdf/1002.0621.pdf, page 7 the eta distribution is relatively flat
-	//Double_t eta_S = random->Uniform(-2,2);
-	Double_t eta_S = 0;
+	Double_t eta_S = random->Uniform(-2,2);
+	//Double_t eta_S = 0;
 	Double_t theta_S = 2*TMath::ATan(TMath::Exp(-eta_S));
+	Double_t p_S = pt_S/TMath::Sin(theta_S);
 	//Double_t theta_S = TMath::Pi()*1./3.; 
 	//phi of the S, should be a uniform distribution in 0 to 2*pi
 	Double_t phi_S = random->Uniform(2.*TMath::Pi());	
@@ -86,7 +100,7 @@ void simulation()
 	h_S_p_xz->Fill(p3_S.Px(),p3_S.Pz());
 	h_S_p_yz->Fill(p3_S.Py(),p3_S.Pz());
 	//******************calculate the S particle parameters******************************************//
-			
+		
 	//the S hits on a neutron and transfers its momentum to the S+n system.
 	
 	//******************calculate the S+n particle parameters******************************************//
@@ -130,17 +144,17 @@ void simulation()
  	if(verbose)cout << "delta phi: " << p4_Ks_star.Phi()-p4_l_star.Phi() << endl;
 	if(verbose)cout << "delta theta: " << p4_Ks_star.Theta()-p4_l_star.Theta() << endl;
 
-	h_Ks_start_p_xy->Fill(p4_Ks_star.Px(),p4_Ks_star.Py());
-        h_Ks_start_p_xz->Fill(p4_Ks_star.Px(),p4_Ks_star.Pz());
-        h_Ks_start_p_yz->Fill(p4_Ks_star.Py(),p4_Ks_star.Pz());
+	h_Ks_star_p_xy->Fill(p4_Ks_star.Px(),p4_Ks_star.Py());
+        h_Ks_star_p_xz->Fill(p4_Ks_star.Px(),p4_Ks_star.Pz());
+        h_Ks_star_p_yz->Fill(p4_Ks_star.Py(),p4_Ks_star.Pz());
 	
-	h_l_start_p_xy->Fill(p4_l_star.Px(),p4_l_star.Py());
-        h_l_start_p_xz->Fill(p4_l_star.Px(),p4_l_star.Pz());
-        h_l_start_p_yz->Fill(p4_l_star.Py(),p4_l_star.Pz());
+	h_l_star_p_xy->Fill(p4_l_star.Px(),p4_l_star.Py());
+        h_l_star_p_xz->Fill(p4_l_star.Px(),p4_l_star.Pz());
+        h_l_star_p_yz->Fill(p4_l_star.Py(),p4_l_star.Pz());
 
-	h_Ks_l_start_p_x->Fill(p4_Ks_star.Px(),p4_l_star.Px());
-        h_Ks_l_start_p_y->Fill(p4_Ks_star.Py(),p4_l_star.Py());
-        h_Ks_l_start_p_z->Fill(p4_Ks_star.Pz(),p4_l_star.Pz());
+	h_Ks_l_star_p_x->Fill(p4_Ks_star.Px(),p4_l_star.Px());
+        h_Ks_l_star_p_y->Fill(p4_Ks_star.Py(),p4_l_star.Py());
+        h_Ks_l_star_p_z->Fill(p4_Ks_star.Pz(),p4_l_star.Pz());
 	h_delta_phi_Ks_l_star->Fill(p4_Ks_star.Phi()-p4_l_star.Phi());
    	h_delta_theta_Ks_l_star->Fill(p4_Ks_star.Theta()-p4_l_star.Theta());
 
@@ -171,13 +185,15 @@ void simulation()
 
 
 	//******************boost to the reference frame of the detector****************************************//
-	i++;    
+	i++;
+	    
    	h_delta_phi_Ks_l->Fill(p4_Ks_star.Phi()-p4_l_star.Phi());
    	h_delta_theta_Ks_l->Fill(p4_Ks_star.Theta()-p4_l_star.Theta());
    }//end for loop
  
 
  TFile *MyFile = new TFile("Simulation.root","RECREATE");
+ h_S_pt->Write();
  h_S_p_xy->Write();
  h_S_p_xz->Write();
  h_S_p_yz->Write();
@@ -189,16 +205,16 @@ void simulation()
  h_m_l_star->Write();
  h_p_Ks_star->Write();
  h_p_l_star->Write();
- h_Ks_start_p_xy->Write();
- h_Ks_start_p_xz->Write();
- h_Ks_start_p_yz->Write();
- h_l_start_p_xy->Write();
- h_l_start_p_xz->Write();
- h_l_start_p_yz->Write();
+ h_Ks_star_p_xy->Write();
+ h_Ks_star_p_xz->Write();
+ h_Ks_star_p_yz->Write();
+ h_l_star_p_xy->Write();
+ h_l_star_p_xz->Write();
+ h_l_star_p_yz->Write();
 
- h_Ks_l_start_p_x->Write();
- h_Ks_l_start_p_y->Write();
- h_Ks_l_start_p_z->Write();
+ h_Ks_l_star_p_x->Write();
+ h_Ks_l_star_p_y->Write();
+ h_Ks_l_star_p_z->Write();
  
  h_Ks_l_p_x->Write();
  h_Ks_l_p_y->Write();
