@@ -66,7 +66,7 @@ where "c1" can be replaced by "c2", "c3" or "c123", depending on the category on
 
 outputs root file with plots
 
-### running all three categories:
+## running all three categories:
 
 bash MCAnalysis_all_categories.bash
 
