@@ -1,0 +1,5 @@
+# samples['MET-Run2017B-PromptReco-v1'] = ['/ZeroBias/Run2017B-PromptReco-v1/AOD']
+# samples['MET-Run2017C-PromptReco-v1'] = ['/ZeroBias/Run2017C-PromptReco-v1/AOD']
+# samples['MET-Run2017C-PromptReco-v2'] = ['/ZeroBias/Run2017C-PromptReco-v2/AOD']
+# samples['MET-Run2017C-PromptReco-v3'] = ['/ZeroBias/Run2017C-PromptReco-v3/AOD']
+samples['MET-Run2017D-PromptReco-v1'] = ['/ZeroBias/Run2017D-PromptReco-v1/AOD']
