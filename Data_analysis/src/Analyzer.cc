@@ -27,11 +27,13 @@ void Analyzer::beginJob() {
   histos_th1f["sdxy"]     = m_fs->make<TH1F>("sdxy",     "sdxy",100,0.,100.);
   histos_th1f["sdr"]      = m_fs->make<TH1F>("sdr",      "sdr",100,0.,100.);
   
-  //nr L0 and Ks per PV SCATTERPLOTS
+  //nr L0 and Ks per PV TProfiles
   
-  histos_th2f["nL0_per_PV_vs_nPV"] = m_fs->make<TH2F>("nL0_per_PV_vs_nPV","nL0_per_PV_vs_nPV; nPV; nL0 per PV",30, 0.,30., 1000, 0, 1);
-  histos_th2f["nKs_per_PV_vs_nPV"] = m_fs->make<TH2F>("nKs_per_PV_vs_nPV","nKs_per_PV_vs_nPV; nPV; nKs per PV",30, 0.,30., 1000, 0, 1);
-  histos_th2f["nL0Ks_per_PV_vs_nPV"] = m_fs->make<TH2F>("nL0Ks_per_PV_vs_nPV","nL0Ks_per_PV_vs_nPV; nPV; nL0Ks fits per PV",45, 0.,45., 1000, 0, 0.25);
+  //histos_TProfile["nL0_per_PV_vs_nPV"] = m_fs->make<TProfile>("nL0_per_PV_vs_nPV","nL0_per_PV_vs_nPV; nPV; nL0 per PV",30, 0.,30., 1000, 0, 1);
+  //histos_TProfile["nKs_per_PV_vs_nPV"] = m_fs->make<TProfile>("nKs_per_PV_vs_nPV","nKs_per_PV_vs_nPV; nPV; nKs per PV",30, 0.,30., 1000, 0, 1);
+ 
+  histos_TProfile["nL0Ks_per_PV_vs_nPV"] = m_fs->make<TProfile>("nL0Ks_per_PV_vs_nPV","nL0Ks_per_PV_vs_nPV; nPV; numberof L0 Ks fits per PV",45, 0.,45., 0., 0.25);
+  histos_TProfile["nL0Ks_vs_nPV"] = m_fs->make<TProfile>("nL0Ks_vs_nPV","nL0Ks_vs_nPV; nPV; number of L0 Ks fits",45, 0.,45., 0., 10.);
 
 
   
@@ -160,7 +162,8 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   histos_th1f["n_rCand"]->Fill(h_rCands->size());
   if (h_vert->size() == 0) return;  //only look at events with reconstructed L0-Ks vertices
   
-  histos_th2f["nL0Ks_per_PV_vs_nPV"] ->Fill(nPV, Float_t(h_rCands->size()) / Float_t(nPV));
+  histos_TProfile["nL0Ks_per_PV_vs_nPV"] ->Fill(nPV, Float_t(h_rCands->size()) / Float_t(nPV));
+  histos_TProfile["nL0Ks_vs_nPV"]  ->Fill(nPV, Float_t(h_rCands->size()));
   
   //cout<<Float_t(h_rCands->size()) / Float_t(nPV)<<endl;
   //cout<<h_rCands->size()<<endl;
@@ -183,7 +186,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     float ye = h_rCands->at(i).vertexCovariance(1,1);
     float ze = h_rCands->at(i).vertexCovariance(2,2);
     
-    cout<<"Cov rCand: "<<h_rCands->at(i).vertexCovariance(0,0)<<" "<<h_rCands->at(i).vertexCovariance(0,1)<<" "<<h_rCands->at(i).vertexCovariance(1,0)<<" "<<h_rCands->at(i).vertexCovariance(1,1)<<endl;
+    //cout<<"Cov rCand: "<<h_rCands->at(i).vertexCovariance(0,0)<<" "<<h_rCands->at(i).vertexCovariance(0,1)<<" "<<h_rCands->at(i).vertexCovariance(1,0)<<" "<<h_rCands->at(i).vertexCovariance(1,1)<<endl;
     histos_th2f["vtx_xy"]  ->Fill(x,y);
     histos_th2f["vtx_rz"]  ->Fill(z,sqrt(pow(x,2)+pow(y,2)));
 //    histos_th1f["vtx_chi2"]->Fill(10*sqrt(xe+ye));
@@ -225,7 +228,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     
     
-    CovMx2D.Print();
+    //CovMx2D.Print();
     //calculate eigenvalues and eigenvectors
     //used for significance in PCA plots
     //http://www.visiondummy.com/2014/04/geometric-interpretation-covariance-matrix/
