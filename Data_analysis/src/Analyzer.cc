@@ -9,8 +9,10 @@ Analyzer::Analyzer(edm::ParameterSet const& pset):
   m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
   m_bsToken    (consumes<reco::BeamSpot>(m_bsTag)),
   m_vertexToken(consumes<vector<reco::Vertex> >(m_vertexTag)),
-  m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
-  m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag))
+  m_rCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_rCandsTag)),
+  m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag))
+  //m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
+  //m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag))
 {
 }
 
@@ -120,11 +122,13 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   iEvent.getByToken(m_vertexToken, h_vert);
 
   // resonance candidates
-  edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_rCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
+  edm::Handle<vector<reco::VertexCompositeCandidate> > h_rCands;
+  //edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_rCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
   iEvent.getByToken(m_rCandsToken, h_rCands);
 
   // sexaquark candidates
-  edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_sCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
+  edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
+  //edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_sCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
   iEvent.getByToken(m_sCandsToken, h_sCands);
 
   // Check validity

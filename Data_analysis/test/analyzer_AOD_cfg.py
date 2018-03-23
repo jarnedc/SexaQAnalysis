@@ -35,6 +35,12 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxE
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(2000)
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
+#/pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/
+#/pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/
+
+rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -185,6 +191,8 @@ process.source = cms.Source("PoolSource",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_99.root",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_9.root",
 #      'file:///user/lowette/SexaQ/CMSSW_8_0_30/src/SexaQAnalysis/TreeProducer/test/events_skimmed.root'
+
+	*tupleOfFiles #the * is to unpack the tuple of filenames
     )
 )
 
