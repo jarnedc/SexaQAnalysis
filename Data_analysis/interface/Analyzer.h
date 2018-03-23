@@ -40,6 +40,7 @@ using namespace std;
 #include "DataFormats/Math/interface/deltaR.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
+#include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
 
 int signum(float x){
@@ -86,6 +87,7 @@ class Analyzer : public edm::EDAnalyzer
     //--------- Histogram Declaration --------------------//
     std::map<TString, TH1F *> histos_th1f;
     std::map<TString, TH2F *> histos_th2f;
+    std::map<TString, TProfile *> histos_TProfile;
 
  };
 

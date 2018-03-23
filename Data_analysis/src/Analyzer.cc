@@ -232,7 +232,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     
     
-    //CovMx2D.Print();
+    CovMx2D.Print();
     //calculate eigenvalues and eigenvectors
     //used for significance in PCA plots
     //http://www.visiondummy.com/2014/04/geometric-interpretation-covariance-matrix/
