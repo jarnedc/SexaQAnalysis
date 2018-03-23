@@ -45,6 +45,7 @@ tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/Single
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
+'''
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_101.root",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_103.root",
@@ -190,6 +191,7 @@ process.source = cms.Source("PoolSource",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_98.root",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_99.root",
       "dcap://maite.iihe.ac.be//pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_9.root",
+      '''
 #      'file:///user/lowette/SexaQ/CMSSW_8_0_30/src/SexaQAnalysis/TreeProducer/test/events_skimmed.root'
 
 	*tupleOfFiles #the * is to unpack the tuple of filenames
