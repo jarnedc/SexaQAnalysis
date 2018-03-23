@@ -416,7 +416,7 @@ void MCAnalysis(TString category){//"c1", "c2", "c3" or "c123"
 			if(abs(hqhand.gen_pdgid->at(gen))!=Lambda_pdgid) continue;
 
 			Float_t phi_L0 = hqhand.gen_phi->at(gen);
-			Float_t eta_L0 = hqhand.gen_phi->at(gen);
+			Float_t eta_L0 = hqhand.gen_eta->at(gen);
 			TVector3 CV_L0(hqhand.gen_x->at(gen), hqhand.gen_y->at(gen), hqhand.gen_z->at(gen));
 
 			for(Int_t gen2=0; gen2<nGen; gen2++){
@@ -424,11 +424,11 @@ void MCAnalysis(TString category){//"c1", "c2", "c3" or "c123"
 				if(abs(hqhand.gen_pdgid->at(gen2))!=Kshort_pdgid) continue;
 
 				Float_t phi_Ks = hqhand.gen_phi->at(gen2);
-				Float_t eta_Ks = hqhand.gen_phi->at(gen2);
+				Float_t eta_Ks = hqhand.gen_eta->at(gen2);
 				TVector3 CV_Ks(hqhand.gen_x->at(gen2), hqhand.gen_y->at(gen2), hqhand.gen_z->at(gen2));
 
 				histos_1d["L0_Ks_gen_delta_Eta"]->Fill(eta_L0 - eta_Ks);
-				histos_1d["L0_Ks_gen_delta_Phi"]->Fill(phi_L0 - phi_Ks);
+				histos_1d["L0_Ks_gen_delta_Phi"]->Fill(deltaPhi(phi_L0, phi_Ks));
 				histos_1d["L0_Ks_gen_delta_R"]  ->Fill(deltaR(eta_L0, eta_Ks, phi_L0, phi_Ks ));
 
 
@@ -436,7 +436,7 @@ void MCAnalysis(TString category){//"c1", "c2", "c3" or "c123"
 				if(delta_CV.Mag() > 0.1) continue; //only look at L0 and Ks that have a CV within 1 cm
 
 				histos_1d["L0_Ks_gen_delta_Eta_dCV_within_1mm"] ->Fill(eta_L0 - eta_Ks);
-				histos_1d["L0_Ks_gen_delta_Phi_dCV_within_1mm"] ->Fill(phi_L0 - phi_Ks);
+				histos_1d["L0_Ks_gen_delta_Phi_dCV_within_1mm"] ->Fill(deltaPhi(phi_L0, phi_Ks));
 				histos_1d["L0_Ks_gen_delta_R_dCV_within_1mm"]   ->Fill(deltaR(eta_L0, eta_Ks, phi_L0, phi_Ks ));
 
 

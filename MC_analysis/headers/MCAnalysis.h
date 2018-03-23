@@ -19,7 +19,8 @@
 #include <math.h>
 #include <string.h>
 #include <boost/progress.hpp>
-//#include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/Math/interface/deltaPhi.h"
 
 
 ///GLOBAL VARIABLES
@@ -195,14 +196,14 @@ Float_t pythagoras3D(Float_t x, Float_t y, Float_t z){
 	return sqrt(pow(x,2)+pow(y,2)+pow(z,2));	
 }
 
-Float_t deltaR(Float_t e1, Float_t e2, Float_t p1, Float_t p2){ //e = eta; p = phi
+/*Float_t deltaR(Float_t e1, Float_t e2, Float_t p1, Float_t p2){ //e = eta; p = phi
 	auto dp=std::abs(p1-p2); if (dp>3.1415927) dp-=2.0*3.1415927;  
     return std::sqrt((e1-e2)*(e1-e2) + dp*dp);
 	
 }
 Float_t xy_norm(TVector3 *v){ //call as xy_norm(&vectorname)
 	return sqrt(pow(v->X(),2)+pow(v->Y(),2));
-}
+}*/
 
 Int_t cout_pdgid_name(Int_t pdgid){ //if pdgid is known: print out name of associated particle and return 1
 									//if pdgid is not in switch choices: return 0
