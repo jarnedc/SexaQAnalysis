@@ -80,8 +80,10 @@ class Analyzer : public edm::EDAnalyzer
   
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
-    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
-    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
+    //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
+    //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_rCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
     int verbose=1;
     
     //--------- Histogram Declaration --------------------//
