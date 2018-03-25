@@ -266,9 +266,9 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
     
     //to distinguish lambda from anti-lambda, one can use this info:
-    //std::cout << "Lambda = 1115; "<<h_sCands->at(i).daughterPtr(0)->mass() << " "
-              //<< "Proton = 938; "<<h_sCands->at(i).daughterPtr(0)->daughter(0)->mass() << " "
-              //<< h_sCands->at(i).daughterPtr(0)->daughter(0)->charge()
+    //std::cout << "Lambda = 1115; "<<h_sCands->at(i).daughter(0)->mass() << " "
+              //<< "Proton = 938; "<<h_sCands->at(i).daughter(0)->daughter(0)->mass() << " "
+              //<< h_sCands->at(i).daughter(0)->daughter(0)->charge()
              // << std::endl;
  
 
@@ -298,7 +298,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     //cout << signum(cand_bs * cand_mom) << endl;
     
     
-    int proton_charge = h_sCands->at(i).daughterPtr(0)->daughter(0)->charge(); //This granddaughter of the sCand is the proton.
+    int proton_charge = h_sCands->at(i).daughter(0)->daughter(0)->charge(); //This granddaughter of the sCand is the proton.
                                         //in the case the proton charge is (-1)+1, the sCand daughter includes an (anti)Lambda
     
     
@@ -306,12 +306,12 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
 	histos_th2f["scatterplot_PCA_pos"]   ->Fill(PCA.X(), PCA.Y());
 	
-	float delta_phi = reco::deltaPhi(h_sCands->at(i).daughterPtr(0)->phi(), h_sCands->at(i).daughterPtr(1)->phi());
+	float delta_phi = reco::deltaPhi(h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->phi());
 
-	float delta_eta = h_sCands->at(i).daughterPtr(0)->eta() - h_sCands->at(i).daughterPtr(1)->eta();
+	float delta_eta = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();
 	
 	histos_th1f["sCand_delta_phi"]->Fill(delta_phi);
-	histos_th1f["sCand_delta_R"]->Fill(deltaR(h_sCands->at(i).daughterPtr(0)->eta(), h_sCands->at(i).daughterPtr(1)->eta(), h_sCands->at(i).daughterPtr(0)->phi(), h_sCands->at(i).daughterPtr(1)->phi()));
+	histos_th1f["sCand_delta_R"]->Fill(deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->phi()));
 	histos_th1f["sCand_delta_eta"]->Fill(delta_eta);
 	
 	
