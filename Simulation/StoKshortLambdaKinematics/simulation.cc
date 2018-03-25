@@ -16,9 +16,9 @@
 
 void simulation()
 {
-	
     TRandom *random = new TRandom3();
-    
+   
+    //below please note the outputDir, give your start particle a name and below define its mass and the mass of the particle it will be hitting (m_n) 
     //output directory
     string outputDir = "Xi_TSalis";
     
@@ -138,22 +138,24 @@ void simulation()
     bool verbose = false;  
  
     while(i<100000){
-	//******************settings*****************************************//
+    //******************settings*****************************************//
     //pt distribution of the S particle:  https://arxiv.org/pdf/1401.4835.pdf
     Double_t pt_S = fTSalisSpt->GetRandom(); 
     //Double_t pt_S = 0; 
     //if(pt_S<2.)continue;
-	//from https://arxiv.org/pdf/1002.0621.pdf, page 7 the eta distribution is relatively flat
+    
+    //from https://arxiv.org/pdf/1002.0621.pdf, page 7 the eta distribution is relatively flat
     Double_t eta_S = random->Uniform(-2.5,2.5);
     //Double_t eta_S = 0.;
+    
     //phi of the S, should be a uniform distribution in 0 to 2*pi
-	Double_t phi_S = random->Uniform(2.*TMath::Pi());	
-	//Double_t phi_S = 0.;	
+    Double_t phi_S = random->Uniform(2.*TMath::Pi());	
+    //Double_t phi_S = 0.;	
 
     //theta of the Ks, distributed according to a cosine
-	Double_t theta_Ks_star = TMath::ACos(2*random->Uniform(1.)-1.);    
-	//phi of the Ks, should be uniform distribution from 0 to 2*pi at some point
-	Double_t phi_Ks_star = random->Uniform(2.*TMath::Pi());	
+    Double_t theta_Ks_star = TMath::ACos(2*random->Uniform(1.)-1.);    
+    //phi of the Ks, should be uniform distribution from 0 to 2*pi at some point
+    Double_t phi_Ks_star = random->Uniform(2.*TMath::Pi());	
 
     h_theta_Ks->Fill(theta_Ks_star);
     h_cos_theta_Ks->Fill(TMath::Cos(theta_Ks_star));
@@ -164,17 +166,17 @@ void simulation()
 	h_S_pt->Fill(pt_S);
 	Double_t theta_S = 2*TMath::ATan(TMath::Exp(-eta_S));
 	Double_t p_S = pt_S/TMath::Sin(theta_S);
-    h_S_p->Fill(p_S);
-    h_theta_S->Fill(theta_S);
+        h_S_p->Fill(p_S);
+        h_theta_S->Fill(theta_S);
 	//p3_S this is the 3 vector of the S particle can be calculated from p_t_S and theta_S
 	TVector3 p3_S(0.,0.,0.); 
 	p3_S.SetMagThetaPhi(p_S,theta_S,phi_S); 
 	
-    h_S_p_x->Fill(p3_S.Px());
+        h_S_p_x->Fill(p3_S.Px());
 	h_S_p_y->Fill(p3_S.Py());
 	h_S_p_z->Fill(p3_S.Pz());
 
-    h_S_p_xy->Fill(p3_S.Px(),p3_S.Py());
+    	h_S_p_xy->Fill(p3_S.Px(),p3_S.Py());
 	h_S_p_xz->Fill(p3_S.Px(),p3_S.Pz());
 	h_S_p_yz->Fill(p3_S.Py(),p3_S.Pz());
 	//******************end calculate the S particle parameters******************************************//
@@ -184,11 +186,11 @@ void simulation()
 	//******************calculate the S+n particle parameters******************************************//
 	//assume the S momentum is transfered to the S+n system, then the momenta are the same
 	TVector3 p3_S_n =  p3_S;	
-    Double_t E_S = pow(p3_S*p3_S+M_Start*M_Start,0.5);
-    Double_t E_S_n = E_S + m_n;
-    Double_t M_Start_n = pow(E_S_n*E_S_n-p3_S_n*p3_S_n,0.5);
+    	Double_t E_S = pow(p3_S*p3_S+M_Start*M_Start,0.5);
+    	Double_t E_S_n = E_S + m_n;
+    	Double_t M_Start_n = pow(E_S_n*E_S_n-p3_S_n*p3_S_n,0.5);
 	h_E_S_n->Fill(E_S_n);
-    h_M_S_n->Fill(M_Start_n);
+    	h_M_S_n->Fill(M_Start_n);
 	//******************end calculate the S+n particle parameters******************************************//
 	
 	//The S + n then decays to a Ks and Lambda. 
@@ -199,7 +201,7 @@ void simulation()
 	Double_t E_Ks_star = (M_Start_n*M_Start_n+m_Ks*m_Ks-m_l*m_l)/(2*M_Start_n);
 	Double_t p_Ks_star = pow(E_Ks_star*E_Ks_star - m_Ks*m_Ks,0.5);
     
-    if(verbose) cout << "2nd way of calculating p_Ks_star:  " << pow((M_Start_n*M_Start_n-(m_Ks-m_l)*(m_Ks-m_l))*(M_Start_n*M_Start_n-(m_Ks+m_l)*(m_Ks+m_l)),0.5)/(2.*M_Start_n) << endl;
+    	if(verbose) cout << "2nd way of calculating p_Ks_star:  " << pow((M_Start_n*M_Start_n-(m_Ks-m_l)*(m_Ks-m_l))*(M_Start_n*M_Start_n-(m_Ks+m_l)*(m_Ks+m_l)),0.5)/(2.*M_Start_n) << endl;
 
 	h_E_Ks_star->Fill(E_Ks_star);
 	h_p_Ks_star->Fill(p_Ks_star);
@@ -209,8 +211,8 @@ void simulation()
 	Double_t E_l_star = (M_Start_n*M_Start_n+m_l*m_l-m_Ks*m_Ks)/(2*M_Start_n);
 	Double_t p_l_star = pow(E_l_star*E_l_star - m_l*m_l,0.5);
 	h_E_l_star->Fill(E_l_star);
-    h_p_l_star->Fill(p_l_star);
-    Double_t m_l_star = pow(E_l_star*E_l_star-p_l_star*p_l_star,0.5);
+    	h_p_l_star->Fill(p_l_star);
+    	Double_t m_l_star = pow(E_l_star*E_l_star-p_l_star*p_l_star,0.5);
 	h_m_l_star->Fill(m_l_star);
 	//p4_Ks_star 4 momentum vector of the Ks 
 	TLorentzVector p4_Ks_star(0.,0.,0.,0.);
@@ -226,34 +228,34 @@ void simulation()
  	if(verbose)cout << "delta phi: " << p4_Ks_star.Phi()-p4_l_star.Phi() << endl;
 	if(verbose)cout << "delta theta: " << p4_Ks_star.Theta()-p4_l_star.Theta() << endl;
 
-    h_Ks_star_p_x->Fill(p4_Ks_star.Px());
-    h_Ks_star_p_y->Fill(p4_Ks_star.Py());
-    h_Ks_star_p_z->Fill(p4_Ks_star.Pz());
-    h_Ks_star_p->Fill(p4_Ks_star.P());
+	h_Ks_star_p_x->Fill(p4_Ks_star.Px());
+	h_Ks_star_p_y->Fill(p4_Ks_star.Py());
+	h_Ks_star_p_z->Fill(p4_Ks_star.Pz());
+	h_Ks_star_p->Fill(p4_Ks_star.P());
 
-    h_l_star_p_x->Fill(p4_Ks_star.Px());
-    h_l_star_p_y->Fill(p4_Ks_star.Py());
-    h_l_star_p_z->Fill(p4_Ks_star.Pz());
-    h_l_star_p->Fill(p4_Ks_star.P());
+	h_l_star_p_x->Fill(p4_Ks_star.Px());
+	h_l_star_p_y->Fill(p4_Ks_star.Py());
+	h_l_star_p_z->Fill(p4_Ks_star.Pz());
+	h_l_star_p->Fill(p4_Ks_star.P());
 
 	h_Ks_star_p_xy->Fill(p4_Ks_star.Px(),p4_Ks_star.Py());
-    h_Ks_star_p_xz->Fill(p4_Ks_star.Px(),p4_Ks_star.Pz());
-    h_Ks_star_p_yz->Fill(p4_Ks_star.Py(),p4_Ks_star.Pz());
+    	h_Ks_star_p_xz->Fill(p4_Ks_star.Px(),p4_Ks_star.Pz());
+    	h_Ks_star_p_yz->Fill(p4_Ks_star.Py(),p4_Ks_star.Pz());
 	
-    h_Ks_star_p_xy_norm->Fill(p4_Ks_star.Px()/p4_Ks_star.P(),p4_Ks_star.Py()/p4_Ks_star.P());
-    h_Ks_star_p_xz_norm->Fill(p4_Ks_star.Px()/p4_Ks_star.P(),p4_Ks_star.Pz()/p4_Ks_star.P());
-    h_Ks_star_p_yz_norm->Fill(p4_Ks_star.Py()/p4_Ks_star.P(),p4_Ks_star.Pz()/p4_Ks_star.P());
+    	h_Ks_star_p_xy_norm->Fill(p4_Ks_star.Px()/p4_Ks_star.P(),p4_Ks_star.Py()/p4_Ks_star.P());
+    	h_Ks_star_p_xz_norm->Fill(p4_Ks_star.Px()/p4_Ks_star.P(),p4_Ks_star.Pz()/p4_Ks_star.P());
+    	h_Ks_star_p_yz_norm->Fill(p4_Ks_star.Py()/p4_Ks_star.P(),p4_Ks_star.Pz()/p4_Ks_star.P());
 	
 	h_l_star_p_xy->Fill(p4_l_star.Px(),p4_l_star.Py());
-    h_l_star_p_xz->Fill(p4_l_star.Px(),p4_l_star.Pz());
-    h_l_star_p_yz->Fill(p4_l_star.Py(),p4_l_star.Pz());
+    	h_l_star_p_xz->Fill(p4_l_star.Px(),p4_l_star.Pz());
+    	h_l_star_p_yz->Fill(p4_l_star.Py(),p4_l_star.Pz());
 
 	h_Ks_l_star_p_x->Fill(p4_Ks_star.Px(),p4_l_star.Px());
-    h_Ks_l_star_p_y->Fill(p4_Ks_star.Py(),p4_l_star.Py());
-    h_Ks_l_star_p_z->Fill(p4_Ks_star.Pz(),p4_l_star.Pz());
+    	h_Ks_l_star_p_y->Fill(p4_Ks_star.Py(),p4_l_star.Py());
+    	h_Ks_l_star_p_z->Fill(p4_Ks_star.Pz(),p4_l_star.Pz());
 	h_delta_phi_Ks_l_star->Fill(p4_Ks_star.Phi()-p4_l_star.Phi());
    	h_delta_theta_Ks_l_star->Fill(p4_Ks_star.Theta()-p4_l_star.Theta());
-    h_sum_theta_Ks_l_star->Fill(p4_Ks_star.Theta()+p4_l_star.Theta());
+    	h_sum_theta_Ks_l_star->Fill(p4_Ks_star.Theta()+p4_l_star.Theta());
 	//******************end calculate the Ks and Lambda parameter****************************************//
 
 	//you have now the vector of the Ks and the Lambda in the rest frame of the S+n. Now will boost these vectors to the reference
@@ -292,14 +294,14 @@ void simulation()
     h_Ks_l_p_z->Fill(p4_Ks_star.Pz(),p4_l_star.Pz());
 
 
-	//******************end boost to the reference frame of the detector****************************************//
-    
+    //******************end boost to the reference frame of the detector****************************************//
+    //calculate the angle in phi and theta between the Ks and the Lambda --> these are the interesting plots!!
     Double_t delta_phi_Ks_l = p4_Ks_star.DeltaPhi(p4_l_star);
     Double_t delta_theta_Ks_l =p4_Ks_star.Theta()-p4_l_star.Theta();
     Double_t delta_eta_Ks_l =p4_Ks_star.Eta()-p4_l_star.Eta();
     Double_t delta_R_Ks_l = p4_Ks_star.DeltaR(p4_l_star);
 
-   	h_delta_phi_Ks_l->Fill(delta_phi_Ks_l);
+    h_delta_phi_Ks_l->Fill(delta_phi_Ks_l);
     h_delta_theta_Ks_l->Fill(delta_theta_Ks_l);
     h_delta_eta_Ks_l->Fill(delta_eta_Ks_l);
     h_delta_R_Ks_l->Fill(delta_R_Ks_l);
@@ -311,7 +313,7 @@ void simulation()
     h_delta_phi_delta_theta_Ks_l->Fill(delta_phi_Ks_l,delta_theta_Ks_l);
     
 
-	//******************check the above calculation by calculating the invariant mass of the S****************************************//
+    //******************check the above calculation by calculating the invariant mass of the S****************************************//
     TLorentzVector p4_sum_Ks_l = p4_Ks_star+p4_l_star;
     Double_t M_Start_n_check = p4_sum_Ks_l.M();
     //cout << "p3_S: " << pow(p3_S*p3_S,0.5) << endl;
@@ -327,7 +329,7 @@ void simulation()
 	i++;
     }//end for loop
  
-
+ //write histograms
  TFile *MyFile = new TFile("Simulation.root","RECREATE");
 
  TCanvas * c1 = new TCanvas("c", "c");
