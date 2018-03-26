@@ -307,8 +307,15 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     //cout << signum(cand_bs * cand_mom) << endl;
     
     
+    //DEZE WERKEN NIET, geven beide segmentation violations (als ik eens van de twee uitcomment):
+    cout << h_sCands->at(i).daughterPtr(0)->eta() << endl;
+    cout << h_sCands->at(i).daughter(0)->eta() << endl;
     
-    cout << h_sCands->at(i).daughterPtr(0)->Eta() << endl;
+    //IETS ZOALS DIT WERKT WEL GEWOON:
+    cout << h_sCands->at(i).px() << endl;
+    
+    
+    
     //int proton_charge = h_sCands->at(i).daughterPtr(0)->daughter(0)->charge(); //This granddaughterPtr of the sCand is the proton.
                                         //in the case the proton charge is (-1)+1, the sCand daughterPtr includes an (anti)Lambda
     
