@@ -1,4 +1,5 @@
 #include "SexaQAnalysis/Data_analysis/interface/Analyzer.h"
+#include <typeinfo>
 
 
 Analyzer::Analyzer(edm::ParameterSet const& pset):
@@ -9,10 +10,10 @@ Analyzer::Analyzer(edm::ParameterSet const& pset):
   m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
   m_bsToken    (consumes<reco::BeamSpot>(m_bsTag)),
   m_vertexToken(consumes<vector<reco::Vertex> >(m_vertexTag)),
-  m_rCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_rCandsTag)),
-  m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag))
-  //m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
-  //m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag))
+  //m_rCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_rCandsTag)),
+  //m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag))
+  m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
+  m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag))
 {
 }
 
@@ -122,13 +123,13 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   iEvent.getByToken(m_vertexToken, h_vert);
 
   // resonance candidates
-  edm::Handle<vector<reco::VertexCompositeCandidate> > h_rCands;
-  //edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_rCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
+  //edm::Handle<vector<reco::VertexCompositeCandidate> > h_rCands;
+  edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_rCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
   iEvent.getByToken(m_rCandsToken, h_rCands);
 
   // sexaquark candidates
-  edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
-  //edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_sCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
+  //edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
+  edm::Handle<vector<reco::VertexCompositePtrCandidate> > h_sCands; //https://github.com/cms-sw/cmssw/blob/master/DataFormats/Candidate/interface/VertexCompositePtrCandidate.h
   iEvent.getByToken(m_sCandsToken, h_sCands);
 
   // Check validity
@@ -157,6 +158,8 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   m_nLumi  = iEvent.luminosityBlock();
   m_nEvent = iEvent.id().event();
   Int_t nPV = h_vert->size();
+  Int_t n_sCands = h_sCands->size();
+  Int_t n_rCands = h_rCands->size();
  
 
   //std::cout<<m_nRun<<"\t"<<m_nLumi<<"\t"<<m_nEvent<<std::endl;
@@ -209,6 +212,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
         sqrt(ze) < .1)
       histos_th1f["rCandMass"]->Fill(h_rCands->at(i).mass());
   }
+  
 
   for (unsigned int i = 0; i < h_sCands->size(); ++i) { //loop over S candidates
 	  
@@ -232,27 +236,31 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     
     
-    CovMx2D.Print();
+    //CovMx2D.Print();
+    
+    
+     
     //calculate eigenvalues and eigenvectors
     //used for significance in PCA plots
     //http://www.visiondummy.com/2014/04/geometric-interpretation-covariance-matrix/
     TVectorD EValues;
     TMatrixD EVectors = CovMx2D.EigenVectors(EValues);
-    /*
-    if(!(CovMx2D(1,1)<0 || CovMx2D(0,0)<0)){ //cut negative sigma_y^2 variances
+    
+    //if(!(CovMx2D(1,1)<0 || CovMx2D(0,0)<0)){ //cut negative sigma_y^2 variances
 		
-		for (Int_t i = 0; i < EValues.GetNrows(); ++i) { 
-			
-			TVectorD EVector(TMatrixTColumn_const<double>(EVectors, i)); 
-			cout << "eigen-value " << i << " is " << EValues(i) << " with eigen-vector "; 
-			EVector.Print(); 
-			
-		}
-		cout<<endl;
-	}*/
+	for (Int_t i = 0; i < EValues.GetNrows(); ++i) { 
+		
+		TVectorD EVector(TMatrixTColumn_const<double>(EVectors, i)); 
+		//cout << "eigen-value " << i << " is " << EValues(i);
+		//cout << " with eigen-vector "; 	EVector.Print(); 
+		
+	}
+	//cout<<endl;
+	//}
 	
 	
 	float MinEValue = ( EValues(0)<EValues(1) ) ? EValues(0) : EValues(1);
+	//cout <<"MinEValue: "<<MinEValue<<endl;
 	//if(!(CovMx2D(1,1)<0 || CovMx2D(0,0)<0)) cout <<"EValues: "<<EValues(0)<<" "<<EValues(1)<<" min: "<<MinEValue<<endl;
 
     
@@ -266,9 +274,9 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
     
     //to distinguish lambda from anti-lambda, one can use this info:
-    //std::cout << "Lambda = 1115; "<<h_sCands->at(i).daughter(0)->mass() << " "
-              //<< "Proton = 938; "<<h_sCands->at(i).daughter(0)->daughter(0)->mass() << " "
-              //<< h_sCands->at(i).daughter(0)->daughter(0)->charge()
+    //std::cout << "Lambda = 1115; "<<h_sCands->at(i).daughterPtr(0)->mass() << " "
+              //<< "Proton = 938; "<<h_sCands->at(i).daughterPtr(0)->daughterPtr(0)->mass() << " "
+              //<< h_sCands->at(i).daughterPtr(0)->daughterPtr(0)->charge()
              // << std::endl;
  
 
@@ -277,6 +285,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     if (dxy > 2-3*edxy && edxy < .1 && sqrt(ze) < .1){
       histos_th1f["sCandMass"]->Fill(h_sCands->at(i).mass());
 	}
+	
 
     //Extrapolate vertex momentum in direction of the unit momentum vector to the Point of Closest Approach with the beamspot
 
@@ -298,20 +307,22 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     //cout << signum(cand_bs * cand_mom) << endl;
     
     
-    int proton_charge = h_sCands->at(i).daughter(0)->daughter(0)->charge(); //This granddaughter of the sCand is the proton.
-                                        //in the case the proton charge is (-1)+1, the sCand daughter includes an (anti)Lambda
     
+    cout << h_sCands->at(i).daughterPtr(0)->Eta() << endl;
+    //int proton_charge = h_sCands->at(i).daughterPtr(0)->daughter(0)->charge(); //This granddaughterPtr of the sCand is the proton.
+                                        //in the case the proton charge is (-1)+1, the sCand daughterPtr includes an (anti)Lambda
     
+    /*
     histos_th2f["scatterplot_sCand_pos"] ->Fill(x,y);
 
 	histos_th2f["scatterplot_PCA_pos"]   ->Fill(PCA.X(), PCA.Y());
 	
-	float delta_phi = reco::deltaPhi(h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->phi());
+	float delta_phi = reco::deltaPhi(h_sCands->at(i).daughterPtr(0)->phi(), h_sCands->at(i).daughterPtr(1)->phi());
 
-	float delta_eta = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();
+	float delta_eta = h_sCands->at(i).daughterPtr(0)->eta() - h_sCands->at(i).daughterPtr(1)->eta();
 	
 	histos_th1f["sCand_delta_phi"]->Fill(delta_phi);
-	histos_th1f["sCand_delta_R"]->Fill(deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->phi()));
+	histos_th1f["sCand_delta_R"]->Fill(deltaR(h_sCands->at(i).daughterPtr(0)->eta(), h_sCands->at(i).daughterPtr(1)->eta(), h_sCands->at(i).daughterPtr(0)->phi(), h_sCands->at(i).daughterPtr(1)->phi()));
 	histos_th1f["sCand_delta_eta"]->Fill(delta_eta);
 	
 	
@@ -323,10 +334,12 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     ///PCA AND SIGNIFICANCE PLOTS
     
-    float dxy_signif_PCA_bs = abs(dxy_PCA_bs_signed)/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))
+    float dxy_signif_PCA_bs= abs(dxy_PCA_bs_signed)/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))
+    float dxy_signif_PCA_bs_signed = dxy_PCA_bs_signed/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))
     //cut away instances when the x or y variance of the sCand position is negative
     bool posVar = true;
-    if(CovMx2D(1,1)<0 || CovMx2D(0,0)<0) posVar = false; //negative variance is bad
+    if(CovMx2D(1,1)<0 || CovMx2D(0,0)<0){cout<<"neg variance"<<endl; posVar = false; }//negative variance is bad
+    
     
     
     
@@ -385,7 +398,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     if(proton_charge == 1) histos_th1f["data_sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut"]->Fill(dxy_cand_bs * signum(cand_bs * cand_mom));
     if(proton_charge == -1) histos_th1f["data_sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut"]->Fill(dxy_cand_bs * signum(cand_bs * cand_mom));
-
+*/
   }
   
 
