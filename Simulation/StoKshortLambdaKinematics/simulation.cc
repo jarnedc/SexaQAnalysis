@@ -145,6 +145,7 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     TH2F *h_pt_S_delta_theta_Ks_l = new TH2F(("h_pt_"+particle+"_delta_theta_Ks_l").c_str(),("h_pt_"+particle+"_delta_theta_Ks_l;pt_"+particle+";delta_theta_Ks_l").c_str(),100,0,10,100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range);
     TH2F *h_p_S_delta_theta_Ks_l = new TH2F(("h_p_"+particle+"_delta_theta_Ks_l").c_str(),("h_p_"+particle+"_delta_theta_Ks_l").c_str(),100,0,10,100,-7,7);
     TH2F *h_delta_phi_delta_theta_Ks_l = new TH2F("h_delta_phi_delta_theta_Ks_l","h_delta_phi_delta_theta_Ks_l;delta_phi_Ks_l;delta_theta_Ks_l",100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range,100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range);
+    TH2F *h2_ArmPod = new TH2F("h2_ArmPod","h2_ArmPod;alpha;pT(Ks,Lambda)",100,-1,1,100,0,10);
     
     TH1F *h_M_Start_n_check =  new TH1F(("h_M_"+particle+"_n_check").c_str(), ("h_M_"+particle+"_n_check").c_str(), 200, 0, 20);
     TH1F *h_M_Start_n_Inv_Mass_calc =  new TH1F(("h_M_"+particle+"_n_Inv_Mass_calc").c_str(), ("h_M_"+particle+"_n_Inv_Mass_calc").c_str(),200,0,20);
@@ -354,8 +355,11 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     h_pt_S_delta_theta_Ks_l->Fill(pt_S,delta_theta_Ks_l);
     h_p_S_delta_theta_Ks_l->Fill(p3_S.Mag(),delta_theta_Ks_l);
     h_delta_phi_delta_theta_Ks_l->Fill(delta_phi_Ks_l,delta_theta_Ks_l);
-    
 
+    //making Armenteros-Podolanski Plot: http://www.star.bnl.gov/~gorbunov/main/node48.html
+    Double_t alpha_ArmPod = (p4_Ks_star.Pz()-p4_l_star.Pz())/(p4_Ks_star.Pz()+p4_l_star.Pz()); //alpha parameter in the Armenteros-Podolanski Plot take Ks as pos and Lambda as neg (convention)
+    h2_ArmPod->Fill(alpha_ArmPod,p4_Ks_star.Pt());
+    h2_ArmPod->Fill(alpha_ArmPod,p4_l_star.Pt());
 	//******************check the above calculation by calculating the invariant mass of the S****************************************//
     TLorentzVector p4_sum_Ks_l = p4_Ks_star+p4_l_star;
     Double_t M_Start_n_check = p4_sum_Ks_l.M();
@@ -624,7 +628,10 @@ int simulation(string outputDir, string particle, int nIterations, string polari
  h_delta_phi_delta_theta_Ks_l->Write();
  h_delta_phi_delta_theta_Ks_l->Draw("colz");
  c1->SaveAs((outputDir+"/h_delta_phi_delta_theta_Ks_l.png").c_str(),"png");
- 
+
+ h2_ArmPod->Write();
+ h2_ArmPod->Draw("colz");
+ c1->SaveAs((outputDir+"/h2_ArmPod.png").c_str(),"png"); 
  
  h_M_Start_n_check->Write();
  h_M_Start_n_check->Draw();
