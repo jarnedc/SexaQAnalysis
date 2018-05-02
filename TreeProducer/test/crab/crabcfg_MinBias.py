@@ -18,8 +18,8 @@ config.Data.splitting = 'EventAwareLumiBased'
 config.Data.unitsPerJob = 50000
 config.Data.lumiMask = ''
 config.Data.runRange = ''
-config.Data.outLFNDirBase = '/store/user/lowette/'
+config.Data.outLFNDirBase = '/store/user/jdeclerc/'
 config.Data.publication = False
-config.Data.outputDatasetTag = 'MinBias_180127'
+config.Data.outputDatasetTag = 'MinBias_260318'
 
 config.Site.storageSite = 'T2_BE_IIHE'
