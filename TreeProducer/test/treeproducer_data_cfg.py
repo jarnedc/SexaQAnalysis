@@ -39,9 +39,11 @@ else:
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvts))
 
 process.source = cms.Source("PoolSource",
-    fileNames = cms.untracked.vstring(
+   duplicateCheckMode = cms.untracked.string('checkAllFilesOpened'),
+   fileNames = cms.untracked.vstring(
 #     'file:///user/lowette/SexaQ/RunIISummer16DR80_MinBias_TuneCUETP8M1_13TeV-pythia8_GEN-SIM-RECO_NoPU_RECO_80X_mcRun2_asymptotic_v14-v1_100000_00150044-D075-E611-AAE8-001E67505A2D.root',
-     'file:///user/lowette/SexaQ/Run2016H_SingleMuon_AOD_07Aug17-v1_10000_F068EC7F-FB96-E711-96FF-7845C4FC3BFF.root'
+    # 'file:///user/lowette/SexaQ/Run2016H_SingleMuon_AOD_07Aug17-v1_10000_F068EC7F-FB96-E711-96FF-7845C4FC3BFF.root',
+     'file:///user/jdeclerc/Analysis/dataSamples/ZeroBiasData/D07C27A2-5690-E711-844F-B083FED429D5.root'
     )
 )
 

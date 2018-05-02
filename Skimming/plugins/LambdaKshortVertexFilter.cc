@@ -117,7 +117,6 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
       RefCountedKinematicParticle Sparticle = STree->currentParticle();
       //get the decay vertex of the S
       RefCountedKinematicVertex STreeVertex = STree->currentDecayVertex();
-
       //cut on some things now related to the Sparticle: the chi2 of the vertex fit, the vertex location compared to the closest primary vertex, the fact if the reconstructed S momentum points to the primary vertex. 	
       if(STreeVertex->chiSquared()/STreeVertex->degreesOfFreedom() > maxchi2ndofVertexFit_)continue;
       //get the track associated with this particle
