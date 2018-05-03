@@ -51,3 +51,27 @@ root -l analysis.C
 - https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideAdaptiveVertexReconstructor
 - http://cds.cern.ch/record/1166320/files/NOTE2008_033.pdf
 - http://iopscience.iop.org/article/10.1088/0954-3899/34/12/N01/pdf
+
+
+## MC_Analysis  --  fpartous
+
+MonteCarlo analysis for Master thesis.
+
+main analysis code in MCAnalysis.C
+### how to run:
+
+root -l -q -b 'MCAnalysis.C+("c1")'
+
+where "c1" can be replaced by "c2", "c3" or "c123", depending on the category one wants to produce plots of. c1 = prompt, c2 = material interaction, c3 = decays of baryons/mesons, c123 = all three together.
+
+outputs root file with plots
+
+## running all three categories:
+
+bash MCAnalysis_all_categories.bash
+
+## exporting rootfile plots to pdf
+
+bash exportplots_all_categories.bash
+
+
