@@ -315,13 +315,13 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	histos_th1f[b+"L0_dxy(PCA_beamspot)"] ->Fill(dxy_PCA_bs_signed);
 	
 	TMatrixD CovMx2D(2,2); //2D xy covariance matrix
-    CovMx2D(0,0)=h_Lambdas->at(i).vertexCovariance(0,0); //elements are Sigma(i,j)²
-    CovMx2D(0,1)=h_Lambdas->at(i).vertexCovariance(0,1);
-    CovMx2D(1,0)=h_Lambdas->at(i).vertexCovariance(1,0);
-    CovMx2D(1,1)=h_Lambdas->at(i).vertexCovariance(1,1);
+        CovMx2D(0,0)=h_Lambdas->at(i).vertexCovariance(0,0); //elements are Sigma(i,j)²
+        CovMx2D(0,1)=h_Lambdas->at(i).vertexCovariance(0,1);
+        CovMx2D(1,0)=h_Lambdas->at(i).vertexCovariance(1,0);
+        CovMx2D(1,1)=h_Lambdas->at(i).vertexCovariance(1,1);
     
-    TVectorD EValues;
-    TMatrixD EVectors = CovMx2D.EigenVectors(EValues);
+        TVectorD EValues;
+        TMatrixD EVectors = CovMx2D.EigenVectors(EValues);
     
 	for (Int_t i = 0; i < EValues.GetNrows(); ++i) { 
 		TVectorD EVector(TMatrixTColumn_const<double>(EVectors, i)); 	
@@ -368,13 +368,13 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	histos_th1f[b+"Ks_dxy(PCA_beamspot)"] ->Fill(dxy_PCA_bs_signed);
 	
 	TMatrixD CovMx2D(2,2); //2D xy covariance matrix
-    CovMx2D(0,0)=h_Kshorts->at(i).vertexCovariance(0,0); //elements are Sigma(i,j)²
-    CovMx2D(0,1)=h_Kshorts->at(i).vertexCovariance(0,1);
-    CovMx2D(1,0)=h_Kshorts->at(i).vertexCovariance(1,0);
-    CovMx2D(1,1)=h_Kshorts->at(i).vertexCovariance(1,1);
+        CovMx2D(0,0)=h_Kshorts->at(i).vertexCovariance(0,0); //elements are Sigma(i,j)²
+        CovMx2D(0,1)=h_Kshorts->at(i).vertexCovariance(0,1);
+        CovMx2D(1,0)=h_Kshorts->at(i).vertexCovariance(1,0);
+        CovMx2D(1,1)=h_Kshorts->at(i).vertexCovariance(1,1);
     
-    TVectorD EValues;
-    TMatrixD EVectors = CovMx2D.EigenVectors(EValues);
+        TVectorD EValues;
+        TMatrixD EVectors = CovMx2D.EigenVectors(EValues);
     
 	for (Int_t i = 0; i < EValues.GetNrows(); ++i) { 
 		TVectorD EVector(TMatrixTColumn_const<double>(EVectors, i)); 	
@@ -394,13 +394,13 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   for (unsigned int i = 0; i < h_sCands->size(); ++i) { //loop over S candidates
 	  
 	  
-	  //sCand daughter distributions
-	  
-	histos_th1f[b+"sCand_d1_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); 
-	histos_th1f[b+"sCand_d2_pt"]->Fill(h_sCands->at(i).daughter(0)->pt());
+    //sCand daughter distributions
+    //Jarne: you have no idea which daughter is which. 0 could be the Ks, but could also be the Lambda 
+   // histos_th1f[b+"sCand_d1_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); 
+   // histos_th1f[b+"sCand_d2_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); //bug here --> should be 1
   
-	histos_th1f[b+"sCand_d1_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
-	histos_th1f[b+"sCand_d2_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
+   // histos_th1f[b+"sCand_d1_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
+   // histos_th1f[b+"sCand_d2_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
 	  
 	  
 	  
@@ -408,7 +408,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	  
      //cout <<h_sCands->at(i).vertexChi2() <<endl;
 
-	//sCand vertex position and errors
+    //sCand vertex position and errors
     float x  = h_sCands->at(i).vx();
     float y  = h_sCands->at(i).vy();
     float z  = h_sCands->at(i).vz();
@@ -508,16 +508,6 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
     //cout << signum(cand_bs * cand_mom) << endl;
     
-    
-    //DEZE WERKEN NIET, geven beide segmentation violations (als ik eens van de twee uitcomment):
-   // cout << h_sCands->at(i).daughterPtr(0)->eta() << endl;
-     cout << h_sCands->at(i).daughter(0)->eta() << endl;
-    
-    //IETS ZOALS DIT WERKT WEL GEWOON:
-    //cout << h_sCands->at(i).px() << endl;
-
-	
-
 
 
     //Extrapolate vertex momentum in direction of the unit momentum vector to the Point of Closest Approach with the beamspot in 3D
