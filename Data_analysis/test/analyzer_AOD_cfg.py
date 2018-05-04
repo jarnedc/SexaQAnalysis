@@ -14,7 +14,7 @@ options.register(
 	'flag to indicate max events to process')
 
 
-process = cms.Process("SEXAQANA")
+process = cms.Process("SEXAQDATAANA")
 
 process.load("FWCore.MessageService.MessageLogger_cfi")
 
@@ -38,9 +38,12 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #/pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/
 #/pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/
 
-rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
-
+#single muon
+#rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
+#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180504_024915/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+#zero bias
+rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180504_025020/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -65,5 +68,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('analysis.root')
+    fileName = cms.string('analysis_SingleMuon_Run2016G.root')
 )

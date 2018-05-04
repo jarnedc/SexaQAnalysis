@@ -15,6 +15,7 @@ Analyzer::Analyzer(edm::ParameterSet const& pset):
   m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
   m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag))
 {
+
 }
 
 
@@ -115,7 +116,6 @@ void Analyzer::beginJob() {
 
 
 void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) {
-
   edm::Handle<reco::BeamSpot> h_bs;
   iEvent.getByToken(m_bsToken, h_bs);
 
@@ -160,7 +160,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   Int_t nPV = h_vert->size();
   Int_t n_sCands = h_sCands->size();
   Int_t n_rCands = h_rCands->size();
- 
+  
 
   //std::cout<<m_nRun<<"\t"<<m_nLumi<<"\t"<<m_nEvent<<std::endl;
 
@@ -197,14 +197,19 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     histos_th2f["vtx_xy"]  ->Fill(x,y);
     histos_th2f["vtx_rz"]  ->Fill(z,sqrt(pow(x,2)+pow(y,2)));
 //    histos_th1f["vtx_chi2"]->Fill(10*sqrt(xe+ye));
-    histos_th1f["dxy"] ->Fill(sqrt(pow(x-bs_x,2)+pow(y-bs_y,2)));
+    float dxy = sqrt(pow(x-bs_x,2)+pow(y-bs_y,2));
+    histos_th1f["dxy"] ->Fill(dxy);
     histos_th1f["dr"]  ->Fill(sqrt(pow(x-bs_x,2)+pow(y-bs_y,2)+pow(z-bs_z,2)));
     histos_th1f["sdxy"]->Fill(sqrt((pow(x-bs_x,2)+pow(y-bs_y,2))/(xe+ye)));
     histos_th1f["sdr"] ->Fill(sqrt((pow(x-bs_x,2)+pow(y-bs_y,2)+pow(z-bs_z,2))/(xe+ye+ze)));
     
     if(h_rCands->at(i).mass() < 2.) histos_th1f["rCand_mass_below_2GeV_Eta"]->Fill(h_rCands->at(i).eta()); //to be compared to gen Xi(1530) eta distri
-
-    float dxy = sqrt(pow(x-bs_x,2)+pow(y-bs_y,2));
+    cout << "number of daughters: " << h_rCands->at(i).numberOfDaughters() << endl;
+    if(h_rCands->at(i).numberOfDaughters() > 0){
+     cout << "found a daughter!!" << endl;
+     cout << h_rCands->at(i).daughterPtr(0)->eta() << endl;
+     // cout << h_rCands->at(i).daughter(0)->eta() << endl;
+    }
     float edxy = sqrt(xe+ye);
     if (dxy < 0.1 && 
         dxy < 3*edxy &&
@@ -235,7 +240,6 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     CovMx2D(1,1)=h_sCands->at(i).vertexCovariance(1,1);
     
     
-    
     //CovMx2D.Print();
     
     
@@ -264,7 +268,6 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	//if(!(CovMx2D(1,1)<0 || CovMx2D(0,0)<0)) cout <<"EValues: "<<EValues(0)<<" "<<EValues(1)<<" min: "<<MinEValue<<endl;
 
     
-    
 
     //momentum
     float px = h_sCands->at(i).px(); 
@@ -286,7 +289,6 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
       histos_th1f["sCandMass"]->Fill(h_sCands->at(i).mass());
 	}
 	
-
     //Extrapolate vertex momentum in direction of the unit momentum vector to the Point of Closest Approach with the beamspot
 
     float alpha = ((cand_mom * bs_pos2D) - (cand_mom * cand_pos)) / (cand_mom * cand_mom);
@@ -308,11 +310,11 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     
     //DEZE WERKEN NIET, geven beide segmentation violations (als ik eens van de twee uitcomment):
-    cout << h_sCands->at(i).daughterPtr(0)->eta() << endl;
-    cout << h_sCands->at(i).daughter(0)->eta() << endl;
+   // cout << h_sCands->at(i).daughterPtr(0)->eta() << endl;
+   // cout << h_sCands->at(i).daughter(0)->eta() << endl;
     
     //IETS ZOALS DIT WERKT WEL GEWOON:
-    cout << h_sCands->at(i).px() << endl;
+    //cout << h_sCands->at(i).px() << endl;
     
     
     
@@ -416,7 +418,6 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
 void Analyzer::endJob()
 {
-
 }
 
 Analyzer::~Analyzer()

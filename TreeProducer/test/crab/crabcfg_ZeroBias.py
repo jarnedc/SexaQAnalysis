@@ -4,7 +4,7 @@ config = config()
 
 pyCfgParams = ['isData=True']
 
-config.General.requestName = 'SexaQ_ZeroBias2'
+config.General.requestName = 'SexaQ_ZeroBias'
 config.General.workArea = 'crab_projects'
 config.General.transferOutputs = True
 config.General.transferLogs = True
