@@ -38,6 +38,8 @@ bool MassFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
     if (m.M() > minMass_ && m.M() < maxMass_) {
       reco::VertexCompositePtrCandidate  lkPass(lk.charge(), lk.p4(), lk.vertex(), lk.vertexCovariance(), lk.vertexChi2(), lk.vertexNdof(), 0, 0, true);
       lkPass.setP4(m);
+      lkPass.addDaughter(lk.sourceCandidatePtr(0));
+      lkPass.addDaughter(lk.sourceCandidatePtr(1));
       lkPairs->push_back(std::move(lkPass));
     }
   }
