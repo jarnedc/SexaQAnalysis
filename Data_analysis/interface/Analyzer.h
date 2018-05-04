@@ -17,6 +17,7 @@
 #include <TLorentzVector.h>
 #include <TMatrixD.h>
 #include <TVectorD.h>
+#include <TString.h>
 
 #include <iostream>
 #include <sstream>
@@ -75,16 +76,25 @@ class Analyzer : public edm::EDAnalyzer
     
     edm::InputTag m_bsTag;
     edm::InputTag m_vertexTag;
-    edm::InputTag m_rCandsTag;
+    //edm::InputTag m_rCandsTag;
     edm::InputTag m_sCandsTag;
+    
+    edm::InputTag m_KshortsTag;
+    edm::InputTag m_LambdasTag;
   
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
-    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
-    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
-    //edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_rCandsToken;
-    //edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
+    //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
+    //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_KshortsToken;
+	edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_LambdasToken;
+
+
     int verbose=1;
+    
+    TString a = "MinBiasMC"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
+	TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
     std::map<TString, TH1F *> histos_th1f;

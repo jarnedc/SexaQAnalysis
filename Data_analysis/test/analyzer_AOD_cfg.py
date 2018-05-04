@@ -4,6 +4,8 @@ import FWCore.ParameterSet.Config as cms
 from FWCore.ParameterSet.VarParsing import VarParsing
 options = VarParsing('python')
 
+
+
 ## data or MC options
 options.register(
 	'isData',True,VarParsing.multiplicity.singleton,VarParsing.varType.bool,
@@ -12,6 +14,9 @@ options.register(
 options.register(
 	'maxEvts',-1,VarParsing.multiplicity.singleton,VarParsing.varType.int,
 	'flag to indicate max events to process')
+	
+	
+#options.isData==True
 
 
 process = cms.Process("SEXAQDATAANA")
@@ -35,15 +40,25 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxE
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(2000)
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
-#/pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/
-#/pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/
+#Jarne
 
 #single muon
 #rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
 #tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180504_024915/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 #zero bias
-rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180504_025020/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+#rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
+#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180504_025020/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+
+#Florian
+
+#/pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000   range to 148 
+#/pnfs/iihe/cms/store/user/jdeclerc/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/Wjets_30032018/180330_081925/0000   range to 483 
+#/pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180329_165749/0000   range to 500 
+#/pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_260318/180325_233019/0000    range up to 201
+
+rangeOfStrings=[str(i) for i in range(1,148)]
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
@@ -57,9 +72,10 @@ process.source = cms.Source("PoolSource",
 )
 
 
+
 # Analyzer
 process.load("SexaQAnalysis.Data_analysis.Analyzer_cfi")
-process.analyzer.isData = cms.untracked.bool(True)
+process.analyzer.isData = cms.untracked.bool(True) ##############SET BACK TO TRUE################
 
 process.p = cms.Path(
   process.analyzer
@@ -68,5 +84,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('analysis_SingleMuon_Run2016G.root')
+    fileName = cms.string('analysis2.root')
 )
