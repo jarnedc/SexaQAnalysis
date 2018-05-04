@@ -3,9 +3,9 @@
 
 //notations: all variables are in the detector rest frame, the once that are in the S+n rest frame are noted with "star", energy unit = GeV
 //to run this for example: root -l -> in interactive mode:
-//.x simulation.cc++("myOutputDir", "Xi1820", 10000, "polarisedJ32M12" )
-//.x simulation.cc++("myOutputDir", "Xi1820", 10000, "unpolarised" )
-//.x simulation.cc++("myOutputDir", "S", 10000, "unpolarised" )
+//.x simulation.cc++("Xi_TSalis_polarised", "Xi1820", 100000, "polarisedJ32M12" )
+//.x simulation.cc++("Xi_TSalis_unpolarised", "Xi1820", 100000, "unpolarised" )
+//.x simulation.cc++("S_ptTSalis", "S", 100000, "unpolarised" )
 #include "TMath.h"
 #include "TH1F.h"
 #include "TH2F.h"
@@ -132,6 +132,16 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     TH1F *h_delta_theta_Ks_l_star = new TH1F("h_delta_theta_Ks_l_star", "h_delta_theta_Ks_l_star", 200, -4, 4);
     TH2F *h2_delta_theta_Ks_l_star = new TH2F("h2_delta_theta_Ks_l_star", "h2_delta_theta_Ks_l_star", 100, -2, 2, 200, -4, 4);
     TH1F *h_sum_theta_Ks_l_star = new TH1F("h_sum_theta_Ks_l_star", "h_sum_theta_Ks_l_star", 200, -4, 4);
+
+
+    TH1F *h_p_l_trans = new TH1F("h_p_l_trans", "h_p_l_trans; Lambda transversal momentum along Start particle direction", 200, -5, 5);
+    TH1F *h_p_Ks_trans = new TH1F("h_p_Ks_trans", "h_p_Ks_trans; Ks transversal momentum along Start particle direction", 200, -5, 5);
+    TH1F *h_p_l_long = new TH1F("h_p_l_long", "h_p_l_long; Lambda longitudinal momentum along Start particle direction", 200, -5, 5);
+    TH1F *h_p_Ks_long = new TH1F("h_p_Ks_long", "h_p_Ks_long; Ks longitudnal momentum along Start particle direction", 200, -5, 5);
+
+    TH2F *h2_p_Ks_l_trans = new TH2F("h2_p_Ks_l_trans","h2_p_Ks_l_trans;transversal momentum Ks wrt Start particle;transversal momentum Lambda wrt Start particle",1000,-1,1,1000,-1,1);
+    TH2F *h2_p_Ks_l_long = new TH2F("h2_p_Ks_l_long","h2_p_Ks_l_long;longitudnal momentum Ks wrt Start particle;longitudnal momentum Lambda wrt Start particle",100,-10,10,100,-10,10);
+
  
     TH1F *h_delta_phi_Ks_l = new TH1F("h_delta_phi_Ks_l", "h_delta_phi_Ks_l", 100, -7, 7);
     TH1F *h_delta_theta_Ks_l = new TH1F("h_delta_theta_Ks_l", "h_delta_theta_Ks_l", 200, -4, 4);
@@ -145,7 +155,12 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     TH2F *h_pt_S_delta_theta_Ks_l = new TH2F(("h_pt_"+particle+"_delta_theta_Ks_l").c_str(),("h_pt_"+particle+"_delta_theta_Ks_l;pt_"+particle+";delta_theta_Ks_l").c_str(),100,0,10,100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range);
     TH2F *h_p_S_delta_theta_Ks_l = new TH2F(("h_p_"+particle+"_delta_theta_Ks_l").c_str(),("h_p_"+particle+"_delta_theta_Ks_l").c_str(),100,0,10,100,-7,7);
     TH2F *h_delta_phi_delta_theta_Ks_l = new TH2F("h_delta_phi_delta_theta_Ks_l","h_delta_phi_delta_theta_Ks_l;delta_phi_Ks_l;delta_theta_Ks_l",100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range,100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range);
-    TH2F *h2_ArmPod = new TH2F("h2_ArmPod","h2_ArmPod;alpha;pT(Ks,Lambda)",100,-1,1,100,0,10);
+ 
+    Double_t ArmPod_alpha_range = 1.;
+    if(particle=="S") ArmPod_alpha_range =  5.;
+    TH2F *h2_ArmPod = new TH2F("h2_ArmPod","h2_ArmPod;alpha;pT(Ks,Lambda)",100,-ArmPod_alpha_range,ArmPod_alpha_range,100,0,5);
+    TH2F *h2_ArmPod_Ks = new TH2F("h2_ArmPod_Ks","h2_ArmPod_Ks;alpha;pT(Ks)",100,-ArmPod_alpha_range,ArmPod_alpha_range,100,0,5);
+    TH2F *h2_ArmPod_Lambda = new TH2F("h2_ArmPod_Lambda","h2_ArmPod_Lambda;alpha;pT(Lambda)",100,-ArmPod_alpha_range,ArmPod_alpha_range,100,0,5);
     
     TH1F *h_M_Start_n_check =  new TH1F(("h_M_"+particle+"_n_check").c_str(), ("h_M_"+particle+"_n_check").c_str(), 200, 0, 20);
     TH1F *h_M_Start_n_Inv_Mass_calc =  new TH1F(("h_M_"+particle+"_n_Inv_Mass_calc").c_str(), ("h_M_"+particle+"_n_Inv_Mass_calc").c_str(),200,0,20);
@@ -357,9 +372,38 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     h_delta_phi_delta_theta_Ks_l->Fill(delta_phi_Ks_l,delta_theta_Ks_l);
 
     //making Armenteros-Podolanski Plot: http://www.star.bnl.gov/~gorbunov/main/node48.html
-    Double_t alpha_ArmPod = (p4_Ks_star.Pz()-p4_l_star.Pz())/(p4_Ks_star.Pz()+p4_l_star.Pz()); //alpha parameter in the Armenteros-Podolanski Plot take Ks as pos and Lambda as neg (convention)
-    h2_ArmPod->Fill(alpha_ArmPod,p4_Ks_star.Pt());
-    h2_ArmPod->Fill(alpha_ArmPod,p4_l_star.Pt());
+   // TVector3 p3_S_norm(0.,0.,0.); 
+   // p3_S_norm.SetXYZ(p3_S.Px()/p3_S.Mag(),p3_S.Py()/p3_S.Mag(),p3_S.Pz()/p3_S.Mag());
+    TVector3 p3_l(0.,0.,0.);
+    p3_l.SetXYZ(p4_l_star.Px(),p4_l_star.Py(),p4_l_star.Pz());
+    TVector3 p3_Ks(0.,0.,0.);
+    p3_Ks.SetXYZ(p4_Ks_star.Px(),p4_Ks_star.Py(),p4_Ks_star.Pz());
+    
+
+    Double_t angle_S_l  = p3_S.Angle(p3_l); //angle between S and Lambda in the lab frame
+    Double_t angle_S_Ks  = p3_S.Angle(p3_Ks); //angle between S and Kshort in the lab frame
+    Double_t p_l_long = p3_l.Mag()*TMath::Cos(angle_S_l); //longitudnal momentum of Lambda along S direction in the lab frame
+    Double_t p_Ks_long = p3_Ks.Mag()*TMath::Cos(angle_S_Ks); //longitudnal momentum of Ks along S direction in the lab frame
+    Double_t p_l_trans = p3_l.Mag()*TMath::Sin(angle_S_l); //transversal momentum of Lambda along S direction in the lab frame
+    Double_t p_Ks_trans = p3_Ks.Mag()*TMath::Sin(angle_S_Ks); //transversal momentum of Ks along S direction in the lab frame
+    cout << "--------------" << endl;
+    cout <<"p_l_trans " << p_l_trans << endl;
+    cout <<"p_Ks_trans" << p_Ks_trans << endl;
+    cout <<"p_l_long " << p_l_long << endl;
+    cout <<"p_Ks_long" << p_Ks_long << endl;
+
+    h_p_l_trans -> Fill(p_l_trans);
+    h_p_Ks_trans -> Fill(p_Ks_trans);
+    h_p_l_long -> Fill(p_l_long);
+    h_p_Ks_long -> Fill(p_Ks_long);
+    h2_p_Ks_l_trans ->Fill(p_Ks_trans, p_l_trans);
+    h2_p_Ks_l_long ->Fill(p_Ks_long, p_l_long);
+
+    Double_t alpha_ArmPod = (p_Ks_long-p_l_long)/(p_Ks_long+p_l_long); //alpha parameter in the Armenteros-Podolanski Plot take Ks as pos and Lambda as neg (convention)
+    h2_ArmPod_Lambda->Fill(alpha_ArmPod,p_l_trans); //make Armenteros-Podolanski Plot for Lambda
+    h2_ArmPod_Ks->Fill(alpha_ArmPod,p_Ks_trans); // make Armenteros-Podolanski Plot for Ks
+    h2_ArmPod->Fill(alpha_ArmPod,p_l_trans); //combine Lambda and Kshort
+    h2_ArmPod->Fill(alpha_ArmPod,p_Ks_trans); //combine Lambda and Kshort
 	//******************check the above calculation by calculating the invariant mass of the S****************************************//
     TLorentzVector p4_sum_Ks_l = p4_Ks_star+p4_l_star;
     Double_t M_Start_n_check = p4_sum_Ks_l.M();
@@ -591,6 +635,15 @@ int simulation(string outputDir, string particle, int nIterations, string polari
 
  h_sum_theta_Ks_l_star->Write();
 
+
+ h_p_l_trans->Write();
+ h_p_Ks_trans->Write();
+ h_p_l_long->Write();
+ h_p_Ks_long->Write();
+
+ h2_p_Ks_l_trans ->Write();
+ h2_p_Ks_l_long ->Write(); 
+
  
  h_delta_phi_Ks_l->Write();
  h_delta_phi_Ks_l->Draw();
@@ -632,6 +685,14 @@ int simulation(string outputDir, string particle, int nIterations, string polari
  h2_ArmPod->Write();
  h2_ArmPod->Draw("colz");
  c1->SaveAs((outputDir+"/h2_ArmPod.png").c_str(),"png"); 
+
+ h2_ArmPod_Ks->Write();
+ h2_ArmPod_Ks->Draw("colz");
+ c1->SaveAs((outputDir+"/h2_ArmPod_Ks.png").c_str(),"png"); 
+
+ h2_ArmPod_Lambda->Write();
+ h2_ArmPod_Lambda->Draw("colz");
+ c1->SaveAs((outputDir+"/h2_ArmPod_Lambda.png").c_str(),"png"); 
  
  h_M_Start_n_check->Write();
  h_M_Start_n_check->Draw();
