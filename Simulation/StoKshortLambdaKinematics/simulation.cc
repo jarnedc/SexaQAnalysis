@@ -128,8 +128,8 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     TH2F *h_Ks_l_p_y = new TH2F("h_Ks_l_p_y", "h_Ks_l_p_y", 1000, -10, 10,1000, -10, 10);
     TH2F *h_Ks_l_p_z = new TH2F("h_Ks_l_p_z", "h_Ks_l_p_z", 1000, -10, 10,1000, -10, 10);
 
-    TH1F *h_delta_phi_Ks_l_star = new TH1F("h_delta_phi_Ks_l_star", "h_delta_phi_Ks_l_star", 200, -7, 7);
-    TH1F *h_delta_theta_Ks_l_star = new TH1F("h_delta_theta_Ks_l_star", "h_delta_theta_Ks_l_star", 200, -4, 4);
+    TH1F *h_delta_phi_Ks_l_star = new TH1F("h_delta_phi_Ks_l_star", "h_delta_phi_Ks_l_star", 100, -TMath::Pi(), TMath::Pi());
+    TH1F *h_delta_theta_Ks_l_star = new TH1F("h_delta_theta_Ks_l_star", "h_delta_theta_Ks_l_star", 100, -TMath::Pi(), TMath::Pi());
     TH2F *h2_delta_theta_Ks_l_star = new TH2F("h2_delta_theta_Ks_l_star", "h2_delta_theta_Ks_l_star", 100, -2, 2, 200, -4, 4);
     TH1F *h_sum_theta_Ks_l_star = new TH1F("h_sum_theta_Ks_l_star", "h_sum_theta_Ks_l_star", 200, -4, 4);
 
@@ -143,9 +143,9 @@ int simulation(string outputDir, string particle, int nIterations, string polari
     TH2F *h2_p_Ks_l_long = new TH2F("h2_p_Ks_l_long","h2_p_Ks_l_long;longitudnal momentum Ks wrt Start particle;longitudnal momentum Lambda wrt Start particle",100,-10,10,100,-10,10);
 
  
-    TH1F *h_delta_phi_Ks_l = new TH1F("h_delta_phi_Ks_l", "h_delta_phi_Ks_l", 100, -7, 7);
-    TH1F *h_delta_theta_Ks_l = new TH1F("h_delta_theta_Ks_l", "h_delta_theta_Ks_l", 200, -4, 4);
-    TH1F *h_delta_eta_Ks_l = new TH1F("h_delta_eta_Ks_l", "h_delta_eta_Ks_l", 200, -4, 4);
+    TH1F *h_delta_phi_Ks_l = new TH1F("h_delta_phi_Ks_l", "h_delta_phi_Ks_l", 100, -TMath::Pi(), TMath::Pi());
+    TH1F *h_delta_theta_Ks_l = new TH1F("h_delta_theta_Ks_l", "h_delta_theta_Ks_l", 100, -TMath::Pi(), TMath::Pi());
+    TH1F *h_delta_eta_Ks_l = new TH1F("h_delta_eta_Ks_l", "h_delta_eta_Ks_l", 100, -TMath::Pi(), TMath::Pi());
     TH1F *h_delta_R_Ks_l = new TH1F("h_delta_R_Ks_l", "h_delta_R_Ks_l", 200, 0, 10);
    
     Double_t delta_phi_detla_theta_range = 2;
@@ -172,11 +172,14 @@ int simulation(string outputDir, string particle, int nIterations, string polari
 
 	//******************settings*****************************************//
     //pt distribution of the S particle:  https://arxiv.org/pdf/1401.4835.pdf
-    Double_t pt_S = fTSalisSpt->GetRandom(); 
+    //Double_t pt_S = fTSalisSpt->GetRandom(); 
+    Double_t pt_S = 2.; 
 	//from https://arxiv.org/pdf/1002.0621.pdf, page 7 the eta distribution is relatively flat
-    Double_t eta_S = random->Uniform(-2.5,2.5);
+    //Double_t eta_S = random->Uniform(-2.5,2.5);
+    Double_t eta_S = 0.;
     //phi of the S, should be a uniform distribution in 0 to 2*pi
-	Double_t phi_S = random->Uniform(2.*TMath::Pi());	
+	//Double_t phi_S = random->Uniform(2.*TMath::Pi());	
+	Double_t phi_S = 0.;	
 
     //theta of the Ks, distributed according to a cosine for a isotropic distribution
     Double_t u = -9999;
@@ -336,8 +339,8 @@ int simulation(string outputDir, string particle, int nIterations, string polari
  	if(verbose)cout << "delta phi: " << p4_Ks_star.Phi()-p4_l_star.Phi() << endl;
 	if(verbose)cout << "delta theta: " << p4_Ks_star.Theta()-p4_l_star.Theta() << endl; 	
 
-    if(p4_l_star.Pt()<1.5)continue;
-    if(p4_Ks_star.Pt()<0.9)continue;
+    //if(p4_l_star.Pt()<1.5)continue;
+    //if(p4_Ks_star.Pt()<0.9)continue;
     h_Ks_p_x->Fill(p4_Ks_star.Px());
     h_Ks_p_y->Fill(p4_Ks_star.Py());
     h_Ks_p_z->Fill(p4_Ks_star.Pz());
@@ -619,11 +622,10 @@ int simulation(string outputDir, string particle, int nIterations, string polari
  c1->SaveAs((outputDir+"/h_l_pt.pdf").c_str(),"pdf");
  
 
-
  h_delta_phi_Ks_l_star->Write();
  h_delta_phi_Ks_l_star->Draw();
  c1->SaveAs((outputDir+"/h_delta_phi_Ks_l_star.pdf").c_str(),"pdf");
- 
+
  h_delta_theta_Ks_l_star->Write();
  h_delta_theta_Ks_l_star->Draw();
  c1->SaveAs((outputDir+"/h_delta_theta_Ks_l_star.pdf").c_str(),"pdf");
@@ -644,19 +646,26 @@ int simulation(string outputDir, string particle, int nIterations, string polari
  h2_p_Ks_l_trans ->Write();
  h2_p_Ks_l_long ->Write(); 
 
- 
+ Double_t norm = h_delta_phi_Ks_l->GetEntries();
+ if(norm) h_delta_phi_Ks_l->Scale(1/norm);
  h_delta_phi_Ks_l->Write();
  h_delta_phi_Ks_l->Draw();
  c1->SaveAs((outputDir+"/h_delta_phi_Ks_l.pdf").c_str(),"pdf");
- 
+
+ Double_t norm2 = h_delta_theta_Ks_l->GetEntries();
+ if(norm2) h_delta_theta_Ks_l->Scale(1/norm2); 
  h_delta_theta_Ks_l->Write();
  h_delta_theta_Ks_l->Draw();
  c1->SaveAs((outputDir+"/h_delta_theta_Ks_l.pdf").c_str(),"pdf");
  
+ Double_t norm3 = h_delta_eta_Ks_l->GetEntries();
+ if(norm3) h_delta_eta_Ks_l->Scale(1/norm3); 
  h_delta_eta_Ks_l->Write();
  h_delta_eta_Ks_l->Draw();
  c1->SaveAs((outputDir+"/h_delta_eta_Ks_l.pdf").c_str(),"pdf");
  
+ Double_t norm4 = h_delta_R_Ks_l->GetEntries();
+ if(norm4) h_delta_R_Ks_l->Scale(1/norm4); 
  h_delta_R_Ks_l->Write();
  h_delta_R_Ks_l->Draw();
  c1->SaveAs((outputDir+"/h_delta_R_Ks_l.pdf").c_str(),"pdf");
