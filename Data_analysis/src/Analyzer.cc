@@ -53,6 +53,8 @@ void Analyzer::beginJob() {
 
   histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,-10.,10.);
   //rCAND DISTIBUTIONS
+  //rCAND mass distributions with certain cuts
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
   
   //histos_th1f[b+"rCand_mass_below_2GeV_Eta"] = m_fs->make<TH1F>(b+"rCand_mass_below_2GeV_Eta",b+"rCand_mass_below_2GeV_Eta; pseudorapidity",1000,-5.,5.);
   
@@ -83,6 +85,9 @@ void Analyzer::beginJob() {
   histos_th1f[b+"sCand_d2_eta"] = m_fs->make<TH1F>(b+"sCand_d2_eta",b+"sCand_d2_eta; pseudorapidity",1000,-5,5.);
 
     
+  histos_th1f[b+"sCand_daughters_m"] = m_fs->make<TH1F>(b+"sCand_daughters_mass",b+"sCand_daughters_mass; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCand_daughter_Kshort_m"] = m_fs->make<TH1F>(b+"sCand_daughter_Kshort_m",b+"sCand_daughter_Kshort_m; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCand_daughter_Lambda_m"] = m_fs->make<TH1F>(b+"sCand_daughter_Lambda_m",b+"sCand_daughter_Lambda_m; mass (GeV)",1000,0,10.);
   
   //SCATTERPLOTS
   
@@ -401,8 +406,22 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   
    // histos_th1f[b+"sCand_d1_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
    // histos_th1f[b+"sCand_d2_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
-	  
-	  
+
+    //Decide which daughter is which from the mass
+    float mass_K0 = 0.497611;
+    float mass_Lambda0 = 1.115683;
+    
+    if(fabs(h_sCands->at(i).daughter(0)->mass()-mass_K0) < fabs(h_sCands->at(i).daughter(0)->mass()-mass_Lambda0)){ //daughter 0 is the K0, daughter 1 is the Lambda
+ 	histos_th1f[b+"sCand_daughter_Kshort_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());
+ 	histos_th1f[b+"sCand_daughter_Lambda_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());
+    }
+    else{ //other way around
+ 	histos_th1f[b+"sCand_daughter_Kshort_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());
+ 	histos_th1f[b+"sCand_daughter_Lambda_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());
+    }
+    //fill both
+    histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());	  
+    histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());	  
 	  
 	  
 	  
@@ -443,7 +462,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     histos_th1f[b+"sCandMass"]->Fill(sCand_mass);
     
 
-
+     
     
     TMatrixD CovMx2D(2,2); //2D xy covariance matrix
     CovMx2D(0,0)=h_sCands->at(i).vertexCovariance(0,0); //elements are Sigma(i,j)²
@@ -582,18 +601,27 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 		histos_th1f[b+"sCandMass_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass);
 	}
 	
-	dxy = sqrt(pow(x,2)+pow(y,2));
+	dxy = sqrt(pow(x,2)+pow(y,2)); //Jarne, why do you use dxy all of a sudden, not dxy_PCA_bs_signed??
     edxy = sqrt(xe+ye);
     if (dxy > 2-3*edxy && edxy < .1 && sqrt(ze) < .1){
-      histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); //Let op, dit is de rCand mass
+      histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); 
 	}
 	
 	dxy = sqrt(pow(x,2)+pow(y,2));
     edxy = sqrt(xe+ye);
     if (dxy > 2-3*edxy && edxy < .1 && sqrt(ze) < .1 && 1<abs(delta_phi) && abs(delta_phi)<2.5){
-      histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); //Let op, dit is de rCand mass
+      histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); 
 	}
+     
+    //make rCandidate mass plot with cuts on the PCA (should be coming from the beam spot) and dR < a given value, from the simulation we saw that for the rCandidate, this could be the Xi1820 for example the has dR < 0.8
+    float delta_eta_daughters = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();     
+    float delta_phi_daughters = h_sCands->at(i).daughter(0)->phi() - h_sCands->at(i).daughter(1)->phi();
+    float dr_daughters = pow(delta_eta_daughters*delta_eta_daughters+delta_phi_daughters*delta_phi_daughters,0.5);
+    if(fabs(dxy_PCA_bs_signed) < 0.2 && dr_daughters < 0.8){
+	histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
+    }     
     
+         
     
     ///PCA AND SIGNIFICANCE PLOTS
     
