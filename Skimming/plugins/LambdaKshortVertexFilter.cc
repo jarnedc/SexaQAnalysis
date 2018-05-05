@@ -53,6 +53,8 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
     //get the daughters from the Lambdas
     const Candidate * V0LambdasDaughter1 = (*h_lambda)[l]->daughter(0);
     const Candidate * V0LambdasDaughter2 = (*h_lambda)[l]->daughter(1);
+   // cout << "original lambda mass (from V0): " << (*h_lambda)[l]->mass() << endl;
+   // cout << "original lambda Px (from V0): " << (*h_lambda)[l]->px() << endl;
     //get the tracks corresponding to these daughters
     const Track * TrackV0LambdasDaughterProton = 0;
     const Track * TrackV0LambdasDaughterPion = 0;
@@ -85,6 +87,8 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
     //get the daughters from the Kshorts
     const Candidate * V0KaonsDaughter1 = (*h_kshort)[k]->daughter(0);
     const Candidate * V0KaonsDaughter2 = (*h_kshort)[k]->daughter(1);
+   // cout << "original Ks mass (from V0): " << (*h_kshort)[k]->mass()<<std::endl;
+   // cout << "original Ks Px (from V0): " << (*h_kshort)[k]->px()<<std::endl;
     //get the tracks corresponding to these daughters
     const Track * TrackV0KaonsDaughter1 = V0KaonsDaughter1->bestTrack();
     const Track * TrackV0KaonsDaughter2 = V0KaonsDaughter2->bestTrack();
@@ -127,7 +131,14 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
       const reco::Track SparticleTrackArtificial = Track(SparticleTrack.chi2(),SparticleTrack.ndof(),SparticleTrack.referencePoint(),StrackArtificialMomentum, SparticleTrack.charge(), SparticleTrack.covariance(), SparticleTrack.algo(), reco::TrackBase::undefQuality); 
       //now that you passed cuts you can start making the Sparticle candidate as a VertexCompositeCandidate
       //momentum
-      const reco::Particle::LorentzVector SparticleP(Sparticle->currentState().globalMomentum().x(), Sparticle->currentState().globalMomentum().y(), Sparticle->currentState().globalMomentum().z(),sqrt(pow(Sparticle->currentState().globalMomentum().x()+Sparticle->currentState().globalMomentum().y()+Sparticle->currentState().globalMomentum().z(),2) + pow(Sparticle->currentState().kinematicParameters().mass(),2)));
+
+      double S_px = Sparticle->currentState().globalMomentum().x();	
+      double S_py = Sparticle->currentState().globalMomentum().y();	
+      double S_pz = Sparticle->currentState().globalMomentum().z();	
+      double S_m = Sparticle->currentState().kinematicParameters().mass();	
+      double S_E = sqrt(S_px*S_px+S_py*S_py+S_pz*S_pz+S_m*S_m);
+
+      const reco::Particle::LorentzVector SparticleP(Sparticle->currentState().globalMomentum().x(), Sparticle->currentState().globalMomentum().y(), Sparticle->currentState().globalMomentum().z(),S_E);
       //decay vertex
       Point STreeVertexPoint(STreeVertex->position().x(),STreeVertex->position().y(),STreeVertex->position().z()); 
 
@@ -139,20 +150,35 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
      
 
       //making daughters to the Sparticle
+      
       //Lambda      
       //momentum
-      const reco::Particle::LorentzVector LambdaDaughterP(lambdaKinFitted.at(l)->currentState().globalMomentum().x(), lambdaKinFitted.at(l)->currentState().globalMomentum().y(), lambdaKinFitted.at(l)->currentState().globalMomentum().z(),sqrt(pow(lambdaKinFitted.at(l)->currentState().globalMomentum().x()+lambdaKinFitted.at(l)->currentState().globalMomentum().y()+lambdaKinFitted.at(l)->currentState().globalMomentum().z(),2) + pow(lambdaKinFitted.at(l)->currentState().kinematicParameters().mass(),2)));
+      double Lambda_px = lambdaKinFitted.at(l)->currentState().globalMomentum().x();	
+      double Lambda_py = lambdaKinFitted.at(l)->currentState().globalMomentum().y();	
+      double Lambda_pz = lambdaKinFitted.at(l)->currentState().globalMomentum().z();	
+      double Lambda_m = lambdaKinFitted.at(l)->currentState().kinematicParameters().mass();	
+      double E_Lambda = sqrt(Lambda_px*Lambda_px+Lambda_py*Lambda_py+Lambda_pz*Lambda_pz+Lambda_m*Lambda_m);
+      
+      const reco::Particle::LorentzVector LambdaDaughterP(lambdaKinFitted.at(l)->currentState().globalMomentum().x(), lambdaKinFitted.at(l)->currentState().globalMomentum().y(), lambdaKinFitted.at(l)->currentState().globalMomentum().z(),E_Lambda);
       //vertex
       const Point LambdaDaughterPoint(lambdaKinFittedVertex.at(l)->position().x(),lambdaKinFittedVertex.at(l)->position().y(),lambdaKinFittedVertex.at(l)->position().z());
-     //daughter
-     LeafCandidate LambdaDaughter(0,  LambdaDaughterP, LambdaDaughterPoint);
+     
+      LeafCandidate LambdaDaughter(0,  LambdaDaughterP, LambdaDaughterPoint);
+      
       //Kshort
       //momentum
-      const reco::Particle::LorentzVector KshortDaughterP(kshortKinFitted.at(k)->currentState().globalMomentum().x(), kshortKinFitted.at(k)->currentState().globalMomentum().y(), kshortKinFitted.at(k)->currentState().globalMomentum().z(),sqrt(pow(kshortKinFitted.at(k)->currentState().globalMomentum().x()+kshortKinFitted.at(k)->currentState().globalMomentum().y()+kshortKinFitted.at(k)->currentState().globalMomentum().z(),2) + pow(kshortKinFitted.at(k)->currentState().kinematicParameters().mass(),2)));
-     //vertex
-     const Point KshortDaughterPoint(kshortKinFittedVertex.at(k)->position().x(),kshortKinFittedVertex.at(k)->position().y(),kshortKinFittedVertex.at(k)->position().z()); 
-     //daughter
+      double Kshort_px = kshortKinFitted.at(k)->currentState().globalMomentum().x();	
+      double Kshort_py = kshortKinFitted.at(k)->currentState().globalMomentum().y();	
+      double Kshort_pz = kshortKinFitted.at(k)->currentState().globalMomentum().z();	
+      double Kshort_m = kshortKinFitted.at(k)->currentState().kinematicParameters().mass();	
+      double E_Kshort = sqrt(Kshort_px*Kshort_px+Kshort_py*Kshort_py+Kshort_pz*Kshort_pz+Kshort_m*Kshort_m);
+      
+      const reco::Particle::LorentzVector KshortDaughterP(kshortKinFitted.at(k)->currentState().globalMomentum().x(), kshortKinFitted.at(k)->currentState().globalMomentum().y(), kshortKinFitted.at(k)->currentState().globalMomentum().z(),E_Kshort);
+      //vertex
+      const Point KshortDaughterPoint(kshortKinFittedVertex.at(k)->position().x(),kshortKinFittedVertex.at(k)->position().y(),kshortKinFittedVertex.at(k)->position().z()); 
+     
      LeafCandidate KshortDaughter(0,  KshortDaughterP, KshortDaughterPoint);
+    
      //add daughters to the S
      theSparticleVertexCompositeCandidate.addDaughter(LambdaDaughter);
      theSparticleVertexCompositeCandidate.addDaughter(KshortDaughter);
@@ -162,6 +188,12 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
       sParticlesTracks->push_back(std::move(SparticleTrackArtificial));
        //adding Sparticles to the event
       sParticles->push_back(std::move(theSparticleVertexCompositeCandidate));
+      /*std::cout << "Sparticle daughter 0 mass " << theSparticleVertexCompositeCandidate.daughter(0)->mass() << std::endl;
+      std::cout << "Sparticle daughter 0 Px" << theSparticleVertexCompositeCandidate.daughter(0)->px() << std::endl;
+      std::cout << "Sparticle daughter 1 mass" << theSparticleVertexCompositeCandidate.daughter(1)->mass() << std::endl;
+      std::cout << "Sparticle daughter 1 Px" << theSparticleVertexCompositeCandidate.daughter(1)->px() << std::endl;
+      std::cout << "S candidate mass " << theSparticleVertexCompositeCandidate.mass() << std::endl;
+      std::cout << "----------------------------" << std::endl;*/
     }//end loop over kshort
   }//end loop over lambda
 
