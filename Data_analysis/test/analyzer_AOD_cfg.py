@@ -41,13 +41,15 @@ process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(2000)
 process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 
-#/pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000   range to 148 
-#/pnfs/iihe/cms/store/user/jdeclerc/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/Wjets_30032018/180330_081925/0000   range to 483 
-#/pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180329_165749/0000   range to 500 
-#/pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_260318/180325_233019/0000    range up to 201
+#/pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000   range to 148 
+#/pnfs/iihe/cms/store/user/jdeclerc/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/Wjets_30032018/180505_035823/0000  range to 483 
+#/pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180505_032510/0000   range to 500 
+#/pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_260318/180505_035725/0000    range up to 201
 
-rangeOfStrings=[str(i) for i in range(1,201)]
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_260318/180325_233019/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+
+
+rangeOfStrings=[str(i) for i in range(1,148)]
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 
 process.source = cms.Source("PoolSource",
