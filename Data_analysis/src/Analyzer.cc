@@ -400,26 +400,17 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	  
 	  
     //sCand daughter distributions
-    //Jarne: you have no idea which daughter is which. 0 could be the Ks, but could also be the Lambda 
-   // histos_th1f[b+"sCand_d1_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); 
-   // histos_th1f[b+"sCand_d2_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); //bug here --> should be 1
+    histos_th1f[b+"sCand_d1_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); 
+    histos_th1f[b+"sCand_d2_pt"]->Fill(h_sCands->at(i).daughter(1)->pt()); //bug here --> should be 1
   
-   // histos_th1f[b+"sCand_d1_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
-   // histos_th1f[b+"sCand_d2_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
+    histos_th1f[b+"sCand_d1_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
+    histos_th1f[b+"sCand_d2_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
 
-    //Decide which daughter is which from the mass
-    float mass_K0 = 0.497611;
-    float mass_Lambda0 = 1.115683;
+    //you know that the first daughter is the lambda en the 2nd the Kshort, because you fill them yourself in the LambdaKshortVertexFilter.cc
+    histos_th1f[b+"sCand_daughter_Lambda_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());
+    histos_th1f[b+"sCand_daughter_Kshort_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());
     
-    if(fabs(h_sCands->at(i).daughter(0)->mass()-mass_K0) < fabs(h_sCands->at(i).daughter(0)->mass()-mass_Lambda0)){ //daughter 0 is the K0, daughter 1 is the Lambda
- 	histos_th1f[b+"sCand_daughter_Kshort_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());
- 	histos_th1f[b+"sCand_daughter_Lambda_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());
-    }
-    else{ //other way around
- 	histos_th1f[b+"sCand_daughter_Kshort_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());
- 	histos_th1f[b+"sCand_daughter_Lambda_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());
-    }
-    //fill both masses in the same plot
+   //fill both masses in the same plot
     histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());	  
     histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());	  
 	  
