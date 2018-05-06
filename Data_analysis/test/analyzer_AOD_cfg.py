@@ -44,10 +44,12 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 #single muon
 #rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
-#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180504_024915/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 #zero bias
-#rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
-#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180504_025020/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180505_032510/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+
+
 
 #Florian
 
@@ -56,8 +58,8 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #/pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180329_165749/0000   range to 500 
 #/pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_260318/180325_233019/0000    range up to 201
 
-rangeOfStrings=[str(i) for i in range(1,148)]
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+#rangeOfStrings=[str(i) for i in range(1,148)]
+#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180321_194524/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 
 process.source = cms.Source("PoolSource",
@@ -65,12 +67,11 @@ process.source = cms.Source("PoolSource",
 		*tupleOfFiles #the * is to unpack the tuple of filenames
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
 
-#      'file:///user/lowette/SexaQ/CMSSW_8_0_30/src/SexaQAnalysis/TreeProducer/test/events_skimmed.root'
+#      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/events_skimmed.root',
 
 		
     )
 )
-
 
 
 # Analyzer
@@ -84,5 +85,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('analysis2.root')
+    fileName = cms.string('ZeroBias.root')
 )
