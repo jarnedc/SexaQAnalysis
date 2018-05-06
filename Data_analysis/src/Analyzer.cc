@@ -252,8 +252,8 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   Int_t nPV = h_vert->size();
   Int_t n_sCands = h_sCands->size();
   
-  unsigned int n_Lambdas = h_Lambdas->size();
-  unsigned int n_Kshorts = h_Kshorts->size();
+  unsigned int n_Lambdas = h_Lambdas->size(); //Jarne: this is the original V0 collection
+  unsigned int n_Kshorts = h_Kshorts->size(); //Jarne: this is the original V0 collection
   //Int_t n_rCands = h_rCands->size();
  
 
@@ -262,10 +262,10 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   histos_th1f[b+"nPV"]->Fill(nPV);
   histos_th1f[b+"n_sCand"]->Fill(h_sCands->size());    
   //histos_th1f["n_rCand"]->Fill(h_rCands->size());
-  if (h_vert->size() == 0) return;  //only look at events with reconstructed L0-Ks vertices
+  if (h_vert->size() == 0) return;  //only look at events with reconstructed L0-Ks vertices //Jarne: why exactly do you do this?
   
-  histos_TProfile[b+"nL0Ks_per_PV_vs_nPV"] ->Fill(nPV, Float_t(n_sCands) / Float_t(nPV));
-  histos_TProfile[b+"nL0Ks_vs_nPV"]  ->Fill(nPV, Float_t(n_sCands));
+  histos_TProfile[b+"nL0Ks_per_PV_vs_nPV"] ->Fill(nPV, Float_t(n_sCands) / Float_t(nPV)); //Jarne: this is not the nL0Ks, but the n_sCands 
+  histos_TProfile[b+"nL0Ks_vs_nPV"]  ->Fill(nPV, Float_t(n_sCands)); //Jarne: this is not the nL0Ks, but the n_sCands 
   
   //cout<<Float_t(h_rCands->size()) / Float_t(nPV)<<endl;
   //cout<<h_rCands->size()<<endl;
@@ -419,7 +419,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
  	histos_th1f[b+"sCand_daughter_Kshort_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());
  	histos_th1f[b+"sCand_daughter_Lambda_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());
     }
-    //fill both
+    //fill both masses in the same plot
     histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());	  
     histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());	  
 	  
@@ -439,8 +439,8 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     TVector3 cand_pos(x,y,z);
     
     histos_th1f[b+"sCand_dxy(CV_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));
-    histos_th1f[b+"sCand_dxyz(CV_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2) + pow(z - bs_z, 2))/(xe+ye) );
-    histos_th1f[b+"sCand_dxy_signif_(CV_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));
+    histos_th1f[b+"sCand_dxyz(CV_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2) + pow(z - bs_z, 2))/(xe+ye) ); //Jarne: why the devision?
+    histos_th1f[b+"sCand_dxy_signif_(CV_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2))); //Jarne: devision should be here?
     histos_th1f[b+"sCand_dxyz_signif_(CV_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2) + pow(z - bs_z, 2))/(xe+ye+ze) );
   
     
@@ -500,11 +500,11 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
     
  
-	histos_th1f[b+"rCandMass"]->Fill(h_sCands->at(i).mass()); //Let op, dit is de rCand mass
+	histos_th1f[b+"rCandMass"]->Fill(h_sCands->at(i).mass()); //Let op, dit is de rCand mass --> Jarne: waarom gebruik je niet gewoon rCand_mass?
     float dxy = sqrt(pow(x,2)+pow(y,2));
-    float edxy = sqrt(xe+ye);
+    float edxy = sqrt(xe+ye); //Jarne: should this not be: sqrt(xe*xe+ye*ye);
     if (dxy > 2-3*edxy && edxy < .1 && sqrt(ze) < .1){
-      histos_th1f[b+"rCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors"]->Fill(h_sCands->at(i).mass()); //Let op, dit is de rCand mass
+      histos_th1f[b+"rCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors"]->Fill(h_sCands->at(i).mass()); //Let op, dit is de rCand mass --> Jarne: waarom gebruik je niet gewoon rCand_mass?
 	}
 	
 
@@ -581,8 +581,10 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	float delta_phi = reco::deltaPhi(h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->phi());
 
 	float delta_eta = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();
+
+        float delta_R = deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(1)->phi());
 	
-	histos_th1f[b+"sCand_delta_R"]->Fill(deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(1)->phi()));
+	histos_th1f[b+"sCand_delta_R"]->Fill(deltaR);
 
 	histos_th1f[b+"sCand_delta_phi"]->Fill(delta_phi);
 	if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"]->Fill(delta_phi);
@@ -601,23 +603,20 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 		histos_th1f[b+"sCandMass_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass);
 	}
 	
-	dxy = sqrt(pow(x,2)+pow(y,2)); //Jarne, why do you use dxy all of a sudden, not dxy_PCA_bs_signed??
-    edxy = sqrt(xe+ye);
+	dxy = sqrt(pow(x,2)+pow(y,2)); //Jarne: already calculated on l504?
+    edxy = sqrt(xe+ye); //Jarne: already calculated on l505?
     if (dxy > 2-3*edxy && edxy < .1 && sqrt(ze) < .1){
       histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); 
 	}
 	
-	dxy = sqrt(pow(x,2)+pow(y,2));
-    edxy = sqrt(xe+ye);
+	dxy = sqrt(pow(x,2)+pow(y,2)); //Jarne: why calclulte third time?
+    edxy = sqrt(xe+ye); //Jarne: why calclulte third time?
     if (dxy > 2-3*edxy && edxy < .1 && sqrt(ze) < .1 && 1<abs(delta_phi) && abs(delta_phi)<2.5){
       histos_th1f[b+"sCandMass_with_dxy(CV_origin)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); 
 	}
      
-    //make rCandidate mass plot with cuts on the PCA (should be coming from the beam spot) and dR < a given value, from the simulation we saw that for the rCandidate, this could be the Xi1820 for example the has dR < 0.8
-    float delta_eta_daughters = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();     
-    float delta_phi_daughters = h_sCands->at(i).daughter(0)->phi() - h_sCands->at(i).daughter(1)->phi();
-    float dr_daughters = pow(delta_eta_daughters*delta_eta_daughters+delta_phi_daughters*delta_phi_daughters,0.5);
-    if(fabs(dxy_PCA_bs_signed) < 0.2 && dr_daughters < 0.8){
+    //make rCandidate mass plot with cuts on the PCA (should be coming from the beam spot) and dR < a given value, from the simulation we saw that for the rCandidate, this could be the Xi1820 for example the has dR ~< 0.8
+    if(fabs(dxy_PCA_bs_signed) < 0.2 && delta_R < 0.8){
 	histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
     }     
     
@@ -627,7 +626,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     
     float dxy_signif_PCA_bs= abs(dxy_PCA_bs_signed)/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))
     float dxy_signif_PCA_bs_signed = dxy_PCA_bs_signed/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))
-    //cut away instances when the x or y variance of the sCand position is negative
+    //cut away instances when the x or y variance of the sCand position is negative --> Jarne: this comment not relevant any more?
     
    
     
@@ -644,7 +643,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
       if(proton_charge == -1) histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0"] ->Fill(dxy_PCA_bs_signed);
       
      //In these 2D plots the distance is signed but the significance not (because it would waste space since only the 1st and 3 quadrants would be filled since both distance and significance would have the same sign)
-	  if(proton_charge == 1) histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0"] ->Fill(dxy_PCA_bs_signed, dxy_signif_PCA_bs); 
+      if(proton_charge == 1) histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0"] ->Fill(dxy_PCA_bs_signed, dxy_signif_PCA_bs); 
       if(proton_charge == -1) histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0"] ->Fill(dxy_PCA_bs_signed, dxy_signif_PCA_bs);
       
       //Here the significance is signed because it is useful
