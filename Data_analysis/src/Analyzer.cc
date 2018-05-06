@@ -584,7 +584,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
         float delta_R = deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(1)->phi());
 	
-	histos_th1f[b+"sCand_delta_R"]->Fill(deltaR);
+	histos_th1f[b+"sCand_delta_R"]->Fill(delta_R);
 
 	histos_th1f[b+"sCand_delta_phi"]->Fill(delta_phi);
 	if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"]->Fill(delta_phi);
@@ -616,7 +616,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	}
      
     //make rCandidate mass plot with cuts on the PCA (should be coming from the beam spot) and dR < a given value, from the simulation we saw that for the rCandidate, this could be the Xi1820 for example the has dR ~< 0.8
-    if(fabs(dxy_PCA_bs_signed) < 0.2 && delta_R < 0.8){
+    if(fabs(dxy_cand_bs) < 0.2 && delta_R < 0.8){
 	histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
     }     
     
