@@ -55,7 +55,9 @@ void Analyzer::beginJob() {
   //rCAND DISTIBUTIONS
   //rCAND mass distributions with certain cuts
   histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
-  
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
   //histos_th1f[b+"rCand_mass_below_2GeV_Eta"] = m_fs->make<TH1F>(b+"rCand_mass_below_2GeV_Eta",b+"rCand_mass_below_2GeV_Eta; pseudorapidity",1000,-5.,5.);
   
   //sCAND DISTIBUTIONS
@@ -611,9 +613,16 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 	histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
     }     
     
-         
-    
-    ///PCA AND SIGNIFICANCE PLOTS
+     if(fabs(dxy_cand_bs) < 0.1 && delta_R < 0.8){
+	histos_th1f[b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
+    }      
+     if(fabs(dxy_cand_bs) < 0.05 && delta_R < 0.8){
+	histos_th1f[b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
+    }  
+     if(fabs(dxy_cand_bs) < 0.01 && delta_R < 0.8){
+	histos_th1f[b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8"]->Fill(h_sCands->at(i).mass());
+    } 
+     //PCA AND SIGNIFICANCE PLOTS
     
     float dxy_signif_PCA_bs= abs(dxy_PCA_bs_signed)/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))
     float dxy_signif_PCA_bs_signed = dxy_PCA_bs_signed/sqrt(abs(MinEValue)); //significance = dxy / sigma_dxy ≃ dxy / sqrt(min(eigenvalues(sCand vtx 2D Cov matrix)))

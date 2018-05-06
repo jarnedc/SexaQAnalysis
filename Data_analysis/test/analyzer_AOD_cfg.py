@@ -51,7 +51,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180505_032510/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 #MET
-rangeOfStrings=[str(i) for i in range(1,513)] #1 to 500
+rangeOfStrings=[str(i) for i in range(1,513)] #1 to 503
 tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/MET/MET_Run2016G/180505_234637/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 
@@ -89,5 +89,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('ZeroBias.root')
+    fileName = cms.string('MET.root')
 )
