@@ -56,6 +56,13 @@ float deltaR(float e1, float e2, float p1, float p2){ //e = eta; p = phi
 	
 }
 
+float RandomFloat(float a, float b) {
+    float random = ((float) rand()) / (float) RAND_MAX;
+    float diff = b - a;
+    float r = random * diff;
+    return a + r;
+}
+
   
 class Analyzer : public edm::EDAnalyzer
  {
@@ -93,7 +100,7 @@ class Analyzer : public edm::EDAnalyzer
 
     int verbose=1;
     
-    TString a = "MinBiasMC"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
+    TString a = "SingleMuonData"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
 	TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
