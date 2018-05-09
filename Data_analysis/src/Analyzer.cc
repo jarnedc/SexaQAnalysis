@@ -28,8 +28,8 @@ void Analyzer::beginJob() {
   
  
   
-  histos_th1f[b+"nPV"]      = m_fs->make<TH1F>(b+"nPV",     a+" Number of PV; #PVs",100,0.,60);
-  histos_th1f[b+"n_sCand"]  = m_fs->make<TH1F>(b+"n_sCand",     a+" Number of Kshort-Lambda vertex fits; #S candidates",10,0.,8);
+  histos_th1f[b+"nPV"]      = m_fs->make<TH1F>(b+"nPV",     a+" Number of PV; #PVs",60,0.,60);
+  histos_th1f[b+"n_sCand"]  = m_fs->make<TH1F>(b+"n_sCand",     a+" Number of Kshort-Lambda vertex fits; #S candidates",8,0.,8);
   
   
   ///MASSES
@@ -95,6 +95,8 @@ void Analyzer::beginJob() {
   histos_th1f[b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; standard deviation on distance (cm)",1000,0,1);
   histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH2F>(b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; distance (cm); standard deviation on distance (cm)",1000,0,4, 1000, 0, 2);
 
+  histos_th1f[b+"sCand_edz(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_edz(sCandVtx_bs)",b+"sCand_edz(sCandVtx_bs); standard deviation on distance (cm)",1000,0,1);
+  histos_th1f[b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; standard deviation on distance (cm)",1000,0,1);
 
 
   histos_th1f[b+"sCand_dxyz(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_dxyz(sCandVtx_bs)",b+"sCand_dxyz(sCandVtx_bs); distance (cm)",1000,0,30);
@@ -463,11 +465,13 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   
 	
     histos_th1f[b+"sCand_edxy(sCandVtx_bs)"]->Fill(edxy); //Here I assume the error on the beamspot position to be negligible compared to the error on the sCandVtx position
+    histos_th1f[b+"sCand_edz(sCandVtx_bs)"]->Fill(sqrt(ze)); //ze = variance --> sqrt(ze) = std
     histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)), edxy);
     
     if(1<abs(delta_phi) && abs(delta_phi)<2.5){
 		histos_th1f[b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(edxy); //Here I assume the error on the beamspot position to be negligible compared to the error on the sCandVtx position
 		histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)), edxy);
+	    histos_th1f[b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(ze)); //ze = variance --> sqrt(ze) = std
 	}
     
     //momentum

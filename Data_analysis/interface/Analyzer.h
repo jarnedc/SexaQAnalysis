@@ -100,7 +100,7 @@ class Analyzer : public edm::EDAnalyzer
 
     int verbose=1;
     
-    TString a = "SingleMuonData"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
+    TString a = "WjetsMC"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
 	TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//

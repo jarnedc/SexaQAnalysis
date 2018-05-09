@@ -48,8 +48,8 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 
 
-rangeOfStrings=[str(i) for i in range(1,148)]
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+rangeOfStrings=[str(i) for i in range(1,483)]
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/Wjets_30032018/180505_035823/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 
 process.source = cms.Source("PoolSource",
