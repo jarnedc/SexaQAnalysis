@@ -459,7 +459,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
     float delta_eta = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();
 
-    float delta_R = deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(1)->phi());
+    float delta_R = sqrt(delta_phi*delta_phi+delta_eta*delta_eta);
   
     
     histos_th1f[b+"sCand_dxy(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));

@@ -100,8 +100,8 @@ class Analyzer : public edm::EDAnalyzer
 
     int verbose=1;
     
-    TString a = "WjetsMC"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
-	TString b = a + "_";
+    TString a = "MET"; //"WjetsMC" "ZeroBiasData" "MET" "MinBiasMC" "SingleMuon"
+    TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
     std::map<TString, TH1F *> histos_th1f;
