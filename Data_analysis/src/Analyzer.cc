@@ -35,33 +35,33 @@ void Analyzer::beginJob() {
   ///MASSES
   
   histos_th1f[b+"rCandMass_L0"] = m_fs->make<TH1F>(b+"rCandMass_L0",b+"rCandMass_L0; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"]=m_fs->make<TH1F>(b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors",b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"]=m_fs->make<TH1F>(b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors",b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_L0"] = m_fs->make<TH1F>(b+"sCandMass_L0",b+"sCandMass_L0; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_L0_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_L0_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_L0_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,0,10.);
     
   histos_th1f[b+"rCandMass_antiL0"] = m_fs->make<TH1F>(b+"rCandMass_antiL0",b+"rCandMass_antiL0; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"]=m_fs->make<TH1F>(b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors",b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"]=m_fs->make<TH1F>(b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors",b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_antiL0"] = m_fs->make<TH1F>(b+"sCandMass_antiL0",b+"sCandMass_antiL0; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_antiL0_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_antiL0_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut; mass (GeV)",1000,0,10.);
   
   //with fermi motion of neutron
   histos_th1f[b+"rCandMass_L0_Fermi"] = m_fs->make<TH1F>(b+"rCandMass_L0_Fermi",b+"rCandMass_L0_Fermi; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi"]=m_fs->make<TH1F>(b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi",b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi"]=m_fs->make<TH1F>(b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi",b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_L0_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_L0_Fermi",b+"sCandMass_L0_Fermi; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_L0_absDeltaPhi_between_1_and_2.5_cut_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_L0_absDeltaPhi_between_1_and_2.5_cut_Fermi",b+"sCandMass_L0_absDeltaPhi_between_1_and_2.5_cut_Fermi; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi",b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi; mass (GeV)",1000,0,10.);
     
   histos_th1f[b+"rCandMass_antiL0_Fermi"] = m_fs->make<TH1F>(b+"rCandMass_antiL0_Fermi",b+"rCandMass_antiL0_Fermi; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi"]=m_fs->make<TH1F>(b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi",b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi"]=m_fs->make<TH1F>(b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi",b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_antiL0_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_Fermi",b+"sCandMass_antiL0_Fermi; mass (GeV)",1000,0,10.);
   histos_th1f[b+"sCandMass_antiL0_absDeltaPhi_between_1_and_2.5_cut_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_absDeltaPhi_between_1_and_2.5_cut_Fermi",b+"sCandMass_antiL0_absDeltaPhi_between_1_and_2.5_cut_Fermi; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
-  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi; mass (GeV)",1000,0,10.);
+  histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"] = m_fs->make<TH1F>(b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi",b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi; mass (GeV)",1000,0,10.);
   
  
   ///rCAND DISTIBUTIONS
@@ -73,35 +73,56 @@ void Analyzer::beginJob() {
   
   ///sCAND DISTIBUTIONS
   
-  histos_th1f[b+"sCand_delta_phi"] = m_fs->make<TH1F>(b+"sCand_delta_phi",b+"sCand_delta_phi; delta Phi",1000,-4.,4.);
-  histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm",b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm; delta Phi",1000,-4.,4.);
-  histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm",b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_delta_phi_random"] 					= m_fs->make<TH1F>(b+"sCand_delta_phi_random",b+"sCand_delta_phi_random; delta Phi",1000,-4.,4.);
+
+  histos_th1f[b+"sCand_delta_phi"] 							= m_fs->make<TH1F>(b+"sCand_delta_phi",b+"sCand_delta_phi; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm",b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm",b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_L0_delta_phi"] 							= m_fs->make<TH1F>(b+"sCand_L0_delta_phi",b+"sCand_L0_delta_phi; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_L0_delta_phi_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_phi_dz(PCA_PV0)_below_1mm",b+"sCand_L0_delta_phi_dz(PCA_PV0)_below_1mm; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_L0_delta_phi_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_phi_dz(PCA_PV0)_above_1mm",b+"sCand_L0_delta_phi_dz(PCA_PV0)_above_1mm; delta Phi",1000,-4.,4.);
     
-  histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm",b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm; delta eta",1000,-5.,5.);
-  histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm",b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm; delta eta",1000,-5.,5.);
-  histos_th1f[b+"sCand_delta_eta"] = m_fs->make<TH1F>(b+"sCand_delta_eta",b+"sCand_delta_eta; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm",b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm",b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta",b+"sCand_delta_eta; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm",b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm",b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_L0_delta_eta"] 							= m_fs->make<TH1F>(b+"sCand_L0_delta_eta",b+"sCand_L0_delta_eta; delta eta",1000,-5.,5.);
   
   histos_th1f[b+"sCand_delta_R"] = m_fs->make<TH1F>(b+"sCand_delta_R",b+"sCand_delta_R; delta R",1000,0,6);
-  
   histos_th1f[b+"sCand_delta_R_dz(PCA_PV0)_below_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_R_dz(PCA_PV0)_below_1mm",b+"sCand_delta_R_dz(PCA_PV0)_below_1mm; delta R",1000,0,6);
   histos_th1f[b+"sCand_delta_R_dz(PCA_PV0)_above_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_R_dz(PCA_PV0)_above_1mm",b+"sCand_delta_R_dz(PCA_PV0)_above_1mm; delta R",1000,0,6);
+  histos_th1f[b+"sCand_L0_delta_R"] = m_fs->make<TH1F>(b+"sCand_L0_delta_R",b+"sCand_L0_delta_R; delta R",1000,0,6);
+  histos_th1f[b+"sCand_L0_delta_R_dz(PCA_PV0)_below_1mm"] = m_fs->make<TH1F>(b+"sCand_L0_delta_R_dz(PCA_PV0)_below_1mm",b+"sCand_L0_delta_R_dz(PCA_PV0)_below_1mm; delta R",1000,0,6);
+  histos_th1f[b+"sCand_L0_delta_R_dz(PCA_PV0)_above_1mm"] = m_fs->make<TH1F>(b+"sCand_L0_delta_R_dz(PCA_PV0)_above_1mm",b+"sCand_L0_delta_R_dz(PCA_PV0)_above_1mm; delta R",1000,0,6);
 
   
   histos_th1f[b+"sCand_dxy(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_bs)",b+"sCand_dxy(sCandVtx_bs); distance (cm)",1000,0,2.5);
-  
   histos_th1f[b+"sCand_edxy(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_edxy(sCandVtx_bs)",b+"sCand_edxy(sCandVtx_bs); standard deviation on distance (cm)",1000,0,1);
-  histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)"]= m_fs->make<TH2F>(b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)",b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs); distance (cm); standard deviation on distance (cm)",1000,0,4, 1000, 0, 2);
-  
-  histos_th1f[b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; standard deviation on distance (cm)",1000,0,1);
+  histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)"]= m_fs->make<TH2F>(b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)",b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs); distance (cm); standard deviation on distance (cm)",1000,0,4, 1000, 0, 2); 
+  histos_th1f[b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; standard deviation on distance (cm)",1000,0,0.5);
   histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH2F>(b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; distance (cm); standard deviation on distance (cm)",1000,0,4, 1000, 0, 2);
+  histos_th1f[b+"sCand_L0_dxy(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_L0_dxy(sCandVtx_bs)",b+"sCand_L0_dxy(sCandVtx_bs); distance (cm)",1000,0,2.5);
+  histos_th1f[b+"sCand_L0_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_L0_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_L0_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; distance (cm)",1000,0,2.5);
+  histos_th1f[b+"sCand_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; distance (cm)",1000,0,2.5);
+
+  histos_th1f[b+"sCand_L0_edxy(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_L0_edxy(sCandVtx_bs)",b+"sCand_L0_edxy(sCandVtx_bs); standard deviation on distance (cm)",1000,0,1);
+  histos_th2f[b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)"]= m_fs->make<TH2F>(b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)",b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs); distance (cm); standard deviation on distance (cm)",1000,0,4, 1000, 0, 2); 
+  histos_th1f[b+"sCand_L0_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_L0_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_L0_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; standard deviation on distance (cm)",1000,0,0.5);
+  histos_th2f[b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH2F>(b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; distance (cm); standard deviation on distance (cm)",1000,0,4, 1000, 0, 2);
+
+
+
 
   histos_th1f[b+"sCand_edz(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_edz(sCandVtx_bs)",b+"sCand_edz(sCandVtx_bs); standard deviation on distance (cm)",1000,0,1);
   histos_th1f[b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]= m_fs->make<TH1F>(b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut",b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut; standard deviation on distance (cm)",1000,0,1);
 
 
-  histos_th1f[b+"sCand_dxyz(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_dxyz(sCandVtx_bs)",b+"sCand_dxyz(sCandVtx_bs); distance (cm)",1000,0,30);
-  histos_th1f[b+"sCand_dxy_signif_(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_dxy_signif_(sCandVtx_bs)",b+"sCand_dxy_signif_(sCandVtx_bs); significance",1000,0,5);
-  histos_th1f[b+"sCand_dxyz_signif_(sCandVtx_bs)"]= m_fs->make<TH1F>(b+"sCand_dxyz_signif_(sCandVtx_bs)",b+"sCand_dxyz_signif_(sCandVtx_bs); significance",1000,0,30);
+  histos_th1f[b+"sCand_dxyz(sCandVtx_bs)"]			= m_fs->make<TH1F>(b+"sCand_dxyz(sCandVtx_bs)",b+"sCand_dxyz(sCandVtx_bs); distance (cm)",1000,0,30);
+  histos_th1f[b+"sCand_dxy_signif_(sCandVtx_bs)"]	= m_fs->make<TH1F>(b+"sCand_dxy_signif_(sCandVtx_bs)",b+"sCand_dxy_signif_(sCandVtx_bs); significance",1000,0,5);
+  histos_th1f[b+"sCand_L0_dxy_signif_(sCandVtx_bs)"]	= m_fs->make<TH1F>(b+"sCand_L0_dxy_signif_(sCandVtx_bs)",b+"sCand_L0_dxy_signif_(sCandVtx_bs); significance",1000,0,5);
+
+  histos_th1f[b+"sCand_dxyz_signif_(sCandVtx_bs)"]	= m_fs->make<TH1F>(b+"sCand_dxyz_signif_(sCandVtx_bs)",b+"sCand_dxyz_signif_(sCandVtx_bs); significance",1000,0,30);
   
   
   ///sCAND DAUGHTER DISTRIBUTIONS
@@ -109,19 +130,32 @@ void Analyzer::beginJob() {
   histos_th1f[b+"sCand_daughter_L0_pt"] = m_fs->make<TH1F>(b+"sCand_daughter_L0_pt",b+"sCand_daughter_L0_pt; pt (GeV)",1000,0,10.);
   histos_th1f[b+"sCand_daughter_Ks_pt"] = m_fs->make<TH1F>(b+"sCand_daughter_Ks_pt",b+"sCand_daughter_Ks_pt; pt (GeV)",1000,0,10.);
   
+  histos_th1f[b+"sCand_L0_daughter_L0_pt"] = m_fs->make<TH1F>(b+"sCand_L0_daughter_L0_pt",b+"sCand_L0_daughter_L0_pt; pt (GeV)",1000,0,10.);
+  histos_th1f[b+"sCand_L0_daughter_Ks_pt"] = m_fs->make<TH1F>(b+"sCand_L0_daughter_Ks_pt",b+"sCand_L0_daughter_Ks_pt; pt (GeV)",1000,0,10.);
+  
   histos_th1f[b+"sCand_daughter_L0_eta"] = m_fs->make<TH1F>(b+"sCand_daughter_L0_eta",b+"sCand_daughter_L0_eta; pseudorapidity",1000,-5,5.);
   histos_th1f[b+"sCand_daughter_Ks_eta"] = m_fs->make<TH1F>(b+"sCand_daughter_Ks_eta",b+"sCand_daughter_Ks_eta; pseudorapidity",1000,-5,5.);
+  histos_th1f[b+"sCand_L0_daughter_L0_eta"] = m_fs->make<TH1F>(b+"sCand_daughter_L0_eta",b+"sCand_daughter_L0_eta; pseudorapidity",1000,-5,5.);
+  histos_th1f[b+"sCand_L0_daughter_Ks_eta"] = m_fs->make<TH1F>(b+"sCand_daughter_Ks_eta",b+"sCand_daughter_Ks_eta; pseudorapidity",1000,-5,5.);
 
     
   histos_th1f[b+"sCand_daughters_m"] = m_fs->make<TH1F>(b+"sCand_daughters_mass",b+"sCand_daughters_mass; mass (GeV)",1000,0,10.);
   
-  //SCATTERPLOTS
+  ///SCATTERPLOTS
+  
+  histos_th2f[b+"scatterplot_sCand_deltaPhi_deltaEta"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_deltaPhi_deltaEta", b+"scatterplot_sCand_deltaPhi_deltaEta; delta phi; delta eta",1000,-5,5,1000,-5,5);
+  histos_th2f[b+"scatterplot_sCand_deltaPhi_deltaTheta"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_deltaPhi_deltaTheta", b+"scatterplot_sCand_deltaPhi_deltaTheta; delta phi; delta theta",1000,-5,5,1000,-5.,5.);
+
   
   histos_th2f[b+"scatterplot_sCand_xy_pos_wrt_origin"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_xy_pos_wrt_origin", b+"scatterplot_sCand_xy_pos_wrt_origin; x position (cm); y position (cm)",1000,-100.,100.,1000,-100.,100.);
   histos_th2f[b+"scatterplot_sCand_rz_pos_wrt_origin"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_rz_pos_wrt_origin", b+"scatterplot_sCand_rz_pos_wrt_origin;z position (cm); r=dxy position (cm) ",1000,-100,100.,1000,0,100.);
 
   histos_th2f[b+"scatterplot_sCand_xy_pos_wrt_bs"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_xy_pos_wrt_bs", b+"scatterplot_sCand_xy_pos_wrt_bs; x position (cm); y position (cm)",1000,-100.,100.,1000,-100.,100.);
   histos_th2f[b+"scatterplot_sCand_rz_pos_wrt_bs"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_rz_pos_wrt_bs", b+"scatterplot_sCand_rz_pos_wrt_bs;z position (cm); r=dxy position (cm)",1000,-100,100.,1000,0,100.);
+
+  histos_th2f[b+"scatterplot_sCand_L0_xy_pos_wrt_bs"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_L0_xy_pos_wrt_bs", b+"scatterplot_sCand_L0_xy_pos_wrt_bs; x position (cm); y position (cm)",1000,-100.,100.,1000,-100.,100.);
+  histos_th2f[b+"scatterplot_sCand_L0_rz_pos_wrt_bs"]    = m_fs->make<TH2F>(b+"scatterplot_sCand_L0_rz_pos_wrt_bs", b+"scatterplot_sCand_L0_rz_pos_wrt_bs;z position (cm); r=dxy position (cm)",1000,-100,100.,1000,0,100.);
+
 
   histos_th2f[b+"scatterplot_PV0_xy_pos"]    = m_fs->make<TH2F>(b+"scatterplot_PV0_xy_pos", b+"scatterplot_PV0_xy_pos; x position (cm); y position (cm)",1000,-3.,3.,1000,-3.,3.);
 
@@ -130,65 +164,66 @@ void Analyzer::beginJob() {
   
   ///DELTA PHI INVESTIGATION
   
-  histos_th2f[b+"sCand_delta_phi_dxy(PCA_beamspot)_signed"]= m_fs->make<TH2F>(b+"sCand_delta_phi_dxy(PCA_beamspot)_signed",b+"sCand_delta_phi_dxy(PCA_beamspot)_signed; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 20);
-  histos_th2f[b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed"]= m_fs->make<TH2F>(b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed",b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 30);
-  histos_th2f[b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed"]= m_fs->make<TH2F>(b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed",b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 30);
-  histos_th2f[b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom"]= m_fs->make<TH2F>(b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom",b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 5);
-  histos_th2f[b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom"]= m_fs->make<TH2F>(b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom",b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 5);
+  histos_th2f[b+"sCand_delta_phi_dxy(PCA_beamspot)_signed"]						= m_fs->make<TH2F>(b+"sCand_delta_phi_dxy(PCA_beamspot)_signed",b+"sCand_delta_phi_dxy(PCA_beamspot)_signed; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 20);
+  histos_th2f[b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed"]				= m_fs->make<TH2F>(b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed",b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 30);
+  histos_th2f[b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed"]			= m_fs->make<TH2F>(b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed",b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 30);
+  histos_th2f[b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom"]		= m_fs->make<TH2F>(b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom",b+"sCand_L0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 5);
+  histos_th2f[b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom"]	= m_fs->make<TH2F>(b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom",b+"sCand_antiL0_delta_phi_dxy(sCandVtx_beamspot)_signed_zoom; delta Phi; distance (cm)",1000,-4.,4., 1000, 0, 5);
 
   ///Vxy PLOTS
   
-  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_L0"] = m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_L0",b+"sCand_dxy(sCandVtx_beamspot)_signed_L0; distance (cm)",1000,-2.5,2.5);
-  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0"] = m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0",b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0; distance (cm)",1000,-2.5,2.5);
+  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_L0"] 					= m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_L0",b+"sCand_dxy(sCandVtx_beamspot)_signed_L0; distance (cm)",1000,-2.5,2.5);
+  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0"] 				= m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0",b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0; distance (cm)",1000,-2.5,2.5);
 
-  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut",b+"sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut; distance (cm)",1000,-2.5,2.5);
-  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut",b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut; distance (cm)",1000,-2.5,2.5);
+  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut"] 		= m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut",b+"sCand_dxy(sCandVtx_beamspot)_signed_L0_deltaPhiCut; distance (cm)",1000,-2.5,2.5);
+  histos_th1f[b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut"] 	= m_fs->make<TH1F>(b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut",b+"sCand_dxy(sCandVtx_beamspot)_signed_anti_L0_deltaPhiCut; distance (cm)",1000,-2.5,2.5);
 
   ///dxy PCA to beamspot 
   
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0; distance (cm)",1000,-0.5,0.5);
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0; distance (cm)",1000,-0.5,0.5);
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0; distance (cm)",1000,-0.5,0.5);
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0"] 					= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0"] 			= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0"] 						= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0"] 					= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0; distance (cm)",1000,-0.5,0.5);
 
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut"] 		= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
   histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
-  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut"] 			= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut"] 		= m_fs->make<TH1F>(b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut; distance (cm)",1000,-0.5,0.5);
   
   ///dz PCA to PV(0)
   
   histos_th1f[b+"sCand_dz(PCA_PV0)"] = m_fs->make<TH1F>(b+"sCand_dz(PCA_PV0)",b+"sCand_dz(PCA_PV0); PCA to PV(0) z-distance (cm)",1000,-0.5,0.5);
+  histos_th1f[b+"sCand_L0_dz(PCA_PV0)"] = m_fs->make<TH1F>(b+"sCand_L0_dz(PCA_PV0)",b+"sCand_L0_dz(PCA_PV0); PCA to PV(0) z-distance (cm)",1000,-0.5,0.5);
 
   
   ///dxy PCA significance PLOTS 
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_L0; significance (dxy / sigma_dxy)", 1000, -20, 20);
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0; significance (dxy / sigma_dxy)", 1000, -20, 20);
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_L0; significance (dxy / sigma_dxy)",1000, -20, 20);
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_Vxy_over_18mm_anti_L0; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0"] 						= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0"] 				= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0"] 							= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0; significance (dxy / sigma_dxy)",1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0"] 						= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0; significance (dxy / sigma_dxy)", 1000, -20, 20);
 
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
-  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut"] = m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut"] 			= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut"] 	= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut"] 				= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
+  histos_th1f[b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut"] 			= m_fs->make<TH1F>(b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_Vxy_over_18mm_anti_L0_deltaPhiCut; significance (dxy / sigma_dxy)", 1000, -20, 20);
 
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0",b+"sCand_dxy(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0",b+"sCand_dxy(PCA_beamspot)_2D_Vxy_over_18mm_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0",b+"sCand_dxy(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0"] 					= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0"] 				= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0"] 							= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0"] 					= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
 
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0_deltaPhiCut"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0_deltaPhiCut"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
-  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0_deltaPhiCut"] = m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0_deltaPhiCut"] 		= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut"] 	= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_between_5mm_18mm_anti_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0_deltaPhiCut"] 				= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
+  histos_th2f[b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0_deltaPhiCut"] 		= m_fs->make<TH2F>(b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0_deltaPhiCut",b+"sCand_dxy_signif_(PCA_beamspot)_2D_Vxy_over_18mm_anti_L0_deltaPhiCut; distance (cm);significance (dxy / sigma_dxy)",1000,-0.5,0.5, 1000, 0, 20);
 
 
 
   ///RECO LAMBDA PLOTS
   
-  histos_th1f[b+"L0_eta"] = m_fs->make<TH1F>(b+"L0_eta",b+"L0_eta; pseudorapidity",1000,-4,4.);
-  histos_th1f[b+"L0_phi"] = m_fs->make<TH1F>(b+"L0_phi",b+"L0_phi; phi",1000,-5,5.);
-  histos_th1f[b+"L0_pt"] = m_fs->make<TH1F>(b+"L0_pt",b+"L0_pt; pt (GeV)",1000,0,10.);
+  histos_th1f[b+"L0_eta"] 	= m_fs->make<TH1F>(b+"L0_eta",b+"L0_eta; pseudorapidity",1000,-4,4.);
+  histos_th1f[b+"L0_phi"] 	= m_fs->make<TH1F>(b+"L0_phi",b+"L0_phi; phi",1000,-5,5.);
+  histos_th1f[b+"L0_pt"] 	= m_fs->make<TH1F>(b+"L0_pt",b+"L0_pt; pt (GeV)",1000,0,10.);
     
   histos_th1f[b+"L0_dxy(PCA_beamspot)"] = m_fs->make<TH1F>(b+"L0_dxy(PCA_beamspot)",b+"L0_dxy(PCA_beamspot); distance (cm)", 1000, 0, 0.5);
 
@@ -196,9 +231,9 @@ void Analyzer::beginJob() {
     
   ///RECO KSHORT PLOTS
   
-  histos_th1f[b+"Ks_eta"] = m_fs->make<TH1F>(b+"Ks_eta",b+"Ks_eta; pseudorapidity",1000,-4,4.);
-  histos_th1f[b+"Ks_phi"] = m_fs->make<TH1F>(b+"Ks_phi",b+"Ks_phi; phi",1000,-5,5.);
-  histos_th1f[b+"Ks_pt"] = m_fs->make<TH1F>(b+"Ks_pt",b+"Ks_pt; pt (GeV)",1000,0,10.);  
+  histos_th1f[b+"Ks_eta"]   = m_fs->make<TH1F>(b+"Ks_eta",b+"Ks_eta; pseudorapidity",1000,-4,4.);
+  histos_th1f[b+"Ks_phi"] 	= m_fs->make<TH1F>(b+"Ks_phi",b+"Ks_phi; phi",1000,-5,5.);
+  histos_th1f[b+"Ks_pt"] 	= m_fs->make<TH1F>(b+"Ks_pt",b+"Ks_pt; pt (GeV)",1000,0,10.);  
     
   histos_th1f[b+"Ks_dxy(PCA_beamspot)"] = m_fs->make<TH1F>(b+"Ks_dxy(PCA_beamspot)",b+"Ks_dxy(PCA_beamspot); distance (cm)", 1000, 0, 0.5);
 
@@ -420,7 +455,7 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   for (unsigned int i = 0; i < h_sCands->size(); ++i) { //loop over S candidates
     
     int proton_charge = h_sCands->at(i).charge();   //in the case the sCand charge (which is the proton charge) is (-1)+1, the sCand daughter includes an (anti)Lambda
-
+	int pc = proton_charge; 
     
     //sCand daughter distributions
    
@@ -429,6 +464,14 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   
     histos_th1f[b+"sCand_daughter_L0_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
     histos_th1f[b+"sCand_daughter_Ks_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
+    
+    if(pc==1){
+		histos_th1f[b+"sCand_L0_daughter_L0_pt"]->Fill(h_sCands->at(i).daughter(0)->pt()); 
+		histos_th1f[b+"sCand_L0_daughter_Ks_pt"]->Fill(h_sCands->at(i).daughter(1)->pt()); 
+  
+		histos_th1f[b+"sCand_L0_daughter_L0_eta"]->Fill(h_sCands->at(i).daughter(0)->eta());
+		histos_th1f[b+"sCand_L0_daughter_Ks_eta"]->Fill(h_sCands->at(i).daughter(1)->eta());
+	}
 
     histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(0)->mass());   
     histos_th1f[b+"sCand_daughters_m"] ->Fill(h_sCands->at(i).daughter(1)->mass());   
@@ -451,26 +494,39 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
     TVector3 cand_pos(x,y,z);
     
     float delta_phi = reco::deltaPhi(h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->phi());
+    
+    float delta_theta = reco::deltaPhi(h_sCands->at(i).daughter(0)->theta(), h_sCands->at(i).daughter(1)->theta());
 
     float delta_eta = h_sCands->at(i).daughter(0)->eta() - h_sCands->at(i).daughter(1)->eta();
 
-    float delta_R = deltaR(h_sCands->at(i).daughter(0)->eta(), h_sCands->at(i).daughter(0)->phi(), h_sCands->at(i).daughter(1)->eta(), h_sCands->at(i).daughter(1)->phi());
+    float delta_R = sqrt(pow(delta_phi,2)+pow(delta_eta,2));
   
     
     histos_th1f[b+"sCand_dxy(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));
+    if(pc==1) histos_th1f[b+"sCand_L0_dxy(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));
+
     histos_th1f[b+"sCand_dxyz(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2) + pow(z - bs_z, 2)) ); 
     histos_th1f[b+"sCand_dxy_signif_(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2))/sqrt(xe+ye)); 
+    if(pc==1) histos_th1f[b+"sCand_L0_dxy_signif_(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2))/sqrt(xe+ye)); 
     histos_th1f[b+"sCand_dxyz_signif_(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2) + pow(z - bs_z, 2))/sqrt(xe+ye+ze) );
   
   
 	
     histos_th1f[b+"sCand_edxy(sCandVtx_bs)"]->Fill(edxy); //Here I assume the error on the beamspot position to be negligible compared to the error on the sCandVtx position
+    if(pc==1) histos_th1f[b+"sCand_L0_edxy(sCandVtx_bs)"]->Fill(edxy); //Here I assume the error on the beamspot position to be negligible compared to the error on the sCandVtx position
+
     histos_th1f[b+"sCand_edz(sCandVtx_bs)"]->Fill(sqrt(ze)); //ze = variance --> sqrt(ze) = std
     histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)), edxy);
+    if(pc==1) histos_th2f[b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)), edxy);
+
     
     if(1<abs(delta_phi) && abs(delta_phi)<2.5){
+		histos_th1f[b+"sCand_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));
 		histos_th1f[b+"sCand_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(edxy); //Here I assume the error on the beamspot position to be negligible compared to the error on the sCandVtx position
 		histos_th2f[b+"sCand_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)), edxy);
+	    if(pc==1) histos_th1f[b+"sCand_L0_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(edxy); //Here I assume the error on the beamspot position to be negligible compared to the error on the sCandVtx position
+		if(pc==1) histos_th2f[b+"sCand_L0_dxy(sCandVtx_bs)_edxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)), edxy);
+	    if(pc==1) histos_th1f[b+"sCand_L0_dxy(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(pow(x - bs_x, 2) + pow(y - bs_y, 2)));
 	    histos_th1f[b+"sCand_edz(sCandVtx_bs)_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sqrt(ze)); //ze = variance --> sqrt(ze) = std
 	}
     
@@ -541,9 +597,9 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   float dxy = sqrt(pow(x,2)+pow(y,2));
   float dxy_bs = sqrt(pow(x-bs_x,2)+pow(y-bs_y,2)); //xy distance to the beamspot
 
-  if (dxy_bs > 2-3*edxy && edxy < .1 && sqrt(ze) < .1){
-    if(proton_charge==1) histos_th1f[b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"]->Fill(rCand_mass); 
-    if(proton_charge==-1) histos_th1f[b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"]->Fill(rCand_mass); 
+  if (dxy_bs > 1.9 && edxy < .1 ){
+    if(proton_charge==1) histos_th1f[b+"rCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"]->Fill(rCand_mass); 
+    if(proton_charge==-1) histos_th1f[b+"rCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"]->Fill(rCand_mass); 
 
   }
   
@@ -600,16 +656,22 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
 
   float dz_PCA_PV0 = PCA_target.Z();
     
+  if(proton_charge == 1) histos_th1f[b+"sCand_L0_dz(PCA_PV0)"]->Fill(dz_PCA_PV0);
   histos_th1f[b+"sCand_dz(PCA_PV0)"]->Fill(dz_PCA_PV0);
     
   histos_th2f[b+"scatterplot_sCand_xy_pos_wrt_bs"] ->Fill(x-bs_x,y-bs_y);
   histos_th2f[b+"scatterplot_sCand_rz_pos_wrt_bs"] ->Fill(z-bs_z,sqrt(pow(x-bs_x,2)+pow(y-bs_y,2)) );
+  
+  if(pc==1) histos_th2f[b+"scatterplot_sCand_L0_xy_pos_wrt_bs"] ->Fill(x-bs_x,y-bs_y);
+  if(pc==1) histos_th2f[b+"scatterplot_sCand_L0_rz_pos_wrt_bs"] ->Fill(z-bs_z,sqrt(pow(x-bs_x,2)+pow(y-bs_y,2)) );
     
   histos_th2f[b+"scatterplot_sCand_xy_pos_wrt_origin"] ->Fill(x,y);
   histos_th2f[b+"scatterplot_sCand_rz_pos_wrt_origin"] ->Fill(z, sqrt(pow(x,2)+pow(y,2)) );
 
   histos_th2f[b+"scatterplot_sCand_PCA_to_bs_xy_pos_wrt_bs"]   ->Fill(PCA2D.X()-bs_x, PCA2D.Y()-bs_y);
   
+  histos_th2f[b+"scatterplot_sCand_deltaPhi_deltaEta"]		->Fill(delta_phi, delta_eta);   
+  histos_th2f[b+"scatterplot_sCand_deltaPhi_deltaTheta"]	->Fill(delta_phi, delta_theta);   
  
   histos_th1f[b+"sCand_delta_R"]->Fill(delta_R);
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_R_dz(PCA_PV0)_above_1mm"]->Fill(delta_R);
@@ -620,6 +682,21 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   histos_th1f[b+"sCand_delta_eta"]->Fill(delta_eta);
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm"]->Fill(delta_eta);
   if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm"]->Fill(delta_eta);
+  
+  if(pc==1){
+	histos_th1f[b+"sCand_L0_delta_R"]->Fill(delta_R);
+	if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_L0_delta_R_dz(PCA_PV0)_above_1mm"]->Fill(delta_R);
+	if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_L0_delta_R_dz(PCA_PV0)_below_1mm"]->Fill(delta_R);
+	histos_th1f[b+"sCand_L0_delta_phi"]->Fill(delta_phi);
+	if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_L0_delta_phi_dz(PCA_PV0)_above_1mm"]->Fill(delta_phi);
+	if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_L0_delta_phi_dz(PCA_PV0)_below_1mm"]->Fill(delta_phi);
+	histos_th1f[b+"sCand_L0_delta_eta"]->Fill(delta_eta);
+	if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm"]->Fill(delta_eta);
+	if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm"]->Fill(delta_eta);
+  }
+  
+  
+  histos_th1f[b+"sCand_delta_phi_random"]->Fill(RandomFloat(0,2*3.1415927)-RandomFloat(0,2*3.1415927)); //the difference between two uniformly distributed angles
   
   
   
@@ -647,19 +724,19 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   }
   
   
-  if (dxy_bs > 2-3*edxy && edxy < .1 && sqrt(ze) < .1){
-    if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); 
-    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); 
-    if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi"]->Fill(sCand_mass_Fermi); 
-    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_Fermi"]->Fill(sCand_mass_Fermi); 
+  if (dxy_bs > 1.9 && edxy < .1){
+    if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); 
+    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors"]->Fill(sCand_mass); 
+    if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi"]->Fill(sCand_mass_Fermi); 
+    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_Fermi"]->Fill(sCand_mass_Fermi); 
 
   }
   
-  if (dxy_bs > 2-3*edxy && edxy < .1 && sqrt(ze) < .1 && 1<abs(delta_phi) && abs(delta_phi)<2.5){
-    if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); 
-    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); 
-	if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"]->Fill(sCand_mass_Fermi); 
-    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_2cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"]->Fill(sCand_mass_Fermi); 
+  if (dxy_bs > 1.9 && edxy < .1 && 1<abs(delta_phi) && abs(delta_phi)<2.5){
+    if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); 
+    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut"]->Fill(sCand_mass); 
+	if(proton_charge==1) histos_th1f[b+"sCandMass_L0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"]->Fill(sCand_mass_Fermi); 
+    if(proton_charge==-1) histos_th1f[b+"sCandMass_antiL0_with_dxy(sCandVtx_bs)_over_1.9cm_cut_and_conditions_on_errors_and_absDeltaPhi_between_1_and_2.5_cut_Fermi"]->Fill(sCand_mass_Fermi); 
   
   }
      

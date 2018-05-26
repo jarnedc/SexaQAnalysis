@@ -50,12 +50,6 @@ int signum(float x){
 	return 0;
 }
 
-float deltaR(float e1, float e2, float p1, float p2){ //e = eta; p = phi
-	auto dp=std::abs(p1-p2); if (dp>3.1415927) dp-=2.0*3.1415927;  
-    return std::sqrt((e1-e2)*(e1-e2) + dp*dp);
-	
-}
-
 float RandomFloat(float a, float b) {
     float random = ((float) rand()) / (float) RAND_MAX;
     float diff = b - a;
@@ -100,7 +94,7 @@ class Analyzer : public edm::EDAnalyzer
 
     int verbose=1;
     
-    TString a = "WjetsMC"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
+    TString a = "SingleMuonData"; //"WjetsMC" "ZeroBiasData" "MinBiasMC" "SingleMuonData"
 	TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
