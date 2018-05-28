@@ -79,6 +79,8 @@ void Analyzer::beginJob() {
   ///sCAND DISTIBUTIONS
   
   histos_th1f[b+"sCand_delta_phi"] = m_fs->make<TH1F>(b+"sCand_delta_phi",b+"sCand_delta_phi; delta Phi",1000,-4.,4.);
+  histos_th1f[b+"sCand_L0_delta_phi"] = m_fs->make<TH1F>(b+"sCand_L0_delta_phi",b+"sCand_L0_delta_phi; delta Phi for S candidates",1000,-4.,4.);
+  histos_th1f[b+"sCand_antiL0_delta_phi"] = m_fs->make<TH1F>(b+"sCand_antiL0_delta_phi",b+"sCand_antiL0_delta_phi; delta Phi for anti-S candidates",1000,-4.,4.);
   histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm",b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm; delta Phi",1000,-4.,4.);
   histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"] = m_fs->make<TH1F>(b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm",b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm; delta Phi",1000,-4.,4.);
     
@@ -622,6 +624,8 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_R_dz(PCA_PV0)_above_1mm"]->Fill(delta_R);
   if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_delta_R_dz(PCA_PV0)_below_1mm"]->Fill(delta_R);
   histos_th1f[b+"sCand_delta_phi"]->Fill(delta_phi);
+  if(proton_charge == 1)histos_th1f[b+"sCand_L0_delta_phi"]->Fill(delta_phi);
+  if(proton_charge == -1)histos_th1f[b+"sCand_antiL0_delta_phi"]->Fill(delta_phi);
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"]->Fill(delta_phi);
   if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm"]->Fill(delta_phi);
   histos_th1f[b+"sCand_delta_eta"]->Fill(delta_eta);
