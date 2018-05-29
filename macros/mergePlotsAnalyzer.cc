@@ -38,10 +38,7 @@ using namespace std;
 
 void mergePlotsAnalyzer()
 {
-   //example of macro illustrating how to superimpose two histograms
-   //with different scales in the "same" pad.
-   // To see the output of this macro, click begin_html <a href="gif/twoscales.gif" >here</a> end_html
-   //Author: Rene Brun
+   //to run: .x mergePlotsAnalyzer.cc++()
 
    TFile *OutputFile = new TFile("Combine_Analyzer_plots.root","RECREATE");
    
@@ -54,6 +51,8 @@ void mergePlotsAnalyzer()
 	
    vector<string> v_histos;
    v_histos.push_back("_sCand_delta_phi");
+   v_histos.push_back("_sCand_L0_delta_phi");
+   v_histos.push_back("_sCand_antiL0_delta_phi");
    
    for(int i = 0; i < (int)v_histos.size(); i++  ){
 	   TCanvas *c1 = new TCanvas(v_histos[i].c_str(),v_histos[i].c_str(),600,400);
