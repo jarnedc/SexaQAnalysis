@@ -70,10 +70,10 @@ void Analyzer::beginJob() {
   histos_th1f[b+"rCandMass_antiL0_with_dxy_smaller_0.2_and_dR_daughters_smaller_0.8"] = m_fs->make<TH1F>(b+"rCandMass_antiL0_with_dxy_smaller_0.2_and_dR_daughters_smaller_0.8",b+"rCandMass_antiL0_with_dxy_smaller_0.2_and_dR_daughters_smaller_0.8; mass (GeV)",1000,0,7);
 
   //rCAND mass distributions with certain cuts
-  histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
-  histos_th1f[b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
-  histos_th1f[b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
-  histos_th1f[b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8; mass (GeV)",1000,-10.,10.);
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8; mass (GeV)",10000, 0.,10.);
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8; mass (GeV)",10000, 0.,10.);
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8; mass (GeV)",10000, 0.,10.);
+  histos_th1f[b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8"] = m_fs->make<TH1F>(b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8",b+"rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8; mass (GeV)",10000, 0.,10.);
   //histos_th1f[b+"rCand_mass_below_2GeV_Eta"] = m_fs->make<TH1F>(b+"rCand_mass_below_2GeV_Eta",b+"rCand_mass_below_2GeV_Eta; pseudorapidity",1000,-5.,5.);
   
   ///sCAND DISTIBUTIONS
@@ -91,6 +91,13 @@ void Analyzer::beginJob() {
   histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm",b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm; delta eta",1000,-5.,5.);
   histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm",b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm; delta eta",1000,-5.,5.);
   histos_th1f[b+"sCand_delta_eta"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta",b+"sCand_delta_eta; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_etas_barrel"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_barrel",b+"sCand_delta_eta_etas_barrel; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_etas_endcap"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_endcap",b+"sCand_delta_eta_etas_endcap; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_etas_endcap_and_barrel"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_endcap_and_barrel",b+"sCand_delta_eta_etas_endcap_and_barrel; delta eta",1000,-5.,5.);
+  
+  histos_th1f[b+"sCand_delta_eta_etas_neg"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_neg",b+"sCand_delta_eta_etas_neg; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_etas_pos"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_pos",b+"sCand_delta_eta_etas_pos; delta eta",1000,-5.,5.);
+
   histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm",b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm; delta eta",1000,-5.,5.);
   histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm",b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm; delta eta",1000,-5.,5.);
   histos_th1f[b+"sCand_L0_delta_eta"] 							= m_fs->make<TH1F>(b+"sCand_L0_delta_eta",b+"sCand_L0_delta_eta; delta eta",1000,-5.,5.);
@@ -689,6 +696,15 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_above_1mm"]->Fill(delta_phi);
   if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_delta_phi_dz(PCA_PV0)_below_1mm"]->Fill(delta_phi);
   histos_th1f[b+"sCand_delta_eta"]->Fill(delta_eta);
+
+  if(h_sCands->at(i).daughter(0)->eta() < 0.9 && h_sCands->at(i).daughter(1)->eta() < 0.9)histos_th1f[b+"sCand_delta_eta_etas_barrel"]->Fill(delta_eta);
+  else if(h_sCands->at(i).daughter(0)->eta() > 0.9 && h_sCands->at(i).daughter(1)->eta() > 0.9)histos_th1f[b+"sCand_delta_eta_etas_endcap"]->Fill(delta_eta);
+  else histos_th1f[b+"sCand_delta_eta_etas_endcap_and_barrel"]->Fill(delta_eta);
+
+  if(h_sCands->at(i).daughter(0)->eta() < 0 && h_sCands->at(i).daughter(1)->eta() < 0)histos_th1f[b+"sCand_delta_eta_etas_neg"]->Fill(delta_eta);
+  else histos_th1f[b+"sCand_delta_eta_etas_pos"]->Fill(delta_eta);
+
+
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm"]->Fill(delta_eta);
   if(abs(dz_PCA_PV0)<0.1) histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_below_1mm"]->Fill(delta_eta);
   

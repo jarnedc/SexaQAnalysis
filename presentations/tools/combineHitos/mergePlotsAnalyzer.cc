@@ -45,14 +45,20 @@ void mergePlotsAnalyzer()
    vector<string> data;
    data.push_back("MET");
    data.push_back("SingleMuon");
-   
-   TFile *hfile1 = new TFile(("../Data_analysis/Results/"+data[0]+".root").c_str());
-   TFile *hfile2 = new TFile(("../Data_analysis/Results/"+data[1]+".root").c_str());
+   data.push_back("ZeroBias"); 
+  
+   TFile *hfile1 = new TFile(("../../../Data_analysis/Results/"+data[0]+".root").c_str());
+   TFile *hfile2 = new TFile(("../../../Data_analysis/Results/"+data[1]+".root").c_str());
+   TFile *hfile3 = new TFile(("../../../Data_analysis/Results/"+data[2]+".root").c_str());
 	
    vector<string> v_histos;
    v_histos.push_back("_sCand_delta_phi");
-   v_histos.push_back("_sCand_L0_delta_phi");
-   v_histos.push_back("_sCand_antiL0_delta_phi");
+   //v_histos.push_back("_sCand_L0_delta_phi");
+   //v_histos.push_back("_sCand_antiL0_delta_phi");
+   v_histos.push_back("_rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8");
+   v_histos.push_back("_rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8");
+   v_histos.push_back("_rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8");
+   v_histos.push_back("_rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8");
    
    for(int i = 0; i < (int)v_histos.size(); i++  ){
 	   TCanvas *c1 = new TCanvas(v_histos[i].c_str(),v_histos[i].c_str(),600,400);
@@ -60,35 +66,48 @@ void mergePlotsAnalyzer()
 	 //  auto legend = new TLegend(0.1,0.7,0.48,0.9);
 	   cout << ("analyzer/"+data[0]+v_histos[i]).c_str() << endl;
 	   cout << ("analyzer/"+data[1]+v_histos[i]).c_str() << endl; 
+	   cout << ("analyzer/"+data[2]+v_histos[i]).c_str() << endl; 
 	   TH1F *h1 = (TH1F*)hfile1->Get(("analyzer/"+data[0]+v_histos[i]).c_str()); 
 	   TH1F *h2 = (TH1F*)hfile2->Get(("analyzer/"+data[1]+v_histos[i]).c_str()); 
+	   TH1F *h3 = (TH1F*)hfile3->Get(("analyzer/"+data[2]+v_histos[i]).c_str()); 
 
-	   h1->Scale(1/h1->GetEntries());
-	   h2->Scale(1/h2->GetEntries());
+	   //h1->Scale(1/h1->GetEntries());
+	   //h2->Scale(1/h2->GetEntries());
+	   //h3->Scale(1/h3->GetEntries());
 
 	   int binmax1 = h1->GetMaximumBin();
 	   int binmax2 = h2->GetMaximumBin();
+	   int binmax3 = h3->GetMaximumBin();
 
 	   double binmax1content = h1-> GetBin(binmax1);
 	   double binmax2content = h2-> GetBin(binmax2);
+	   double binmax3content = h3-> GetBin(binmax3);
 
 	   double binmaxcontent = binmax1content;
- 	   if(binmax1content < binmax2content) binmaxcontent = binmax2content;
-           
-	   h1->GetYaxis()->SetRangeUser(0,binmaxcontent);
-	   h2->GetYaxis()->SetRangeUser(0,binmaxcontent);
-
-	   h1->Draw();
+ 	   if(binmax1content < binmax2content) binmaxcontent = binmax2content; 
+	   if(binmaxcontent < binmax3content) binmaxcontent = binmax3content;
+	
+           int maxNEntries = h1->GetEntries();
+	   if(h1->GetEntries() > h2->GetEntries()) maxNEntries = h2->GetEntries();
+	   if(h2->GetEntries() > h3->GetEntries()) maxNEntries = h3->GetEntries();
+          
 	   h1->SetLineColor(kRed);
-	   h2->Draw("same");
+	   h1->DrawNormalized("E1");
 	   h2->SetLineColor(kBlue);
-	   h1->GetYaxis()->SetRangeUser(0,0.01);
-	   h2->GetYaxis()->SetRangeUser(0,0.01);
+	   h2->DrawNormalized("sameE1");
+	   h3->SetLineColor(kGreen);
+	   h3->DrawNormalized("sameE1");
+	   
+	   h1->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+	   h2->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+	   h3->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+
 	   c1->Update();
 
 	   auto legend = new TLegend(0.1,0.7,0.48,0.9);
    	   legend->AddEntry(h1,data[0].c_str(),"l");
    	   legend->AddEntry(h2,data[1].c_str(),"l");
+   	   legend->AddEntry(h3,data[2].c_str(),"l");
    	   legend->Draw();
 	   
            OutputFile->cd();
