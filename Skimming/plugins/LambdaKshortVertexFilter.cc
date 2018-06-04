@@ -7,14 +7,14 @@ LambdaKshortVertexFilter::LambdaKshortVertexFilter(edm::ParameterSet const& pset
   //collections
   lambdaCollectionTag_		(pset.getParameter<edm::InputTag>("lambdaCollection")),
   kshortCollectionTag_		(pset.getParameter<edm::InputTag>("kshortCollection")),
-  //genCollectionTag_   (pset.getParameter<edm::InputTag>("genCollection")),
+  genCollectionTag_  		(pset.getParameter<edm::InputTag>("genparticlesCollection")),
   //parameters
   maxchi2ndofVertexFit_  	(pset.getParameter<double>("maxchi2ndofVertexFit"))
 {
   //collections
   lambdaCollectionToken_ = consumes<reco::CandidatePtrVector>(lambdaCollectionTag_);
   kshortCollectionToken_ = consumes<reco::CandidatePtrVector>(kshortCollectionTag_);
-  //genCollectionToken_    = consumes<std::vector<reco::GenParticle> > (genCollectionTag_);
+  genCollectionToken_    = consumes<std::vector<reco::GenParticle> > (genCollectionTag_);
   //producer
   produces<std::vector<reco::Track> >("sParticlesTracks");
   produces<std::vector<reco::VertexCompositeCandidate> >("sParticles");
@@ -38,9 +38,18 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
   iEvent.getByToken(lambdaCollectionToken_, h_lambda);
   edm::Handle<reco::CandidatePtrVector> h_kshort;
   iEvent.getByToken(kshortCollectionToken_ , h_kshort);
+  edm::Handle<std::vector<reco::GenParticle>> h_gen;
+  iEvent.getByToken(genCollectionToken_ , h_gen);
  
   //check all the above collections and return false if any of them is invalid
   if (!allCollectionValid(h_lambda, h_kshort)) return false;
+  //special collection to check of the gen particles. It will not always be there... depending on the input file
+  bool isMC = false;
+  if(h_gen.isValid()) {
+      std::cout << "gen collection is here --> YOU ARE RUNNING ON MC " << std::endl;
+      isMC = true;
+  }
+ 
 
   //to save the results from the kinfit
   std::vector<int> chargeProton;
@@ -104,6 +113,13 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
    kshortKinFittedVertex.push_back(KshortTree->currentDecayVertex());
 
   }
+
+  //only if there are GEN particles
+  if(isMC){
+	for (unsigned int g = 0; g < h_gen->size(); ++g) {
+		cout << "x position of gen particle vertex " << (*h_gen)[g].vx() << endl;	
+	}//end loop over gen particles
+  }//end isMC
 
   for (unsigned int l = 0; l < lambdaKinFitted.size(); ++l) {
     for(unsigned int k = 0; k < kshortKinFitted.size(); ++k){

@@ -58,10 +58,12 @@ class LambdaKshortVertexFilter : public edm::EDFilter {
 
     edm::InputTag lambdaCollectionTag_;
     edm::InputTag kshortCollectionTag_;
+    edm::InputTag genCollectionTag_;
   //  edm::InputTag beamspotCollectionTag_;
     
     edm::EDGetTokenT<reco::CandidatePtrVector> lambdaCollectionToken_;
     edm::EDGetTokenT<reco::CandidatePtrVector> kshortCollectionToken_;
+    edm::EDGetTokenT<std::vector<reco::GenParticle>> genCollectionToken_;
   //  edm::EDGetTokenT<reco::BeamSpot> beamspotCollectionToken_;
 
     double maxchi2ndofVertexFit_;
