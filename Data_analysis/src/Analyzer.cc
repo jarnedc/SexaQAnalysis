@@ -97,6 +97,7 @@ void Analyzer::beginJob() {
   
   histos_th1f[b+"sCand_delta_eta_etas_neg"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_neg",b+"sCand_delta_eta_etas_neg; delta eta",1000,-5.,5.);
   histos_th1f[b+"sCand_delta_eta_etas_pos"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_pos",b+"sCand_delta_eta_etas_pos; delta eta",1000,-5.,5.);
+  histos_th1f[b+"sCand_delta_eta_etas_pos_neg"] 							= m_fs->make<TH1F>(b+"sCand_delta_eta_etas_pos_neg",b+"sCand_delta_eta_etas_pos_neg; delta eta",1000,-5.,5.);
 
   histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm",b+"sCand_L0_delta_eta_dz(PCA_PV0)_below_1mm; delta eta",1000,-5.,5.);
   histos_th1f[b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm"] 	= m_fs->make<TH1F>(b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm",b+"sCand_L0_delta_eta_dz(PCA_PV0)_above_1mm; delta eta",1000,-5.,5.);
@@ -702,7 +703,8 @@ void Analyzer::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) 
   else histos_th1f[b+"sCand_delta_eta_etas_endcap_and_barrel"]->Fill(delta_eta);
 
   if(h_sCands->at(i).daughter(0)->eta() < 0 && h_sCands->at(i).daughter(1)->eta() < 0)histos_th1f[b+"sCand_delta_eta_etas_neg"]->Fill(delta_eta);
-  else histos_th1f[b+"sCand_delta_eta_etas_pos"]->Fill(delta_eta);
+  if(h_sCands->at(i).daughter(0)->eta() > 0 && h_sCands->at(i).daughter(1)->eta() > 0)histos_th1f[b+"sCand_delta_eta_etas_pos"]->Fill(delta_eta);
+  else histos_th1f[b+"sCand_delta_eta_etas_pos_neg"]->Fill(delta_eta);
 
 
   if(abs(dz_PCA_PV0)>0.1) histos_th1f[b+"sCand_delta_eta_dz(PCA_PV0)_above_1mm"]->Fill(delta_eta);
