@@ -31,13 +31,11 @@ LambdaKshortFilter::LambdaKshortFilter(edm::ParameterSet const& pset):
 
 bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSetup)
 {
-
   auto kshorts = std::make_unique<reco::CandidatePtrVector>();
   auto lambdas = std::make_unique<reco::CandidatePtrVector>();
 
   // select on reco lambdas and kaons
   if (isData_) {
-
     // read out lambdas
     edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_lambda;
     iEvent.getByToken(lambdaCollectionToken_, h_lambda);
@@ -141,7 +139,8 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
     return (prescaleFalse_ ? !(nreject_ % prescaleFalse_) : false);
   }
   // if we reach here there's a sufficient number of good lambdas and kshorts
-  return true;
+ 
+   return true;
 
 }
 
