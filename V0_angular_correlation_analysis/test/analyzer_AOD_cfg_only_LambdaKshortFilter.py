@@ -65,6 +65,9 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #/pnfs/iihe/cms/store/user/jdeclerc/ZeroBias/ZeroBias_280318/180505_032510/0000   range to 500 
 #/pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_260318/180505_035725/0000    range up to 201
 
+#SingleMuon only first filter ran
+rangeOfStrings=[str(i) for i in range(1,148)]
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180629_143246/0000/MC_events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 
 
@@ -93,5 +96,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('analysed_SingleMuon_LambdaKshort_correlation_allFilters.root')
+    fileName = cms.string('analysed_SingleMuon_LambdaKshort_correlation_only_LambdaKshortFilter.root')
 )

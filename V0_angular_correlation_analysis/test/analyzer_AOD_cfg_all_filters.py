@@ -43,8 +43,8 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #Jarne
 
 #SingleMuon
-#rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
-#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 #zero bias
 #rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500

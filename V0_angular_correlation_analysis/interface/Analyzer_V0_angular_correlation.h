@@ -44,6 +44,13 @@ using namespace std;
 #include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
 
+//vectors to save data accross events
+    static vector<double> v_L0_phi;
+    static vector<double> v_L0_eta;
+    static vector<double> v_Ks_phi;
+    static vector<double> v_Ks_eta;
+
+
 int signum(float x){
 	if (x > 0) return 1;
 	if (x < 0) return -1;
@@ -87,9 +94,9 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
-//    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
+    //edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_KshortsToken;
-	edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_LambdasToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_LambdasToken;
 
 
     int verbose=1;
@@ -102,12 +109,7 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     std::map<TString, TH2F *> histos_th2f;
     std::map<TString, TProfile *> histos_TProfile;
 
-    //vectors to save data accross events
-    vector<double> v_L0_phi;
-    vector<double> v_L0_eta;
-    vector<double> v_Ks_phi;
-    vector<double> v_Ks_eta;
- };
+     };
 
 #endif
 

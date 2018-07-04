@@ -31,10 +31,15 @@ void Analyzer_V0_angular_correlation::beginJob() {
 //  histos_th1f[b+"nPV"]      = m_fs->make<TH1F>(b+"nPV",     a+" Number of PV; #PVs",60,0.,60);
   
   
-   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta"]= m_fs->make<TH2F>(b+"h_L0_Ks_delta_phi_delta_eta",b+"h_L0_Ks_delta_phi_delta_eta; delta phi; delta_eta",100,-4,4, 100, -4, 4); 
+   histos_th1f[b+"h_L0_Ks_delta_phi"]= m_fs->make<TH1F>(b+"h_L0_Ks_delta_phi",b+"h_L0_Ks_delta_phi; delta phi",1000,-4,4); 
+   histos_th1f[b+"h_L0_Ks_delta_eta"]= m_fs->make<TH1F>(b+"h_L0_Ks_delta_eta",b+"h_L0_Ks_delta_eta; delta eta",4000,-10,10); 
+   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta"]= m_fs->make<TH2F>(b+"h_L0_Ks_delta_phi_delta_eta",b+"h_L0_Ks_delta_phi_delta_eta; delta phi; delta_eta",100,-4,4, 100, -10, 10); 
+   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_no_cent"]= m_fs->make<TH2F>(b+"h_L0_Ks_delta_phi_delta_eta_no_cent",b+"h_L0_Ks_delta_phi_delta_eta_no_cent; delta phi; delta_eta",1000,-4,4, 4000, -10, 10); 
   
   
-   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current"]= m_fs->make<TH2F>(b+"h_L0_delta_phi_delta_eta_prev_and_current",b+"h_L0_delta_phi_delta_eta; delta phi prev event and current event; delta_eta previous event and current event",100,-4,4, 100, -4, 4); 
+   histos_th1f[b+"h_L0_Ks_delta_phi_prev_and_current"]= m_fs->make<TH1F>(b+"h_L0_delta_phi_prev_and_current",b+"h_L0_delta_phi; delta phi prev event and current event;",1000,-4,4); 
+   histos_th1f[b+"h_L0_Ks_delta_eta_prev_and_current"]= m_fs->make<TH1F>(b+"h_L0_delta_eta_prev_and_current",b+"h_L0_delta_eta; delta eta prev event and current event;",4000,-10,10); 
+   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current"]= m_fs->make<TH2F>(b+"h_L0_delta_phi_delta_eta_prev_and_current",b+"h_L0_delta_phi_delta_eta; delta phi prev event and current event; delta_eta previous event and current event",1000,-4,4, 4000, -10, 10); 
    
     
 
@@ -42,6 +47,8 @@ void Analyzer_V0_angular_correlation::beginJob() {
 
 
 void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) {
+  //std::cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << std::endl;
+  //std::cout << "START LOOPING OVER THIS EVENT" << std::endl;
   edm::Handle<reco::BeamSpot> h_bs;
   iEvent.getByToken(m_bsToken, h_bs);
 
@@ -102,31 +109,39 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
     if(verbose>0) cout << "Missing collection : " << m_KshortsTag << " ... skip entry !" << endl;
     return;
   }
-
+   //std::cout << "getting the size of the lambda and kshort collections" << std::endl;
    unsigned int n_Lambdas = h_Lambdas->size(); //Jarne: this is the original V0 collection
    unsigned int n_Kshorts = h_Kshorts->size();
 
-
+   //std::cout << "looping over the lambdas and kshorts together" << std::endl;
  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!STANDARD PLOT: ONLY THE CURRENT EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- for (unsigned int i = 0; i < n_Lambdas; ++i) { //loop over reco V0 Lambdas
-	for (unsigned int i = 0; i < n_Kshorts; ++i) { //loop over reco Kshorts	
-		double phi1 = h_Kshorts->at(i).phi();
-		double phi2 = h_Lambdas->at(i).phi();
+ for (unsigned int l = 0; l < n_Lambdas; ++l) { //loop over reco V0 Lambdas
+	for (unsigned int k = 0; k < n_Kshorts; ++k) { //loop over reco Kshorts	
+		double phi1 = h_Kshorts->at(k).phi();
+		double phi2 = h_Lambdas->at(l).phi();
 		double delta_phi = reco::deltaPhi(phi1, phi2);
 		
-		double eta1 = h_Kshorts->at(i).eta();
-		double eta2 = h_Lambdas->at(i).eta();
+		double eta1 = h_Kshorts->at(k).eta();
+		double eta2 = h_Lambdas->at(l).eta();
 		double delta_eta = eta1-eta2;
 
+		histos_th1f[b+"h_L0_Ks_delta_phi"]->Fill(delta_phi);
+		histos_th1f[b+"h_L0_Ks_delta_eta"]->Fill(delta_eta);
 		histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta"]->Fill(delta_phi,delta_eta);
+		if( abs(delta_phi) > 0.1 || abs(delta_eta) > 0.1 )histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_no_cent"]->Fill(delta_phi,delta_eta);
 	}
  }
 
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!COMPARE THE PREVIOUS EVENT WITH THE CURRENT EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   bool emptyVectors = false;
+  //std::cout << "---------------------" << std::endl;
+  //std::cout << "going to check if the vectors are empty" << std::endl;
   if(v_L0_phi.empty() && v_L0_eta.empty() && v_Ks_phi.empty() && v_Ks_eta.empty()) emptyVectors = true;//this means they have been cleared in the previous event or it is the first event
 
+ //if(emptyVectors) std::cout << "vectors empty" << std::endl;  
+ //else std::cout << "vectors not empty" << std::endl;  
+  
   for (unsigned int i = 0; i < n_Lambdas; ++i) { //loop over reco V0 Lambdas
   	if(emptyVectors){//just save the data if there is no data in these vectrors, make the histogram in the next event
 		v_L0_phi.push_back(h_Lambdas->at(i).phi());	
@@ -141,14 +156,15 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			double eta1 = v_Ks_eta[i_prev];
 			double eta2 = h_Lambdas->at(i).eta();
 			double delta_eta = eta1-eta2;
+			histos_th1f[b+"h_L0_Ks_delta_phi_prev_and_current"]->Fill(delta_phi);
+			histos_th1f[b+"h_L0_Ks_delta_eta_prev_and_current"]->Fill(delta_eta);
 			histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current"]->Fill(delta_phi,delta_eta);
 		}
 	} 
   }//end loop over lambda
 
- if(emptyVectors) std::cout << "vectors empty" << std::endl;  
- else std::cout << "vectors not empty" << std::endl;  
-  
+  //std::cout << "loop over Lambdas done" << std::endl; 
+
   for (unsigned int i = 0; i < n_Kshorts; ++i) { //loop over reco Kshorts
  	 if(emptyVectors){
                 v_Ks_phi.push_back(h_Kshorts->at(i).phi());
@@ -165,17 +181,22 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			double eta2 = h_Kshorts->at(i).eta();
 			double delta_eta = eta1-eta2;
 
+			histos_th1f[b+"h_L0_Ks_delta_phi_prev_and_current"]->Fill(delta_phi);
+			histos_th1f[b+"h_L0_Ks_delta_eta_prev_and_current"]->Fill(delta_eta);
 			histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current"]->Fill(delta_phi,delta_eta);
 		}
 	}
   }// end loop over Kshort
-  
+
+ // std::cout << "loop over Kshorts done" << std::endl; 
+
   if(!emptyVectors){
 	v_L0_phi.clear();
 	v_L0_eta.clear();
 	v_Ks_phi.clear();
 	v_Ks_eta.clear();
-  }  
+  } 
+ // std::cout << "vectors cleared" << std::endl; 
 
 
 } //end of analyzer
