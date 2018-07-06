@@ -6,7 +6,7 @@ Analyzer_V0_angular_correlation = cms.EDAnalyzer('Analyzer_V0_angular_correlatio
     vertexCollection = cms.InputTag("offlinePrimaryVertices"),
     #resonCandidates = cms.InputTag("rMassFilter", "sVertexCompositePtrCandidate","SEXAQ"),
     #sexaqCandidates = cms.InputTag("sMassFilter", "sVertexCompositePtrCandidate","SEXAQ"),
-    #sexaqCandidates = cms.InputTag("lambdaKshortVertexFilter", "sParticles","SEXAQ"),
+    sexaqCandidates = cms.InputTag("lambdaKshortVertexFilter", "sParticles","SEXAQ"),
    
     #triggerResults   = cms.InputTag("TriggerResults", "", "HLT"),
     #trackCollection    = cms.InputTag("generalTracks", "", "RECO"),

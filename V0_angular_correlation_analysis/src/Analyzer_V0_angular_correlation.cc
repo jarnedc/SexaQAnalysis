@@ -7,14 +7,14 @@ Analyzer_V0_angular_correlation::Analyzer_V0_angular_correlation(edm::ParameterS
   m_bsTag    (pset.getParameter<edm::InputTag>("beamspot")),
   m_vertexTag(pset.getParameter<edm::InputTag>("vertexCollection")),
   //m_rCandsTag(pset.getParameter<edm::InputTag>("resonCandidates")),
-  //m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
+  m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
   m_KshortsTag(pset.getParameter<edm::InputTag>("lambdaCollection")),
   m_LambdasTag(pset.getParameter<edm::InputTag>("kshortCollection")),
   m_bsToken    (consumes<reco::BeamSpot>(m_bsTag)),
   m_vertexToken(consumes<vector<reco::Vertex> >(m_vertexTag)),
   //m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
   //m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag)),
-  //m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag)),
+  m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag)),
   m_KshortsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_KshortsTag)),
   m_LambdasToken(consumes<vector<reco::VertexCompositeCandidate> >(m_LambdasTag))
 
@@ -30,16 +30,21 @@ void Analyzer_V0_angular_correlation::beginJob() {
   
 //  histos_th1f[b+"nPV"]      = m_fs->make<TH1F>(b+"nPV",     a+" Number of PV; #PVs",60,0.,60);
   
-  
+   //for angular correlation between Ks and L0 
    histos_th1f[b+"h_L0_Ks_delta_phi"]= m_fs->make<TH1F>(b+"h_L0_Ks_delta_phi",b+"h_L0_Ks_delta_phi; delta phi",1000,-4,4); 
    histos_th1f[b+"h_L0_Ks_delta_eta"]= m_fs->make<TH1F>(b+"h_L0_Ks_delta_eta",b+"h_L0_Ks_delta_eta; delta eta",4000,-10,10); 
    histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta"]= m_fs->make<TH2F>(b+"h_L0_Ks_delta_phi_delta_eta",b+"h_L0_Ks_delta_phi_delta_eta; delta phi; delta_eta",100,-4,4, 100, -10, 10); 
    histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_no_cent"]= m_fs->make<TH2F>(b+"h_L0_Ks_delta_phi_delta_eta_no_cent",b+"h_L0_Ks_delta_phi_delta_eta_no_cent; delta phi; delta_eta",1000,-4,4, 4000, -10, 10); 
   
-  
-   histos_th1f[b+"h_L0_Ks_delta_phi_prev_and_current"]= m_fs->make<TH1F>(b+"h_L0_delta_phi_prev_and_current",b+"h_L0_delta_phi; delta phi prev event and current event;",1000,-4,4); 
-   histos_th1f[b+"h_L0_Ks_delta_eta_prev_and_current"]= m_fs->make<TH1F>(b+"h_L0_delta_eta_prev_and_current",b+"h_L0_delta_eta; delta eta prev event and current event;",4000,-10,10); 
-   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current"]= m_fs->make<TH2F>(b+"h_L0_delta_phi_delta_eta_prev_and_current",b+"h_L0_delta_phi_delta_eta; delta phi prev event and current event; delta_eta previous event and current event",1000,-4,4, 4000, -10, 10); 
+   //for angular correlation between Ks and L0 from different events
+   histos_th1f[b+"h_L0_Ks_delta_phi_prev_and_current"]= m_fs->make<TH1F>(b+"h_L0_delta_phi_prev_and_current",b+"h_L0_delta_phi_prev_and_current; delta phi prev event and current event;",1000,-4,4); 
+   histos_th1f[b+"h_L0_Ks_delta_eta_prev_and_current"]= m_fs->make<TH1F>(b+"h_L0_delta_eta_prev_and_current",b+"h_L0_delta_eta_prev_and_current; delta eta prev event and current event;",4000,-10,10); 
+   histos_th2f[b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current"]= m_fs->make<TH2F>(b+"h_L0_delta_phi_delta_eta_prev_and_current",b+"h_L0_Ks_delta_phi_delta_eta_prev_and_current; delta phi prev event and current event; delta_eta previous event and current event",1000,-4,4, 4000, -10, 10); 
+   
+   //for angular coorelation between the daughters of the S candidates
+   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]= m_fs->make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_phi",b+"h_Sdaughters_L0_Ks_delta_phi; delta phi;",1000,-4,4); 
+   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta"]= m_fs->make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_eta",b+"h_Sdaughters_L0_Ks_delta_eta; delta eta;",4000,-10,10); 
+   histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta"]= m_fs->make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta; delta phi; delta eta",1000,-4,4, 4000, -10, 10); 
    
     
 
@@ -67,8 +72,8 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   //iEvent.getByToken(m_sCandsToken, h_sCands);
   
   //lambdaKshortVertexFilter sexaquark candidates
- // edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
- // iEvent.getByToken(m_sCandsToken, h_sCands);
+  edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
+  iEvent.getByToken(m_sCandsToken, h_sCands);
   
   //reco Kshorts V0
   edm::Handle<vector<reco::VertexCompositeCandidate> > h_Kshorts;
@@ -95,11 +100,6 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   }
 */
 
- // if(!h_sCands.isValid()) {
- //   if(verbose>0) cout << "Missing collection : " << m_sCandsTag << " ... skip entry !" << endl;
- //   return;
- // }
-  
   if(!h_Lambdas.isValid()) {
     if(verbose>0) cout << "Missing collection : " << m_LambdasTag << " ... skip entry !" << endl;
     return;
@@ -197,6 +197,30 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 	v_Ks_eta.clear();
   } 
  // std::cout << "vectors cleared" << std::endl; 
+
+
+ //!!!!!!!!!!!!!!!!!!!!!!!!!!!make the same distribution but for the S candidates (if they are there, they are only there if they ran through the 2nd filter)!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ 
+  if(h_sCands.isValid()) {
+	unsigned int n_sCands = h_sCands->size();
+	for (unsigned int i = 0; i < n_sCands; ++i) { //loop over reco Kshorts	
+			double phi1 = h_sCands->at(i).daughter(0)->phi();
+			double phi2 = h_sCands->at(i).daughter(1)->phi();
+			double delta_phi = reco::deltaPhi(phi1, phi2);
+			
+			double eta1 = h_sCands->at(i).daughter(0)->eta();
+			double eta2 = h_sCands->at(i).daughter(1)->eta();
+			double delta_eta = eta1-eta2;
+   			
+			histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]->Fill(delta_phi);
+                        histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta"]->Fill(delta_eta);
+                        histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta"]->Fill(delta_phi,delta_eta);
+		}
+
+  }//end of sCands present
+
+  
+
 
 
 } //end of analyzer

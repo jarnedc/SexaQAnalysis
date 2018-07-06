@@ -94,14 +94,14 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
-    //edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_KshortsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_LambdasToken;
 
 
     int verbose=1;
     
-    TString a = "SingleMuon_check_angular_corr"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
+    TString a = "ZeroBias_check_angular_corr"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
     TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
