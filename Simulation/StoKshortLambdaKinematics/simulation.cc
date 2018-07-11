@@ -159,7 +159,8 @@
     TH2F *h_p_S_delta_theta_Ks_l = new TH2F(("h_p_"+particle+"_delta_theta_Ks_l").c_str(),("h_p_"+particle+"_delta_theta_Ks_l").c_str(),100,0,10,100,-7,7);
     TH2F *h_delta_phi_delta_theta_Ks_l = new TH2F("h_delta_phi_delta_theta_Ks_l","h_delta_phi_delta_theta_Ks_l;delta_phi_Ks_l;delta_theta_Ks_l",100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range,100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range);
     TH2F *h_delta_phi_delta_eta_Ks_l = new TH2F("h_delta_phi_delta_eta_Ks_l","h_delta_phi_delta_eta_Ks_l;delta_phi_Ks_l;delta_eta_Ks_l",100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range,100,-delta_phi_detla_theta_range,delta_phi_detla_theta_range);
- 
+    TH2F *h_eta_S_delta_phi = new TH2F("h_eta_S_delta_phi","h_eta_S_delta_phi;eta_S;delta_phi_Ks_l",100,-11,11,100,-4,4);
+
     Double_t ArmPod_alpha_range = 5.; //1
     TH2F *h2_ArmPod = new TH2F("h2_ArmPod","h2_ArmPod;alpha;pT(Ks,Lambda)",100,-ArmPod_alpha_range,ArmPod_alpha_range,100,0,5);
     TH2F *h2_ArmPod_Ks = new TH2F("h2_ArmPod_Ks","h2_ArmPod_Ks;alpha;pT(Ks)",100,-ArmPod_alpha_range,ArmPod_alpha_range,100,0,5);
@@ -393,6 +394,7 @@ void fillHistosAfterCuts(TLorentzVector p4_Ks_star, TLorentzVector p4_l_star, Do
     h_p_S_delta_theta_Ks_l->Fill(p3_S.Mag(),delta_theta_Ks_l);
     h_delta_phi_delta_theta_Ks_l->Fill(delta_phi_Ks_l,delta_theta_Ks_l);
     h_delta_phi_delta_eta_Ks_l->Fill(delta_phi_Ks_l,delta_eta_Ks_l);
+    h_eta_S_delta_phi->Fill(eta_S, delta_phi_Ks_l);
 
     h_S_pt_after_cuts->Fill(pt_S);
     h_S_p_after_cuts->Fill(p3_S.Mag());
@@ -401,6 +403,8 @@ void fillHistosAfterCuts(TLorentzVector p4_Ks_star, TLorentzVector p4_l_star, Do
     h_Ks_eta_after_cuts->Fill(p4_Ks_star.Eta());
     h_l_pt_after_cuts->Fill(p4_l_star.Pt());
     h_l_eta_after_cuts->Fill(p4_l_star.Eta());
+
+
  }
 
  void fillArmenterosHist(Double_t p_l_trans, Double_t p_Ks_trans, Double_t p_l_long, Double_t p_Ks_long, Double_t alpha_ArmPod){
@@ -450,6 +454,9 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
 
     int i = 0; 
     int numerator_eff = 0; 
+
+    int i_particles_produced = 0;
+    int i_particles_surviving_cuts = 0;
     bool verbose = false;  
     
     //start the main loop where you generate particles
@@ -461,9 +468,9 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
     Double_t pt_S = fTSalisSpt->GetRandom(); 
 
 	//from https://arxiv.org/pdf/1002.0621.pdf, page 14 the eta distribution is relatively flat
-    Double_t eta_S = random->Uniform(-2.5,2.5);
-    //Double_t eta_S = fEtaDistrHadr->GetRandom(0.,10.);
-    //if(random->Uniform(0,1)<0.5) eta_S = -eta_S;
+    //Double_t eta_S = random->Uniform(-2.5,2.5);
+    Double_t eta_S = fEtaDistrHadr->GetRandom(0.,10.);
+    if(random->Uniform(0,1)<0.5) eta_S = -eta_S;
     
 
     //phi of the S, should be a uniform distribution in 0 to 2*pi
@@ -608,9 +615,10 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
 
     hEff_L0_Ks->Fill(l_survives_cuts && Ks_survives_cuts, pt_S);
 
-
+    i_particles_produced++;
     if(!Ks_survives_cuts) continue;
     if(!l_survives_cuts) continue;
+    i_particles_surviving_cuts++;
 
     Double_t delta_phi_Ks_l = p4_Ks_star.DeltaPhi(p4_l_star);
     Double_t delta_theta_Ks_l =p4_Ks_star.Theta()-p4_l_star.Theta();
@@ -663,6 +671,7 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
 
     }//end for loop
 
+ cout << std::setprecision(12) << "fraction of generated S particles surviving the pt cuts on the daughters, the eta cuts on the daughter and weighted with the reconstruction efficiencies: " <<  (double)i_particles_surviving_cuts/(double)i_particles_produced << endl;
  cout << "the efficiency on the signal as a result of the delta_phi cut on background: " << (double)numerator_eff/(double)i << endl; 
 
  //*****************************CALCULATE THE RECONSTRUCTION EFFICIENCY FOR ONE S*******************************************
@@ -677,7 +686,7 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
     denumenator = denumenator + n_S_pt;
  }
 
- cout << "The efficiency we have all been waiting for: " << numerator/denumenator << endl;
+ cout << "The overall reconstruction efficiency of the S particle: " << numerator/denumenator << endl;
  //*************************************************************************************************************************
 
 
@@ -973,6 +982,11 @@ dir_DecayProductsLabAfterCuts->cd();
  h_delta_phi_delta_eta_Ks_l->Write();
  h_delta_phi_delta_eta_Ks_l->Draw("colz");
  c1->SaveAs((outputDir+"/h_delta_phi_delta_eta_Ks_l.png").c_str(),"png");
+
+ h_eta_S_delta_phi->Write();
+ h_eta_S_delta_phi->Draw("colz");
+ c1->SaveAs((outputDir+"/h_eta_S_delta_phi.png").c_str(),"png");
+
 
  h_M_Start_n_check->Write();
  h_M_Start_n_check->Draw();
