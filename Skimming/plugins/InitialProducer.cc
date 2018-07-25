@@ -39,6 +39,11 @@
 
 #include <vector>
 
+#include "DataFormats/VertexReco/interface/Vertex.h"
+#include "DataFormats/JetReco/interface/TrackJet.h"
+#include "DataFormats/MuonReco/interface/Muon.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
+#include "DataFormats/L1Trigger/interface/L1EtMissParticle.h"
 //
 // class declaration
 //
@@ -53,7 +58,23 @@ class InitialProducer : public edm::stream::EDProducer<> {
    private:
       //************remove 2 lines below
       edm::InputTag trackCollectionTag_;
+      edm::InputTag lambdaCollectionTag_;
+      edm::InputTag kshortCollectionTag_;
+      edm::InputTag offlinePrimaryVerticesCollectionTag_;
+      edm::InputTag ak4TrackJetsCollectionTag_;
+      edm::InputTag muonsCollectionTag_;
+      edm::InputTag electronsCollectionTag_;
+      edm::InputTag MHTCollectionTag_;
+      edm::InputTag METCollectionTag_;
       edm::EDGetTokenT<std::vector<reco::Track> > tracksCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > lambdaCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > kshortCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::Vertex> > offlinePrimaryVerticesCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::TrackJet> > ak4TrackJetsCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::Muon> > muonsCollectionToken_;
+      edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate> >> electronsCollectionToken_;
+      edm::EDGetTokenT<std::vector<l1extra::L1EtMissParticle> > MHTCollectionToken_;
+      edm::EDGetTokenT<std::vector<l1extra::L1EtMissParticle>  > METCollectionToken_;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
       virtual void endStream() override;
@@ -71,7 +92,6 @@ class InitialProducer : public edm::stream::EDProducer<> {
 // constants, enums and typedefs
 //
 
-
 //
 // static data member definitions
 //
@@ -83,7 +103,15 @@ class InitialProducer : public edm::stream::EDProducer<> {
 InitialProducer::InitialProducer(edm::ParameterSet const& pset)
 //***************delte the line below
 //:trackCollectionTag_(iConfig.getParameter<edm::InputTag>("TrackCollection"))
-:trackCollectionTag_(pset.getParameter<edm::InputTag>("TrackCollection"))
+:trackCollectionTag_(pset.getParameter<edm::InputTag>("TrackCollection")),
+lambdaCollectionTag_(pset.getParameter<edm::InputTag>("lambdaCollection")),
+kshortCollectionTag_(pset.getParameter<edm::InputTag>("kshortCollection")),
+offlinePrimaryVerticesCollectionTag_(pset.getParameter<edm::InputTag>("offlinePrimaryVerticesCollection")),
+ak4TrackJetsCollectionTag_(pset.getParameter<edm::InputTag>("ak4TrackJetsCollection")),
+muonsCollectionTag_(pset.getParameter<edm::InputTag>("muonsCollection")),
+electronsCollectionTag_(pset.getParameter<edm::InputTag>("electronsCollection")),
+MHTCollectionTag_(pset.getParameter<edm::InputTag>("MHTCollection")),
+METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
 {
    //register your products
 /* Examples
@@ -101,7 +129,25 @@ InitialProducer::InitialProducer(edm::ParameterSet const& pset)
 //   produces<int>( "ntracks" ).setBranchAlias( "ntracks"); 
   //***********delete the 2 lines below
    tracksCollectionToken_ = consumes<std::vector<reco::Track> >(trackCollectionTag_);
+   lambdaCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(lambdaCollectionTag_);
+   kshortCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(kshortCollectionTag_);
+   offlinePrimaryVerticesCollectionToken_ = consumes<std::vector<reco::Vertex> >(offlinePrimaryVerticesCollectionTag_);
+   ak4TrackJetsCollectionToken_ = consumes<std::vector<reco::TrackJet> >(ak4TrackJetsCollectionTag_);
+   muonsCollectionToken_ = consumes<std::vector<reco::Muon> >(muonsCollectionTag_);
+   electronsCollectionToken_ = consumes<edm::ValueMap<edm::Ptr<reco::PFCandidate> > >(electronsCollectionTag_);
+   MHTCollectionToken_ = consumes<std::vector<l1extra::L1EtMissParticle> >(METCollectionTag_);
+   METCollectionToken_ = consumes<std::vector<l1extra::L1EtMissParticle> >(MHTCollectionTag_);
    produces<std::vector<int>>("ntracks");
+   produces<std::vector<int>>("nlambdas");
+   produces<std::vector<int>>("nkshorts");
+   produces<std::vector<int>>("nPVs");
+   produces<std::vector<int>>("njets");
+   produces<std::vector<reco::Particle::LorentzVector>>("TwoTopJets");
+   produces<std::vector<int>>("nmuons");
+   produces<std::vector<int>>("nelectrons");
+   produces<std::vector<int>>("MHT");
+   produces<std::vector<int>>("MET");
+  
 }
 
 
@@ -140,18 +186,112 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
 */
 
   //********delete the block below
+  //
+  //ntracks part
   edm::Handle<std::vector<reco::Track >> h_tracks;
   iEvent.getByToken(tracksCollectionToken_, h_tracks);
   if(!h_tracks.isValid()) {
       std::cout << "Missing collection during InitialProducer : " << trackCollectionTag_ << " ... skip entry !" << std::endl;
   }
+  auto ntracks = std::make_unique<std::vector<int>>();
+  ntracks->push_back((int)h_tracks->size());
+  iEvent.put(std::move(ntracks), "ntracks");
 
-   auto ntracks = std::make_unique<std::vector<int>>();
-   ntracks->push_back((int)h_tracks->size());
-   
-   iEvent.put(std::move(ntracks), "ntracks");
+  //nlambdas part
+  edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_lambdas;
+  iEvent.getByToken(lambdaCollectionToken_, h_lambdas);
+  if(!h_lambdas.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << lambdaCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto nlambdas = std::make_unique<std::vector<int>>();
+  nlambdas->push_back((int)h_lambdas->size());
+  iEvent.put(std::move(nlambdas), "nlambdas");
 
-   
+  //nkshorts part
+  edm::Handle<std::vector<reco::VertexCompositeCandidate> > h_kshorts;
+  iEvent.getByToken(kshortCollectionToken_, h_kshorts);
+  if(!h_kshorts.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << kshortCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto nkshorts = std::make_unique<std::vector<int>>();
+  nkshorts->push_back((int)h_kshorts->size());
+  iEvent.put(std::move(nkshorts), "nkshorts");
+
+  //nPVs part
+  edm::Handle<std::vector<reco::Vertex> > h_PVs;
+  iEvent.getByToken(offlinePrimaryVerticesCollectionToken_, h_PVs);
+  if(!h_PVs.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << offlinePrimaryVerticesCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto nPVs = std::make_unique<std::vector<int>>();
+  nPVs->push_back((int)h_PVs->size());
+  iEvent.put(std::move(nPVs), "nPVs");
+
+  //njets part
+  edm::Handle<std::vector<reco::TrackJet> > h_jets;
+  iEvent.getByToken(ak4TrackJetsCollectionToken_, h_jets);
+  if(!h_jets.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << ak4TrackJetsCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto njets = std::make_unique<std::vector<int>>();
+  njets->push_back((int)h_jets->size());
+  iEvent.put(std::move(njets), "njets");
+  //select the 2 jets with highest momentum
+  auto TwoTopJets = std::make_unique<std::vector<reco::TrackJet>>();
+  reco::TrackJet dummyTrackJet; 
+  TwoTopJets->push_back(dummyTrackJet); 
+  TwoTopJets->push_back(dummyTrackJet);
+  for (unsigned int j = 0; j < h_jets->size(); ++j) {
+
+	double thisJetMomentum = h_jets->at(j).p();
+	if(thisJetMomentum > TwoTopJets->at(0).p()) TwoTopJets->at(0)  = h_jets->at(j);
+	else if(thisJetMomentum > TwoTopJets->at(1).p()) TwoTopJets->at(1)  = h_jets->at(j);
+ 
+  }
+  auto highestMomentJetsLorentzVectors = std::make_unique<std::vector<reco::Particle::LorentzVector>>();
+  highestMomentJetsLorentzVectors->push_back(TwoTopJets->at(0).p4());
+  highestMomentJetsLorentzVectors->push_back(TwoTopJets->at(1).p4());
+  iEvent.put(std::move(highestMomentJetsLorentzVectors), "TwoTopJets");
+
+  //nmuons part
+  edm::Handle<std::vector<reco::Muon> > h_muons;
+  iEvent.getByToken(muonsCollectionToken_, h_muons);
+  if(!h_muons.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << muonsCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto nmuons = std::make_unique<std::vector<int>>();
+  nmuons->push_back((int)h_muons->size());
+  iEvent.put(std::move(nmuons), "nmuons");
+
+  //nelectrons part
+  edm::Handle<edm::ValueMap<edm::Ptr<reco::PFCandidate> > > h_electrons;
+  iEvent.getByToken(electronsCollectionToken_, h_electrons);
+  if(!h_electrons.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << electronsCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto nelectrons = std::make_unique<std::vector<int>>();
+  nelectrons->push_back((int)h_electrons->size());
+  iEvent.put(std::move(nelectrons), "nelectrons");
+
+  //MHT part
+  edm::Handle<vector<l1extra::L1EtMissParticle> > h_MHT;
+  iEvent.getByToken(MHTCollectionToken_, h_MHT);
+  if(!h_MHT.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << MHTCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto MHT = std::make_unique<std::vector<int>>();
+  MHT->push_back((int)h_MHT->at(0).etMiss());
+  iEvent.put(std::move(MHT), "MHT");
+
+  //MET part
+  edm::Handle<vector<l1extra::L1EtMissParticle> > h_MET;
+  iEvent.getByToken(METCollectionToken_, h_MET);
+  if(!h_MET.isValid()) {
+      std::cout << "Missing collection during InitialProducer : " << METCollectionTag_ << " ... skip entry !" << std::endl;
+  }
+  auto MET = std::make_unique<std::vector<int>>();
+  MET->push_back((int)h_MET->at(0).etMiss()); 
+  iEvent.put(std::move(MET), "MET");
 
 /* This is an event example
    //Read 'ExampleData' from the Event

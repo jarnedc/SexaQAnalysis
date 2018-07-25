@@ -62,11 +62,10 @@ process.genParticlePlusGEANT = cms.EDProducer("GenPlusSimParticleProducer",
   genParticles  = cms.InputTag("genParticles") # original genParticle list
 )
 
-process.InitialProducer = cms.EDProducer('InitialProducer'
-        ,TrackCollection    =cms.InputTag('generalTracks')
-)
+#process.InitialProducer = cms.EDProducer('InitialProducer'
+#        ,TrackCollection    =cms.InputTag('generalTracks')
+#)
 
-process.load
 
 process.load("SexaQAnalysis.Skimming.LambdaKshortFilter_cfi")
 process.lambdaKshortFilter.genCollection = cms.InputTag("genParticlePlusGEANT")
@@ -90,6 +89,7 @@ process.rMassFilter.targetMass = 0
 process.sMassFilter = massFilter.clone()
 process.sMassFilter.targetMass = 0.939565
 
+process.load("SexaQAnalysis.Skimming.InitialProducer_cff")
 
 #process.load("SexaQAnalysis.TreeProducer.Treeproducer_AOD_cfi")
 #process.tree.genCollection = cms.InputTag("genParticlePlusGEANT")
@@ -99,7 +99,6 @@ process.sMassFilter.targetMass = 0.939565
 
 process.p = cms.Path(
 #  process.genParticlePlusGEANT *
-  process.InitialProducer *
   process.nEvTotal *
   process.lambdaKshortFilter *
   process.nEvLambdaKshort *
@@ -107,7 +106,8 @@ process.p = cms.Path(
   process.nEvLambdaKshortVertex *
   process.rMassFilter *
   process.sMassFilter *
-  process.nEvSMass 
+  process.nEvSMass *
+  process.InitialProducer 
 #  process.tree 
 )
 
@@ -120,12 +120,14 @@ process.p = cms.Path(
 process.out = cms.OutputModule("PoolOutputModule",
   outputCommands = cms.untracked.vstring(
     'drop *',
-     'keep *_ntracks_*_*',
-     'keep *_InitialProducer_*_*',
+    'keep *_InitialProducer_*_*',
     'keep recoVertexCompositeCandidates_generalV0Candidates_*_*',
+    'keep recoTracks_lambdaKshortVertexFilter_sParticlesTracks_*',
+    'keep recoVertexCompositePtrCandidates_rMassFilter_sVertexCompositePtrCandidate_*', 
+    'keep recoVertexCompositePtrCandidates_sMassFilter_sVertexCompositePtrCandidate_*', 
  #   'keep recoVertexs_offlinePrimaryVertices_*_*',
  #   'keep *_offlineBeamSpot_*_*',
-    'keep *_*_*_SEXAQ',
+ #   'keep *_*_*_SEXAQ',
   ),
   fileName = cms.untracked.string("events_skimmed.root"),
   SelectEvents = cms.untracked.PSet(
