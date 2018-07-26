@@ -100,10 +100,8 @@ class InitialProducer : public edm::stream::EDProducer<> {
 // constructors and destructor
 //
 //InitialProducer::InitialProducer(const edm::ParameterSet& iConfig)
-InitialProducer::InitialProducer(edm::ParameterSet const& pset)
-//***************delte the line below
-//:trackCollectionTag_(iConfig.getParameter<edm::InputTag>("TrackCollection"))
-:trackCollectionTag_(pset.getParameter<edm::InputTag>("TrackCollection")),
+InitialProducer::InitialProducer(edm::ParameterSet const& pset):
+trackCollectionTag_(pset.getParameter<edm::InputTag>("TrackCollection")),
 lambdaCollectionTag_(pset.getParameter<edm::InputTag>("lambdaCollection")),
 kshortCollectionTag_(pset.getParameter<edm::InputTag>("kshortCollection")),
 offlinePrimaryVerticesCollectionTag_(pset.getParameter<edm::InputTag>("offlinePrimaryVerticesCollection")),
@@ -114,20 +112,6 @@ MHTCollectionTag_(pset.getParameter<edm::InputTag>("MHTCollection")),
 METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
 {
    //register your products
-/* Examples
-   produces<ExampleData2>();
-
-   //if do put with a label
-   produces<ExampleData2>("label");
- 
-   //if you want to put into the Run
-   produces<ExampleData2,InRun>();
-*/
-   //now do what ever other initialization is needed
-  //***********uncomment 2 lines below
-//   src_  = iConfig.getParameter<edm::InputTag>( "src" );
-//   produces<int>( "ntracks" ).setBranchAlias( "ntracks"); 
-  //***********delete the 2 lines below
    tracksCollectionToken_ = consumes<std::vector<reco::Track> >(trackCollectionTag_);
    lambdaCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(lambdaCollectionTag_);
    kshortCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(kshortCollectionTag_);
@@ -172,21 +156,6 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace reco; 
    using namespace std;
    
-   //get information on the tracks
- //*********uncomment the block below
- /*  edm::Handle<reco::TrackCollection> Tracks;
-   iEvent.getByLabel( src_, Tracks );
-   if(!Tracks.isValid()) {
-      std::cout << "Missing collection during InitialProducer : ... skip entry !" << std::endl;
-   }
-   auto ntracks = std::make_unique<std::vector<int>>();
-   ntracks->push_back((int)Tracks->size());
-   
-   iEvent.put(std::move(ntracks), "ntracks");
-*/
-
-  //********delete the block below
-  //
   //ntracks part
   edm::Handle<std::vector<reco::Track >> h_tracks;
   iEvent.getByToken(tracksCollectionToken_, h_tracks);
@@ -293,23 +262,6 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   MET->push_back((int)h_MET->at(0).etMiss()); 
   iEvent.put(std::move(MET), "MET");
 
-/* This is an event example
-   //Read 'ExampleData' from the Event
-   Handle<ExampleData> pIn;
-   iEvent.getByLabel("example",pIn);
-
-   //Use the ExampleData to create an ExampleData2 which 
-   // is put into the Event
-   std::unique_ptr<ExampleData2> pOut(new ExampleData2(*pIn));
-   iEvent.put(std::move(pOut));
-*/
-
-/* this is an EventSetup example
-   //Read SetupData from the SetupRecord in the EventSetup
-   ESHandle<SetupData> pSetup;
-   iSetup.get<SetupRecord>().get(pSetup);
-*/
- 
 }
 
 // ------------ method called once each stream before processing any runs, lumis or events  ------------
