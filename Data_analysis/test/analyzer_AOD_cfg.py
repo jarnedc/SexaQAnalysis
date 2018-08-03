@@ -43,8 +43,8 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 #Jarne
 
 #SingleMuon
-rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+#rangeOfStrings=[str(i) for i in range(1,148)] #1 to 148
+#tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 #zero bias
 #rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
@@ -54,6 +54,10 @@ tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/Single
 #rangeOfStrings=[str(i) for i in range(1,513)] #1 to 503
 #tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/MET/MET_Run2016G/180505_234637/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
+
+#MinBias
+rangeOfStrings=[str(i) for i in range(1,199)]
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_asData_150718/180715_164309/0000/V0_correlation_SingleMuon_single_file_allFilters_' + x + '.root' for x in rangeOfStrings])
 
 #Florian
 
@@ -91,5 +95,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('SingleMuon.root')
+    fileName = cms.string('MinBias_asData_allFilters.root')
 )
