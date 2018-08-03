@@ -130,9 +130,6 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
   // get the vector sizes before they disappear when putting in the event
   unsigned int nl = lambdas->size(), nk = kshorts->size();
 
-  iEvent.put(std::move(lambdas),"lambda");
-  iEvent.put(std::move(kshorts),"kshort");
-
   // throw away events on data without sufficient lambdas or kshorts
   if (nl < minNrLambda_ || nk < minNrKshort_) {
     ++nreject_;
@@ -140,6 +137,29 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
   }
   // if we reach here there's a sufficient number of good lambdas and kshorts
  
+  //for debugging: check that the lambda and kshort which you save are really different
+
+/*  for(unsigned int l = 0; l < lambdas->size(); ++l){
+ 	std::cout << "put a lambda" << std::endl;
+  }
+  for(unsigned int k = 0; k < kshorts->size(); ++k){
+	std::cout << "put a kshort" << std::endl;
+  }
+
+  for(unsigned int l = 0; l < lambdas->size(); ++l){
+  	for(unsigned int k = 0; k < kshorts->size(); ++k){
+	 if((*lambdas)[l]->px() == (*kshorts)[k]->px()){
+  		std::cout << "------------------------------------------" << std::endl;
+      		std::cout << "Lambda number " << l << " momenta: "<< (*lambdas)[l]->px()  << ", " << (*lambdas)[l]->py() << ", " <<  (*lambdas)[l]->pz() << std::endl;
+      		std::cout << "Kshort number " << k << " momenta: "<<  (*kshorts)[k]->px() << ", " << (*kshorts)[k]->py() << ", " <<  (*kshorts)[k]->pz() << std::endl;
+         }
+  	}
+  }
+*/
+
+  iEvent.put(std::move(lambdas),"lambda");
+  iEvent.put(std::move(kshorts),"kshort");
+
    return true;
 
 }
