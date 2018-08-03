@@ -20,6 +20,6 @@ config.Data.lumiMask = ''
 config.Data.runRange = ''
 config.Data.outLFNDirBase = '/store/user/jdeclerc/'
 config.Data.publication = False
-config.Data.outputDatasetTag = 'Wjets_30032018'
+config.Data.outputDatasetTag = 'Wjets_01082018'
 
 config.Site.storageSite = 'T2_BE_IIHE'
