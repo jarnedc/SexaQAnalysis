@@ -89,7 +89,22 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     
     edm::InputTag m_KshortsTag;
     edm::InputTag m_LambdasTag;
-  
+   
+    edm::InputTag m_LambdasLambdaKshortFilterTag;
+    edm::InputTag m_KshortsLambdaKshortFilterTag;
+    
+    edm::InputTag m_sCollectionMassFilterTag;
+    edm::InputTag m_rCollectionMassFilterTag;
+ 
+
+    edm::InputTag m_nPVsTag;
+    edm::InputTag m_nelectronsTag;
+    edm::InputTag m_njetsTag;
+    edm::InputTag m_nkshortsTag;
+    edm::InputTag m_nlambdasTag;
+    edm::InputTag m_nmuonsTag;
+    edm::InputTag m_ntracksTag;
+ 
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
@@ -97,11 +112,24 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_KshortsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_LambdasToken;
+    edm::EDGetTokenT<edm::PtrVector<reco::Candidate > > m_LambdasLambdaKshortFilterToken;
+    edm::EDGetTokenT<edm::PtrVector<reco::Candidate > > m_KshortsLambdaKshortFilterToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCollectionMassFilterToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCollectionMassFilterToken;
+    
+    edm::EDGetTokenT<vector<int> > m_nPVsToken;
+    edm::EDGetTokenT<vector<int> > m_nelectronsToken;
+    edm::EDGetTokenT<vector<int> > m_njetsToken;
+    edm::EDGetTokenT<vector<int> > m_nkshortsToken;
+    edm::EDGetTokenT<vector<int> > m_nlambdasToken;
+    edm::EDGetTokenT<vector<int> > m_nmuonsToken;
+    edm::EDGetTokenT<vector<int> > m_ntracksToken;
+
 
 
     int verbose=1;
     
-    TString a = "ZeroBias_check_angular_corr"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
+    TString a = "SingleMuon_2016_MultiCrab"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
     TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
