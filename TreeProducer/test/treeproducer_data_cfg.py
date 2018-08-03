@@ -119,15 +119,15 @@ process.p = cms.Path(
 #Keep edm output file --> used in the analyzer
 process.out = cms.OutputModule("PoolOutputModule",
   outputCommands = cms.untracked.vstring(
-    'drop *',
-    'keep *_InitialProducer_*_*',
+     'drop *',
+
+#    'drop *',
+#    'keep *_InitialProducer_*_*',
     'keep recoVertexCompositeCandidates_generalV0Candidates_*_*',
     'keep recoTracks_lambdaKshortVertexFilter_sParticlesTracks_*',
-    'keep recoVertexCompositePtrCandidates_rMassFilter_sVertexCompositePtrCandidate_*', 
-    'keep recoVertexCompositePtrCandidates_sMassFilter_sVertexCompositePtrCandidate_*', 
- #   'keep recoVertexs_offlinePrimaryVertices_*_*',
- #   'keep *_offlineBeamSpot_*_*',
- #   'keep *_*_*_SEXAQ',
+    'keep recoVertexCompositePtrCandidates_rMassFilter_sVertexCompositePtrCandidate_*',
+    'keep recoVertexCompositePtrCandidates_sMassFilter_sVertexCompositePtrCandidate_*',
+    'keep *_*_*_SEXAQ'
   ),
   fileName = cms.untracked.string("events_skimmed.root"),
   SelectEvents = cms.untracked.PSet(
