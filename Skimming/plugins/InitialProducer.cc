@@ -43,7 +43,8 @@
 #include "DataFormats/JetReco/interface/TrackJet.h"
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
-#include "DataFormats/L1Trigger/interface/L1EtMissParticle.h"
+#include "DataFormats/METReco/interface/PFMET.h"
+#include "DataFormats/Candidate/interface/LeafCandidate.h"
 //
 // class declaration
 //
@@ -55,6 +56,9 @@ class InitialProducer : public edm::stream::EDProducer<> {
 
       static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
+      //typedefs
+      typedef math::XYZTLorentzVector LorentzVector;
+
    private:
       //************remove 2 lines below
       edm::InputTag trackCollectionTag_;
@@ -64,7 +68,6 @@ class InitialProducer : public edm::stream::EDProducer<> {
       edm::InputTag ak4PFJetsCollectionTag_;
       edm::InputTag muonsCollectionTag_;
       edm::InputTag electronsCollectionTag_;
-      edm::InputTag MHTCollectionTag_;
       edm::InputTag METCollectionTag_;
       edm::EDGetTokenT<std::vector<reco::Track> > tracksCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > lambdaCollectionToken_;
@@ -73,8 +76,7 @@ class InitialProducer : public edm::stream::EDProducer<> {
       edm::EDGetTokenT<std::vector<reco::TrackJet> > ak4PFJetsCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::Muon> > muonsCollectionToken_;
       edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate> >> electronsCollectionToken_;
-      edm::EDGetTokenT<std::vector<l1extra::L1EtMissParticle> > MHTCollectionToken_;
-      edm::EDGetTokenT<std::vector<l1extra::L1EtMissParticle>  > METCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::PFMET>  > METCollectionToken_;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
       virtual void endStream() override;
@@ -108,7 +110,6 @@ offlinePrimaryVerticesCollectionTag_(pset.getParameter<edm::InputTag>("offlinePr
 ak4PFJetsCollectionTag_(pset.getParameter<edm::InputTag>("ak4PFJetsCollection")),
 muonsCollectionTag_(pset.getParameter<edm::InputTag>("muonsCollection")),
 electronsCollectionTag_(pset.getParameter<edm::InputTag>("electronsCollection")),
-MHTCollectionTag_(pset.getParameter<edm::InputTag>("MHTCollection")),
 METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
 {
    //register your products
@@ -119,8 +120,7 @@ METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
    ak4PFJetsCollectionToken_ = consumes<std::vector<reco::TrackJet> >(ak4PFJetsCollectionTag_);
    muonsCollectionToken_ = consumes<std::vector<reco::Muon> >(muonsCollectionTag_);
    electronsCollectionToken_ = consumes<edm::ValueMap<edm::Ptr<reco::PFCandidate> > >(electronsCollectionTag_);
-   MHTCollectionToken_ = consumes<std::vector<l1extra::L1EtMissParticle> >(METCollectionTag_);
-   METCollectionToken_ = consumes<std::vector<l1extra::L1EtMissParticle> >(MHTCollectionTag_);
+   METCollectionToken_ = consumes<std::vector<reco::PFMET> >(METCollectionTag_);
    produces<std::vector<int>>("ntracks");
    produces<std::vector<int>>("nlambdas");
    produces<std::vector<int>>("nkshorts");
@@ -196,7 +196,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   nPVs->push_back((int)h_PVs->size());
   iEvent.put(std::move(nPVs), "nPVs");
 
-  //njets part
+  //njets part and HT part
   edm::Handle<std::vector<reco::TrackJet> > h_jets;
   iEvent.getByToken(ak4PFJetsCollectionToken_, h_jets);
   if(!h_jets.isValid()) {
@@ -205,22 +205,31 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   auto njets = std::make_unique<std::vector<int>>();
   njets->push_back((int)h_jets->size());
   iEvent.put(std::move(njets), "njets");
+
   //select the 2 jets with highest momentum
   auto TwoTopJets = std::make_unique<std::vector<reco::TrackJet>>();
   reco::TrackJet dummyTrackJet; 
   TwoTopJets->push_back(dummyTrackJet); 
   TwoTopJets->push_back(dummyTrackJet);
+  double sumJetpT = 0;
   for (unsigned int j = 0; j < h_jets->size(); ++j) {
 
 	double thisJetMomentum = h_jets->at(j).p();
 	if(thisJetMomentum > TwoTopJets->at(0).p()) TwoTopJets->at(0)  = h_jets->at(j);
 	else if(thisJetMomentum > TwoTopJets->at(1).p()) TwoTopJets->at(1)  = h_jets->at(j);
+        
+	sumJetpT = sumJetpT + h_jets->at(j).pt();
  
   }
+ 
   auto highestMomentJetsLorentzVectors = std::make_unique<std::vector<reco::Particle::LorentzVector>>();
   highestMomentJetsLorentzVectors->push_back(TwoTopJets->at(0).p4());
   highestMomentJetsLorentzVectors->push_back(TwoTopJets->at(1).p4());
   iEvent.put(std::move(highestMomentJetsLorentzVectors), "TwoTopJets");
+
+  auto HT = std::make_unique<std::vector<int>>();
+  HT->push_back(sumJetpT);
+  iEvent.put(std::move(HT), "HT");
 
   //nmuons part
   edm::Handle<std::vector<reco::Muon> > h_muons;
@@ -242,25 +251,33 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   nelectrons->push_back((int)h_electrons->size());
   iEvent.put(std::move(nelectrons), "nelectrons");
 
-  //MHT part
-  edm::Handle<vector<l1extra::L1EtMissParticle> > h_MHT;
-  iEvent.getByToken(MHTCollectionToken_, h_MHT);
-  if(!h_MHT.isValid()) {
-      std::cout << "Missing collection during InitialProducer : " << MHTCollectionTag_ << " ... skip entry !" << std::endl;
-  }
-  auto MHT = std::make_unique<std::vector<int>>();
-  MHT->push_back((int)h_MHT->at(0).etMiss());
-  iEvent.put(std::move(MHT), "MHT");
-
   //MET part
-  edm::Handle<vector<l1extra::L1EtMissParticle> > h_MET;
+  edm::Handle<vector<reco::PFMET> > h_MET;
   iEvent.getByToken(METCollectionToken_, h_MET);
   if(!h_MET.isValid()) {
       std::cout << "Missing collection during InitialProducer : " << METCollectionTag_ << " ... skip entry !" << std::endl;
   }
-  auto MET = std::make_unique<std::vector<int>>();
-  MET->push_back((int)h_MET->at(0).etMiss()); 
+  auto MET = std::make_unique<std::vector<LorentzVector>>();
+  MET->push_back(h_MET->at(0).p4()); 
   iEvent.put(std::move(MET), "MET");
+
+  //TKMET and TKHT part 
+  //TKMET: calculate the missing pT from the tracks: so sum all the tracks and take the minus sign
+  //TKHT: scalar sim of all track pts
+  math::XYZVector sumTK(0,0,0);
+  double sumTrackpT = 0;
+  for(unsigned int j = 0; j < h_tracks->size(); ++j) {
+	sumTK = sumTK - h_tracks->at(j).innerMomentum();
+	sumTrackpT = sumTrackpT + h_tracks->at(j).pt();
+  }	
+  auto TKMET = std::make_unique<std::vector<math::XYZVector>>();
+  TKMET->push_back(sumTK);
+  iEvent.put(std::move(TKMET), "TKMET");
+
+  auto TKHT = std::make_unique<std::vector<int>>();
+  TKHT->push_back(sumTrackpT);
+  iEvent.put(std::move(TKHT), "TKHT");
+
 
 }
 

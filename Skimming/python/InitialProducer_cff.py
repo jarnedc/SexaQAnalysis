@@ -9,6 +9,5 @@ InitialProducer = cms.EDProducer(
   ak4PFJetsCollection = cms.InputTag("ak4PFJets"),
   muonsCollection = cms.InputTag("muons"),
   electronsCollection = cms.InputTag("particleFlow","electrons"),
-  MHTCollection = cms.InputTag("l1extraParticles","MHT"),
-  METCollection = cms.InputTag("l1extraParticles","MET"),
+  METCollection = cms.InputTag("pfMet"),
   )
