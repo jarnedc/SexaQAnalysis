@@ -40,7 +40,7 @@
 #include <vector>
 
 #include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/JetReco/interface/TrackJet.h"
+#include "DataFormats/JetReco/interface/PFJet.h"
 #include "DataFormats/MuonReco/interface/Muon.h"
 #include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
 #include "DataFormats/METReco/interface/PFMET.h"
@@ -73,7 +73,7 @@ class InitialProducer : public edm::stream::EDProducer<> {
       edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > lambdaCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > kshortCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::Vertex> > offlinePrimaryVerticesCollectionToken_;
-      edm::EDGetTokenT<std::vector<reco::TrackJet> > ak4PFJetsCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::PFJet> > ak4PFJetsCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::Muon> > muonsCollectionToken_;
       edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate> >> electronsCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::PFMET>  > METCollectionToken_;
@@ -117,7 +117,7 @@ METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
    lambdaCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(lambdaCollectionTag_);
    kshortCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(kshortCollectionTag_);
    offlinePrimaryVerticesCollectionToken_ = consumes<std::vector<reco::Vertex> >(offlinePrimaryVerticesCollectionTag_);
-   ak4PFJetsCollectionToken_ = consumes<std::vector<reco::TrackJet> >(ak4PFJetsCollectionTag_);
+   ak4PFJetsCollectionToken_ = consumes<std::vector<reco::PFJet> >(ak4PFJetsCollectionTag_);
    muonsCollectionToken_ = consumes<std::vector<reco::Muon> >(muonsCollectionTag_);
    electronsCollectionToken_ = consumes<edm::ValueMap<edm::Ptr<reco::PFCandidate> > >(electronsCollectionTag_);
    METCollectionToken_ = consumes<std::vector<reco::PFMET> >(METCollectionTag_);
@@ -129,8 +129,10 @@ METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
    produces<std::vector<reco::Particle::LorentzVector>>("TwoTopJets");
    produces<std::vector<int>>("nmuons");
    produces<std::vector<int>>("nelectrons");
-   produces<std::vector<int>>("MHT");
-   produces<std::vector<int>>("MET");
+   produces<std::vector<int>>("HT");
+   produces<std::vector<int>>("TKHT");
+   produces<std::vector<LorentzVector>>("MET");
+   produces<std::vector<math::XYZVector>>("TKMET");
   
 }
 
@@ -197,7 +199,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.put(std::move(nPVs), "nPVs");
 
   //njets part and HT part
-  edm::Handle<std::vector<reco::TrackJet> > h_jets;
+  edm::Handle<std::vector<reco::PFJet> > h_jets;
   iEvent.getByToken(ak4PFJetsCollectionToken_, h_jets);
   if(!h_jets.isValid()) {
       std::cout << "Missing collection during InitialProducer : " << ak4PFJetsCollectionTag_ << " ... skip entry !" << std::endl;
@@ -207,10 +209,10 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.put(std::move(njets), "njets");
 
   //select the 2 jets with highest momentum
-  auto TwoTopJets = std::make_unique<std::vector<reco::TrackJet>>();
-  reco::TrackJet dummyTrackJet; 
-  TwoTopJets->push_back(dummyTrackJet); 
-  TwoTopJets->push_back(dummyTrackJet);
+  auto TwoTopJets = std::make_unique<std::vector<reco::PFJet>>();
+  reco::PFJet dummyPFJet; 
+  TwoTopJets->push_back(dummyPFJet); 
+  TwoTopJets->push_back(dummyPFJet);
   double sumJetpT = 0;
   for (unsigned int j = 0; j < h_jets->size(); ++j) {
 
@@ -267,7 +269,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   math::XYZVector sumTK(0,0,0);
   double sumTrackpT = 0;
   for(unsigned int j = 0; j < h_tracks->size(); ++j) {
-	sumTK = sumTK - h_tracks->at(j).innerMomentum();
+	//sumTK = sumTK - h_tracks->at(j).innerMomentum();
 	sumTrackpT = sumTrackpT + h_tracks->at(j).pt();
   }	
   auto TKMET = std::make_unique<std::vector<math::XYZVector>>();
