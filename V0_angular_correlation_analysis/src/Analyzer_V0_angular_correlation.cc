@@ -55,7 +55,46 @@ void Analyzer_V0_angular_correlation::beginJob() {
 
   
 //  histos_th1f[b+"nPV"]      = m_fs->make<TH1F>(b+"nPV",     a+" Number of PV; #PVs",60,0.,60);
+   //masses from the original kshort and lambda collection
+   histos_th1f[b+"h_Lambda_mass"] = m_fs->make<TH1F>(b+"h_Lambda_mass",b+"h_Lambda_mass; Lambda mass from original V0 collection",4000,0,20);   
+   histos_th1f[b+"h_Kshort_mass"] = m_fs->make<TH1F>(b+"h_Kshort_mass",b+"h_Kshort_mass; Kshort mass from original V0 collection",4000,0,20);   
+   
+   //masses of Ks and Lambda after the LambdaKshortVertexFilter
+   histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass_all"] = m_fs->make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass_all", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass_all; Lambda mass after LambdaKshortVertexFilter",4000, 0,20);
+   histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass_all"] = m_fs->make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass_all", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass_all; Kshort mass after LambdaKshortVertexFilter",4000, 0,20);
+   histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass"] = m_fs->make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass; Lambda mass after LambdaKshortVertexFilter for S candidate",4000, 0,20);
+   histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass"] = m_fs->make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass; Kshort mass after LambdaKshortVertexFilter for S candidate",4000, 0,20);
+   histos_th1f[b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass", b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass; Lambda mass after LambdaKshortVertexFilter for anti S candidate",4000, 0,20);
+   histos_th1f[b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass", b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass; Kshort mass after LambdaKshortVertexFilter for anti S candidate",4000, 0,20);
   
+  //other kinematic quantities after the LambdaKshortVertexFilter 
+	//Lambda
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_pt_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_pt_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_pt_all; Lambda pt after the LambdaKshortVertexFilter; pT (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_p_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_p_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_p_all; Lambda p after the LambdaKshortVertexFilter; p (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_energy_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_energy_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_energy_all; Lambda energy after the LambdaKshortVertexFilter; E (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_et_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_et_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_et_all; Lambda transversal E after the LambdaKshortVertexFilter; eT (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_mt_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_mt_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_mt_all; Lambda transversal mass after the LambdaKshortVertexFilter; mT (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_phi_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_phi_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_phi_all; Lambda phi after the LambdaKshortVertexFilter; phi (rad) ",8000,-4,4);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_theta_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_theta_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_theta_all; Lambda theta after the LambdaKshortVertexFilter; theta (rad) ",800,-4,4);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_eta_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_eta_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_eta_all; Lambda eta after the LambdaKshortVertexFilter; eta ",800,-10,10);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vx_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vx_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vx_all; Lambda vx after the LambdaKshortVertexFilter; vx (cm) ",2000,-100,100);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vy_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vy_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vy_all; Lambda vy after the LambdaKshortVertexFilter; vy (cm) ",2000,-100,100);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vz_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vz_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vz_all; Lambda vz after the LambdaKshortVertexFilter; vz (cm) ",2000,-100,100);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vertexNormalizedChi2_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vertexNormalizedChi2_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vertexNormalizedChi2_all; Lambda vertex normalised Chi2 after the LambdaKshortVertexFilter ",1000, 0,100);
+	//Kshort
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_pt_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_pt_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_pt_all; Kshort pt after the KshortKshortVertexFilter; pT (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_p_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_p_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_p_all; Kshort p after the LambdaKshortVertexFilter; p (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_energy_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_energy_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_energy_all; Kshort energy after the LambdaKshortVertexFilter; E (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_et_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_et_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_et_all; Kshort transversal E after the LambdaKshortVertexFilter; eT (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_mt_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_mt_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_mt_all; Kshort transversal mass after the LambdaKshortVertexFilter; mT (GeV) ",4000,0,20);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_phi_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_phi_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_phi_all; Kshort phi after the LambdaKshortVertexFilter; phi (rad) ",8000,-4,4);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_theta_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_theta_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_theta_all; Kshort theta after the LambdaKshortVertexFilter; theta (rad) ",800,-4,4);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_eta_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_eta_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_eta_all; Kshort eta after the LambdaKshortVertexFilter; eta ",800,-10,10);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vx_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vx_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vx_all; Kshort vx after the LambdaKshortVertexFilter; vx (cm) ",2000,-100,100);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vy_all"]= m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vy_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vy_all; Kshort vy after the LambdaKshortVertexFilter; vy (cm) ",2000,-100,100);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vz_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vz_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vz_all; Kshort vz after the LambdaKshortVertexFilter; vz (cm) ",2000,-100,100);
+	histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vertexNormalizedChi2_all"] = m_fs->make<TH1F>(b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vertexNormalizedChi2_all", b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vertexNormalizedChi2_all; Kshort vertex normalised Chi2 after the LambdaKshortVertexFilter ",1000, 0,100);
+   
    //for angular correlation between Ks and L0 produced in the filters
    histos_th1f[b+"h_L0_Ks_delta_phi_Filters_Collection"]= m_fs->make<TH1F>(b+"h_L0_Ks_delta_phi_Filters_Collection",b+"h_L0_Ks_delta_phi_Filters_Collection; delta phi",1000,-4,4); 
    histos_th1f[b+"h_L0_Ks_delta_eta_Filters_Collection"]= m_fs->make<TH1F>(b+"h_L0_Ks_delta_eta_Filters_Collection",b+"h_L0_Ks_delta_eta_Filters_Collection; delta eta",4000,-10,10); 
@@ -80,12 +119,46 @@ void Analyzer_V0_angular_correlation::beginJob() {
   
    //for the s candidates after the massfilter
     
-   histos_th1f[b+"h_s_candidates_mass_after_massFilter"]= m_fs->make<TH1F>(b+"h_s_candidates_mass_after_massFilter",b+"h_s_candidates_mass_after_massFilter; r candidate mass (GeV);",40000,-200,200); 
-    
+   histos_th1f[b+"h_s_candidates_mass_after_massFilter"]= m_fs->make<TH1F>(b+"h_s_candidates_mass_after_massFilter",b+"h_s_candidates_mass_after_massFilter; S candidate mass (GeV);",40000,-200,200); 
+   histos_th1f[b+"h_s_candidates_pt_after_massFilter"] =  m_fs->make<TH1F>(b+"h_s_candidates_pt_after_massFilter",b+"h_s_candidates_pt_after_massFilter; S candidate pt (GeV);",40000,-200,200);
+   histos_th1f[b+"h_s_candidates_p_after_massFilter"] =  m_fs->make<TH1F>(b+"h_s_candidates_p_after_massFilter",b+"h_s_candidates_p_after_massFilter; S candidate p (GeV);",40000,-200,200);
+   histos_th1f[b+"h_s_candidates_energy_after_massFilter"]  =  m_fs->make<TH1F>(b+"h_s_candidates_energy_after_massFilter",b+"h_s_candidates_energy_after_massFilter; S candidate E (GeV);",20000,0,200);
+   histos_th1f[b+"h_s_candidates_et_after_massFilter"] =  m_fs->make<TH1F>(b+"h_s_candidates_et_after_massFilter",b+"h_s_candidates_et_after_massFilter; S candidate Et (GeV);",20000,0,200);
+   histos_th1f[b+"h_s_candidates_mt_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_mt_after_massFilter",b+"h_s_candidates_mt_after_massFilter; S candidate mt (GeV);",40000,-200,200);
+   histos_th1f[b+"h_s_candidates_phi_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_phi_after_massFilter",b+"h_s_candidates_phi_after_massFilter; S candidate phi (rad);",8000,-4,4);
+   histos_th1f[b+"h_s_candidates_theta_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_theta_after_massFilter",b+"h_s_candidates_theta_after_massFilter; S candidate theta (rad);",8000,-4,4);
+   histos_th1f[b+"h_s_candidates_eta_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_eta_after_massFilter",b+"h_s_candidates_eta_after_massFilter; S candidate eta;",800,-10,10);
+   histos_th1f[b+"h_s_candidates_vx_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_vx_after_massFilter",b+"h_s_candidates_vx_after_massFilter; S candidate vx (cm);",2000,-100,100);
+   histos_th1f[b+"h_s_candidates_vy_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_vy_after_massFilter",b+"h_s_candidates_vy_after_massFilter; S candidate vy (cm);",2000,-100,100);
+   histos_th1f[b+"h_s_candidates_vz_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_vz_after_massFilter",b+"h_s_candidates_vz_after_massFilter; S candidate vz (cm);",2000,-100,100);
+   histos_th1f[b+"h_s_candidates_vertexNormalizedChi2_after_massFilter"] = m_fs->make<TH1F>(b+"h_s_candidates_vertexNormalizedChi2_after_massFilter",b+"h_s_candidates_vertexNormalizedChi2_after_massFilter; S candidate vertex normalised Chi2;",1000,0,100);
+		
+   histos_th1f[b+"h_anti_s_candidates_mass_after_massFilter"]= m_fs->make<TH1F>(b+"h_anti_s_candidates_mass_after_massFilter",b+"h_anti_s_candidates_mass_after_massFilter; anti S candidate mass (GeV);",40000,-200,200); 
+   histos_th1f[b+"h_anti_s_candidates_pt_after_massFilter"] =  m_fs->make<TH1F>(b+"h_anti_s_candidates_pt_after_massFilter",b+"h_anti_s_candidates_pt_after_massFilter; anti S candidate pt (GeV);",40000,-200,200);
+   histos_th1f[b+"h_anti_s_candidates_p_after_massFilter"] =  m_fs->make<TH1F>(b+"h_anti_s_candidates_p_after_massFilter",b+"h_anti_s_candidates_p_after_massFilter; anti S candidate p (GeV);",40000,-200,200);
+   histos_th1f[b+"h_anti_s_candidates_energy_after_massFilter"]  =  m_fs->make<TH1F>(b+"h_anti_s_candidates_energy_after_massFilter",b+"h_anti_s_candidates_energy_after_massFilter; anti S candidate E (GeV);",20000,0,200);
+   histos_th1f[b+"h_anti_s_candidates_et_after_massFilter"] =  m_fs->make<TH1F>(b+"h_anti_s_candidates_et_after_massFilter",b+"h_anti_s_candidates_et_after_massFilter; anti S candidate Et (GeV);",20000,0,200);
+   histos_th1f[b+"h_anti_s_candidates_mt_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_mt_after_massFilter",b+"h_anti_s_candidates_mt_after_massFilter; anti S candidate mt (GeV);",40000,-200,200);
+   histos_th1f[b+"h_anti_s_candidates_phi_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_phi_after_massFilter",b+"h_anti_s_candidates_phi_after_massFilter; anti S candidate phi (rad);",8000,-4,4);
+   histos_th1f[b+"h_anti_s_candidates_theta_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_theta_after_massFilter",b+"h_anti_s_candidates_theta_after_massFilter; anti S candidate theta (rad);",8000,-4,4);
+   histos_th1f[b+"h_anti_s_candidates_eta_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_eta_after_massFilter",b+"h_anti_s_candidates_eta_after_massFilter; anti S candidate eta;",800,-10,10);
+   histos_th1f[b+"h_anti_s_candidates_vx_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_vx_after_massFilter",b+"h_anti_s_candidates_vx_after_massFilter; anti S candidate vx (cm);",2000,-100,100);
+   histos_th1f[b+"h_anti_s_candidates_vy_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_vy_after_massFilter",b+"h_anti_s_candidates_vy_after_massFilter; anti S candidate vy (cm);",2000,-100,100);
+   histos_th1f[b+"h_anti_s_candidates_vz_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_vz_after_massFilter",b+"h_anti_s_candidates_vz_after_massFilter; anti S candidate vz (cm);",2000,-100,100);
+   histos_th1f[b+"h_anti_s_candidates_vertexNormalizedChi2_after_massFilter"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_vertexNormalizedChi2_after_massFilter",b+"h_anti_s_candidates_vertexNormalizedChi2_after_massFilter; anti S candidate vertex normalised Chi2;",1000,0,100);
+		
 
+   //for the daughters of the s candidates after the massfilter
+/*
+   histos_th1f[b+"h_s_candidates_mass_after_massFilter_Lambda_mass"] = m_fs->make<TH1F>(b+"h_s_candidates_mass_after_massFilter_Lambda_mass",b+"h_s_candidates_mass_after_massFilter_Lambda_mass; Lambda mass in the S decay chain (GeV);",40000,-200,200);
+   histos_th1f[b+"h_s_candidates_mass_after_massFilter_Kshort_mass"] = m_fs->make<TH1F>(b+"h_s_candidates_mass_after_massFilter_Kshort_mass",b+"h_s_candidates_mass_after_massFilter_Kshort_mass; Kshort mass in the S decay chain (GeV);",40000,-200,200);
+   histos_th1f[b+"h_anti_s_candidates_mass_after_massFilter_Lambda_mass"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_mass_after_massFilter_Lambda_mass",b+"h_anti_s_candidates_mass_after_massFilter_Lambda_mass; Lambda mass in the anti S decay chain (GeV);",40000,-200,200);
+   histos_th1f[b+"h_anti_s_candidates_mass_after_massFilter_Kshort_mass"] = m_fs->make<TH1F>(b+"h_anti_s_candidates_mass_after_massFilter_Kshort_mass",b+"h_anti_s_candidates_mass_after_massFilter_Kshort_mass; Kshort mass in the anti S decay chain (GeV);",40000,-200,200);
+*/
    //for the r candidates after the massfilter
     
    histos_th1f[b+"h_r_candidates_mass_after_massFilter"]= m_fs->make<TH1F>(b+"h_r_candidates_mass_after_massFilter",b+"h_r_candidates_mass_after_massFilter; r candidate mass (GeV);",40000,-200,200); 
+   histos_th1f[b+"h_anti_r_candidates_mass_after_massFilter"]= m_fs->make<TH1F>(b+"h_anti_r_candidates_mass_after_massFilter",b+"h_anti_r_candidates_mass_after_massFilter; anti r candidate mass (GeV);",40000,-200,200); 
     
 }
 
@@ -241,6 +314,21 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
    //std::cout << "looping over the lambdas and kshorts together" << std::endl;
  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!STANDARD PLOT: ONLY THE CURRENT EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //h_lambdas and h_kshorts are the original lambda and kshort collections
+  std::cout << "running on h_Lambdas" << std::endl;
+  if(h_Lambdas.isValid()){
+	for (unsigned int l = 0; l < h_Lambdas->size(); ++l) {
+		histos_th1f[b+"h_Lambda_mass"]->Fill(h_Lambdas->at(l).mass());
+	}
+  }
+
+
+  std::cout << "running on h_Kshorts" << std::endl;
+  if(h_Kshorts.isValid()){
+	for (unsigned int k = 0; k < h_Kshorts->size(); ++k) {
+		histos_th1f[b+"h_Kshort_mass"]->Fill(h_Kshorts->at(k).mass());
+	}
+  }
 
   std::cout << "the lambdas and kshorts" << std::endl;
  if(h_Lambdas.isValid() && h_Kshorts.isValid()){
@@ -360,6 +448,45 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]->Fill(delta_phi);
                         histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta"]->Fill(delta_eta);
                         histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta"]->Fill(delta_phi,delta_eta);
+			
+			//masses of the daughters
+			histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass_all"]->Fill(h_sCands->at(i).daughter(0)->mass());
+                        histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass_all"]->Fill(h_sCands->at(i).daughter(1)->mass());	
+			if(h_sCands->at(i).charge()==1){
+			              histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass"]->Fill(h_sCands->at(i).daughter(0)->mass());
+			              histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass"]->Fill(h_sCands->at(i).daughter(1)->mass());
+			}
+			if(h_sCands->at(i).charge()==-1){
+			              histos_th1f[b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass"]->Fill(h_sCands->at(i).daughter(0)->mass());
+			              histos_th1f[b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass"]->Fill(h_sCands->at(i).daughter(1)->mass());
+			}
+			//other kinematic variables of the daughters
+			//Lambda
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_pt_all"]->Fill(h_sCands->at(i).daughter(0)->pt());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_p_all"]->Fill(h_sCands->at(i).daughter(0)->p());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_energy_all"]->Fill(h_sCands->at(i).daughter(0)->energy());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_et_all"]->Fill(h_sCands->at(i).daughter(0)->et());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_mt_all"]->Fill(h_sCands->at(i).daughter(0)->mt());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_phi_all"]->Fill(h_sCands->at(i).daughter(0)->phi());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_theta_all"]->Fill(h_sCands->at(i).daughter(0)->theta());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_eta_all"]->Fill(h_sCands->at(i).daughter(0)->eta());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vx_all"]->Fill(h_sCands->at(i).daughter(0)->vx());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vy_all"]->Fill(h_sCands->at(i).daughter(0)->vy());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vz_all"]->Fill(h_sCands->at(i).daughter(0)->vz());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_vertexNormalizedChi2_all"]->Fill(h_sCands->at(i).daughter(0)->vertexNormalizedChi2());
+			//Kshort
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_pt_all"]->Fill(h_sCands->at(i).daughter(1)->pt());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_p_all"]->Fill(h_sCands->at(i).daughter(1)->p());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_energy_all"]->Fill(h_sCands->at(i).daughter(1)->energy());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_et_all"]->Fill(h_sCands->at(i).daughter(1)->et());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_mt_all"]->Fill(h_sCands->at(i).daughter(1)->mt());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_phi_all"]->Fill(h_sCands->at(i).daughter(1)->phi());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_theta_all"]->Fill(h_sCands->at(i).daughter(1)->theta());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_eta_all"]->Fill(h_sCands->at(i).daughter(1)->eta());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vx_all"]->Fill(h_sCands->at(i).daughter(1)->vx());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vy_all"]->Fill(h_sCands->at(i).daughter(1)->vy());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vz_all"]->Fill(h_sCands->at(i).daughter(1)->vz());
+			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vertexNormalizedChi2_all"]->Fill(h_sCands->at(i).daughter(1)->vertexNormalizedChi2());
 		}
 
   }//end of sCands present
@@ -367,18 +494,65 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!make some distributions for the S and r candidates
   std::cout << "the rMassFilter" << std::endl;
   if((h_r_MassFilter).isValid()){
-  for (unsigned int r = 0; r < (*h_r_MassFilter).size(); ++r) {
-	
-	histos_th1f[b+"h_r_candidates_mass_after_massFilter"]->Fill((*h_r_MassFilter)[r].mass());
-  }
+  	for (unsigned int r = 0; r < (*h_r_MassFilter).size(); ++r) {
+		if((*h_r_MassFilter)[r].charge() == 1) histos_th1f[b+"h_r_candidates_mass_after_massFilter"]->Fill((*h_r_MassFilter)[r].mass());
+		if((*h_r_MassFilter)[r].charge() == -1) histos_th1f[b+"h_anti_r_candidates_mass_after_massFilter"]->Fill((*h_r_MassFilter)[r].mass());
+	}
   }
  
   std::cout << "the sMassFilter" << std::endl;
   if((h_s_MassFilter).isValid()){
-  for (unsigned int s = 0; s < (*h_s_MassFilter).size(); ++s) {
-	
-	histos_th1f[b+"h_s_candidates_mass_after_massFilter"]->Fill((*h_s_MassFilter)[s].mass());
-  }
+  	for (unsigned int s = 0; s < (*h_s_MassFilter).size(); ++s) {
+		
+		//mass plots of the S candidates. The charge is the charge of the proton in the decay chain, so a antiLambda would give an antiproton
+		std::cout << "getting the charge and the mass" << std::endl;
+		if((*h_s_MassFilter)[s].charge()==1){
+			histos_th1f[b+"h_s_candidates_mass_after_massFilter"]->Fill((*h_s_MassFilter)[s].mass());
+			histos_th1f[b+"h_s_candidates_pt_after_massFilter"]->Fill((*h_s_MassFilter)[s].pt());
+			histos_th1f[b+"h_s_candidates_p_after_massFilter"]->Fill((*h_s_MassFilter)[s].p());
+			histos_th1f[b+"h_s_candidates_energy_after_massFilter"]->Fill((*h_s_MassFilter)[s].energy());
+			histos_th1f[b+"h_s_candidates_et_after_massFilter"]->Fill((*h_s_MassFilter)[s].et());
+			histos_th1f[b+"h_s_candidates_mt_after_massFilter"]->Fill((*h_s_MassFilter)[s].mt());
+			histos_th1f[b+"h_s_candidates_phi_after_massFilter"]->Fill((*h_s_MassFilter)[s].phi());
+			histos_th1f[b+"h_s_candidates_theta_after_massFilter"]->Fill((*h_s_MassFilter)[s].theta());
+			histos_th1f[b+"h_s_candidates_eta_after_massFilter"]->Fill((*h_s_MassFilter)[s].eta());
+			histos_th1f[b+"h_s_candidates_vx_after_massFilter"]->Fill((*h_s_MassFilter)[s].vx());
+			histos_th1f[b+"h_s_candidates_vy_after_massFilter"]->Fill((*h_s_MassFilter)[s].vy());
+			histos_th1f[b+"h_s_candidates_vz_after_massFilter"]->Fill((*h_s_MassFilter)[s].vz());
+			histos_th1f[b+"h_s_candidates_vertexNormalizedChi2_after_massFilter"]->Fill((*h_s_MassFilter)[s].vertexNormalizedChi2());
+			
+			
+		}
+		if((*h_s_MassFilter)[s].charge()==-1){
+			histos_th1f[b+"h_anti_s_candidates_mass_after_massFilter"]->Fill((*h_s_MassFilter)[s].mass());
+			histos_th1f[b+"h_anti_s_candidates_pt_after_massFilter"]->Fill((*h_s_MassFilter)[s].pt());
+			histos_th1f[b+"h_anti_s_candidates_p_after_massFilter"]->Fill((*h_s_MassFilter)[s].p());
+			histos_th1f[b+"h_anti_s_candidates_energy_after_massFilter"]->Fill((*h_s_MassFilter)[s].energy());
+			histos_th1f[b+"h_anti_s_candidates_et_after_massFilter"]->Fill((*h_s_MassFilter)[s].et());
+			histos_th1f[b+"h_anti_s_candidates_mt_after_massFilter"]->Fill((*h_s_MassFilter)[s].mt());
+			histos_th1f[b+"h_anti_s_candidates_phi_after_massFilter"]->Fill((*h_s_MassFilter)[s].phi());
+			histos_th1f[b+"h_anti_s_candidates_theta_after_massFilter"]->Fill((*h_s_MassFilter)[s].theta());
+			histos_th1f[b+"h_anti_s_candidates_eta_after_massFilter"]->Fill((*h_s_MassFilter)[s].eta());
+			histos_th1f[b+"h_anti_s_candidates_vx_after_massFilter"]->Fill((*h_s_MassFilter)[s].vx());
+			histos_th1f[b+"h_anti_s_candidates_vy_after_massFilter"]->Fill((*h_s_MassFilter)[s].vy());
+			histos_th1f[b+"h_anti_s_candidates_vz_after_massFilter"]->Fill((*h_s_MassFilter)[s].vz());
+			histos_th1f[b+"h_anti_s_candidates_vertexNormalizedChi2_after_massFilter"]->Fill((*h_s_MassFilter)[s].vertexNormalizedChi2());
+		
+		}
+		
+		//THE BELOW DOES NOT WORK: I CANNOT ACCESS THE DAUGHTERS OF THESE S CANDIDATES, I GET A product not found exception. ALTHOUGH THE DAUGHTERS ARE PUT INSIDE IN THE massfilter...
+		//some plots for the S particle daughters: the first added daughter is the Lamda, the second is the Kshort (look at LambdaKshortVertexFilter.cc for this)
+/*		if((*h_s_MassFilter)[s].charge()==1){
+			const reco::Candidate *daughter0 = (*h_s_MassFilter)[s].daughter(0); 
+			histos_th1f[b+"h_s_candidates_mass_after_massFilter_Lambda_mass"]->Fill((*h_s_MassFilter)[s].daughter(0)->mass());
+			histos_th1f[b+"h_s_candidates_mass_after_massFilter_Kshort_mass"]->Fill((*h_s_MassFilter)[s].daughter(1)->mass());
+		}
+		if((*h_s_MassFilter)[s].charge()==-1){
+			histos_th1f[b+"h_anti_s_candidates_mass_after_massFilter_Lambda_mass"]->Fill((*h_s_MassFilter)[s].daughter(0)->mass());
+			histos_th1f[b+"h_anti_s_candidates_mass_after_massFilter_Kshort_mass"]->Fill((*h_s_MassFilter)[s].daughter(1)->mass());
+		}
+*/
+	}
   }
 
 

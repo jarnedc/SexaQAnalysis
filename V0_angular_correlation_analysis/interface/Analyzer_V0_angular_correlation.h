@@ -43,7 +43,7 @@ using namespace std;
 #include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
 #include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
 #include "DataFormats/Math/interface/deltaPhi.h"
-
+#include "DataFormats/Candidate/interface/Candidate.h"
 //vectors to save data accross events
     static vector<double> v_L0_phi;
     static vector<double> v_L0_eta;

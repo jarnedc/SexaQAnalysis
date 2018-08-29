@@ -7,5 +7,6 @@
 <use name="HLTrigger/HLTcore"/>
 <use name="CommonTools/Utils"/>
 <use name="DataFormats/TrackReco"/>
+<use name="DataFormats/Candidate"/>
 <use name="RecoVertex/PrimaryVertexProducer"/>
 <flags EDM_PLUGIN="1"/>
