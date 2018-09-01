@@ -104,6 +104,11 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::InputTag m_nlambdasTag;
     edm::InputTag m_nmuonsTag;
     edm::InputTag m_ntracksTag;
+    edm::InputTag m_HTTag;
+    edm::InputTag m_TKHTTag;
+    edm::InputTag m_TwoTopJetsTag;
+    edm::InputTag m_METTag;
+    edm::InputTag m_TKMETTag;
  
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
@@ -117,6 +122,7 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCollectionMassFilterToken;
     edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCollectionMassFilterToken;
     
+    //from the initialproducer 
     edm::EDGetTokenT<vector<int> > m_nPVsToken;
     edm::EDGetTokenT<vector<int> > m_nelectronsToken;
     edm::EDGetTokenT<vector<int> > m_njetsToken;
@@ -124,6 +130,13 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::EDGetTokenT<vector<int> > m_nlambdasToken;
     edm::EDGetTokenT<vector<int> > m_nmuonsToken;
     edm::EDGetTokenT<vector<int> > m_ntracksToken;
+    edm::EDGetTokenT<vector<double> > m_HTToken;
+    edm::EDGetTokenT<vector<double> > m_TKHTToken;
+    edm::EDGetTokenT<vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > > m_TwoTopJetsToken;
+    edm::EDGetTokenT<vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > > m_METToken;
+    edm::EDGetTokenT<vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> > > m_TKMETToken;
+
+    
     
 
 

@@ -19,6 +19,11 @@ Analyzer_V0_angular_correlation::Analyzer_V0_angular_correlation(edm::ParameterS
   m_nlambdasTag(pset.getParameter<edm::InputTag>("nlambdasCollection")),
   m_nmuonsTag(pset.getParameter<edm::InputTag>("nmuonsCollection")),
   m_ntracksTag(pset.getParameter<edm::InputTag>("ntracksCollection")),
+  m_HTTag(pset.getParameter<edm::InputTag>("HTCollection")),
+  m_TKHTTag(pset.getParameter<edm::InputTag>("TKHTCollection")),
+  m_TwoTopJetsTag(pset.getParameter<edm::InputTag>("TwoTopJetsCollection")),
+  m_METTag(pset.getParameter<edm::InputTag>("METCollection")),
+  m_TKMETTag(pset.getParameter<edm::InputTag>("TKMETCollection")),
   //m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
   //m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag)),
   m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag)),
@@ -34,7 +39,12 @@ Analyzer_V0_angular_correlation::Analyzer_V0_angular_correlation(edm::ParameterS
   m_nkshortsToken(consumes<vector<int>>(m_nkshortsTag)),
   m_nlambdasToken(consumes<vector<int>>(m_nlambdasTag)),
   m_nmuonsToken(consumes<vector<int>>(m_nmuonsTag)),
-  m_ntracksToken(consumes<vector<int>>(m_ntracksTag))
+  m_ntracksToken(consumes<vector<int>>(m_ntracksTag)),
+  m_HTToken(consumes<vector<double>>(m_HTTag)),
+  m_TKHTToken(consumes<vector<double>>(m_TKHTTag)),
+  m_TwoTopJetsToken(consumes<vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> >>>(m_TwoTopJetsTag)),
+  m_METToken(consumes<vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> >>>(m_METTag)),
+  m_TKMETToken(consumes<vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag>>>(m_TKMETTag))
 
 
 {
@@ -52,7 +62,15 @@ void Analyzer_V0_angular_correlation::beginJob() {
     histos_th1f[b+"h_h_nlambdas"]= m_fs->make<TH1F>(b+"h_h_nlambdas",b+"h_h_nlambdas; nlambdas",1000,0,1000);
     histos_th1f[b+"h_h_nmuons"]= m_fs->make<TH1F>(b+"h_h_nmuons",b+"h_h_nmuons; nmuons",1000,0,1000);
     histos_th1f[b+"h_h_ntracks"]= m_fs->make<TH1F>(b+"h_h_ntracks",b+"h_h_ntracks; ntracks",1000,0,1000);
+  
+    histos_th1f[b+"h_h_TKMET_pT"]= m_fs->make<TH1F>(b+"h_h_TKMET_pT",b+"h_h_TKMET_pT; ",2000,-1000,1000);
+    histos_th1f[b+"h_h_MET_pT"]= m_fs->make<TH1F>(b+"h_h_MET_pT",b+"h_h_MET_pT; ",2000,-1000,1000);
+    histos_th1f[b+"h_h_TwoTopJets_pT_0"]= m_fs->make<TH1F>(b+"h_h_TwoTopJets_pT_0",b+"h_h_TwoTopJets_pT_0; ",2000,-1000,1000);
+    histos_th1f[b+"h_h_TwoTopJets_pT_1"]= m_fs->make<TH1F>(b+"h_h_TwoTopJets_pT_1",b+"h_h_TwoTopJets_pT_1; ",2000,-1000,1000);
+    histos_th1f[b+"h_h_HT"]= m_fs->make<TH1F>(b+"h_h_HT",b+"h_h_HT; ",5000,0,5000);
+    histos_th1f[b+"h_h_TKHT"]= m_fs->make<TH1F>(b+"h_h_TKHT",b+"h_h_TKHT; ",5000,0,5000);
 
+    
   
 //  histos_th1f[b+"nPV"]      = m_fs->make<TH1F>(b+"nPV",     a+" Number of PV; #PVs",60,0.,60);
    //masses from the original kshort and lambda collection
@@ -201,6 +219,21 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   iEvent.getByToken(m_ntracksToken, h_ntracks);
 
 
+  edm::Handle <vector<ROOT::Math::DisplacementVector3D<ROOT::Math::Cartesian3D<double>,ROOT::Math::DefaultCoordinateSystemTag> > > h_TKMET;
+  iEvent.getByToken(m_TKMETToken, h_TKMET);
+
+  edm::Handle <vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > >h_MET;
+  iEvent.getByToken(m_METToken, h_MET);
+
+  edm::Handle <vector<ROOT::Math::LorentzVector<ROOT::Math::PxPyPzE4D<double> > > > h_TwoTopJets;
+  iEvent.getByToken(m_TwoTopJetsToken, h_TwoTopJets);
+
+  edm::Handle <vector<double> > h_HT;
+  iEvent.getByToken(m_HTToken, h_HT);
+
+  edm::Handle <vector<double> > h_TKHT;
+  iEvent.getByToken(m_TKHTToken, h_TKHT);
+
   //lambdaKshortVertexFilter sexaquark candidates
   edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
   iEvent.getByToken(m_sCandsToken, h_sCands);
@@ -230,43 +263,6 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   iEvent.getByToken(m_rCollectionMassFilterToken, h_r_MassFilter);
 
 
-
-/*
-  if(!h_rCands.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_rCandsTag << " ... skip entry !" << endl;
-    return;
-  }
-*/
-/*
-  if(!h_Lambdas.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_LambdasTag << " ... skip entry !" << endl;
-    return;
-  }
-  
-  if(!h_Kshorts.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_KshortsTag << " ... skip entry !" << endl;
-    return;
-  }
-  if(!h_Lambdas_LambdaKshortFilter.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_LambdasLambdaKshortFilterTag << " ... skip entry !" << endl;
-    return;
-  }
-  if(!h_Kshorts_LambdaKshortFilter.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_KshortsLambdaKshortFilterTag << " ... skip entry !" << endl;
-    return;
-  }
-
-  if(!h_s_MassFilter.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_sCollectionMassFilterTag << " ... skip entry !" << endl;
-    return;
-  }
-
-  if(!h_r_MassFilter.isValid()) {
-    if(verbose>0) cout << "Missing collection : " << m_rCollectionMassFilterTag << " ... skip entry !" << endl;
-    return;
-  }
- */ 
-  
   //do stuff with the scalars produced in the filters
   std::cout << "the scalars" << std::endl;
 
@@ -278,6 +274,12 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
  if(h_nmuons.isValid() && h_nmuons->size() > 0)			histos_th1f[b+"h_h_nmuons"]->Fill(h_nmuons->at(0));
 // if(h_ntracks.isValid() && h_ntracks->size() > 0)		histos_th1f[b+"h_h_tracks"]->Fill(h_ntracks->at(0));
 
+ if(h_TKMET.isValid() && h_TKMET->size() > 0){			histos_th1f[b+"h_h_TKMET_pT"]->Fill(pow(h_TKMET->at(0).X()*h_TKMET->at(0).X()+h_TKMET->at(0).Y()*h_TKMET->at(0).Y(),0.5)); cout << "TKMET x and y component: " << h_TKMET->at(0).X() << " " << h_TKMET->at(0).Y() << endl; }
+ if(h_MET.isValid() && h_MET->size() > 0)			histos_th1f[b+"h_h_MET_pT"]->Fill(h_MET->at(0).pt());
+ if(h_TwoTopJets.isValid() && h_TwoTopJets->size() > 0)		histos_th1f[b+"h_h_TwoTopJets_pT_0"]->Fill(h_TwoTopJets->at(0).pt()); 
+ if(h_TwoTopJets.isValid() && h_TwoTopJets->size() > 0)		histos_th1f[b+"h_h_TwoTopJets_pT_1"]->Fill(h_TwoTopJets->at(1).pt()); 
+ if(h_HT.isValid() && h_HT->size() > 0)				histos_th1f[b+"h_h_HT"]->Fill(h_HT->at(0));
+ if(h_TKHT.isValid() && h_TKHT->size() > 0)			histos_th1f[b+"h_h_TKHT"]->Fill(h_TKHT->at(0));
 
  
   std::cout << "LambdaKshortfilter" << std::endl;

@@ -25,6 +25,13 @@ Analyzer_V0_angular_correlation = cms.EDAnalyzer('Analyzer_V0_angular_correlatio
     nlambdasCollection = cms.InputTag("InitialProducer","nlambdas","SEXAQ"),
     nmuonsCollection = cms.InputTag("InitialProducer","nmuons","SEXAQ"),
     ntracksCollection = cms.InputTag("InitialProducer","ntracks","SEXAQ"),
+    HTCollection = cms.InputTag("InitialProducer","HT","SEXAQ"),
+    TKHTCollection = cms.InputTag("InitialProducer","TKHT","SEXAQ"),
+    TwoTopJetsCollection = cms.InputTag("InitialProducer","TwoTopJets","SEXAQ"),
+    METCollection = cms.InputTag("InitialProducer","MET","SEXAQ"),
+    TKMETCollection = cms.InputTag("InitialProducer","TKMET","SEXAQ"),
+    
+
     #sCollection = cms.InputTag("lambdaKshortVertexFilter","Sparticles","SEXAQ"),
     #sTrackCollection = cms.InputTag("lambdaKshortVertexFilter","sParticlesTracks","SEXAQ"),
     #triggerName = cms.vstring('HLT_DiCentralPFJet170_v1'),
