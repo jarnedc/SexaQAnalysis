@@ -74,8 +74,8 @@ class InitialProducer : public edm::stream::EDProducer<> {
       edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > kshortCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::Vertex> > offlinePrimaryVerticesCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::PFJet> > ak4PFJetsCollectionToken_;
-      edm::EDGetTokenT<std::vector<reco::Muon> > muonsCollectionToken_;
-      edm::EDGetTokenT<edm::ValueMap<edm::Ptr<reco::PFCandidate> >> electronsCollectionToken_;
+      edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate> > > muonsCollectionToken_;
+      edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate>>> electronsCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::PFMET>  > METCollectionToken_;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
@@ -118,8 +118,8 @@ METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
    kshortCollectionToken_ = consumes<std::vector<reco::VertexCompositeCandidate> >(kshortCollectionTag_);
    offlinePrimaryVerticesCollectionToken_ = consumes<std::vector<reco::Vertex> >(offlinePrimaryVerticesCollectionTag_);
    ak4PFJetsCollectionToken_ = consumes<std::vector<reco::PFJet> >(ak4PFJetsCollectionTag_);
-   muonsCollectionToken_ = consumes<std::vector<reco::Muon> >(muonsCollectionTag_);
-   electronsCollectionToken_ = consumes<edm::ValueMap<edm::Ptr<reco::PFCandidate> > >(electronsCollectionTag_);
+   muonsCollectionToken_ = consumes<std::vector<edm::FwdPtr<reco::PFCandidate> > >(muonsCollectionTag_);
+   electronsCollectionToken_ = consumes<std::vector<edm::FwdPtr<reco::PFCandidate> > >(electronsCollectionTag_);
    METCollectionToken_ = consumes<std::vector<reco::PFMET> >(METCollectionTag_);
    produces<std::vector<int>>("ntracks");
    produces<std::vector<int>>("nlambdas");
@@ -129,8 +129,8 @@ METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
    produces<std::vector<reco::Particle::LorentzVector>>("TwoTopJets");
    produces<std::vector<int>>("nmuons");
    produces<std::vector<int>>("nelectrons");
-   produces<std::vector<int>>("HT");
-   produces<std::vector<int>>("TKHT");
+   produces<std::vector<double>>("HT");
+   produces<std::vector<double>>("TKHT");
    produces<std::vector<LorentzVector>>("MET");
    produces<std::vector<math::XYZVector>>("TKMET");
   
@@ -229,12 +229,12 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   highestMomentJetsLorentzVectors->push_back(TwoTopJets->at(1).p4());
   iEvent.put(std::move(highestMomentJetsLorentzVectors), "TwoTopJets");
 
-  auto HT = std::make_unique<std::vector<int>>();
+  auto HT = std::make_unique<std::vector<double>>();
   HT->push_back(sumJetpT);
   iEvent.put(std::move(HT), "HT");
 
   //nmuons part
-  edm::Handle<std::vector<reco::Muon> > h_muons;
+  edm::Handle<std::vector<edm::FwdPtr<reco::PFCandidate>> > h_muons;
   iEvent.getByToken(muonsCollectionToken_, h_muons);
   if(!h_muons.isValid()) {
       std::cout << "Missing collection during InitialProducer : " << muonsCollectionTag_ << " ... skip entry !" << std::endl;
@@ -244,7 +244,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   iEvent.put(std::move(nmuons), "nmuons");
 
   //nelectrons part
-  edm::Handle<edm::ValueMap<edm::Ptr<reco::PFCandidate> > > h_electrons;
+  edm::Handle<std::vector<edm::FwdPtr<reco::PFCandidate>> > h_electrons;
   iEvent.getByToken(electronsCollectionToken_, h_electrons);
   if(!h_electrons.isValid()) {
       std::cout << "Missing collection during InitialProducer : " << electronsCollectionTag_ << " ... skip entry !" << std::endl;
@@ -276,7 +276,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   TKMET->push_back(sumTK);
   iEvent.put(std::move(TKMET), "TKMET");
 
-  auto TKHT = std::make_unique<std::vector<int>>();
+  auto TKHT = std::make_unique<std::vector<double>>();
   TKHT->push_back(sumTrackpT);
   iEvent.put(std::move(TKHT), "TKHT");
 
