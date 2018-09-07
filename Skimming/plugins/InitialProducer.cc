@@ -75,7 +75,7 @@ class InitialProducer : public edm::stream::EDProducer<> {
       edm::EDGetTokenT<std::vector<reco::Vertex> > offlinePrimaryVerticesCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::PFJet> > ak4PFJetsCollectionToken_;
       edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate> > > muonsCollectionToken_;
-      edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate>>> electronsCollectionToken_;
+      edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate> > > electronsCollectionToken_;
       edm::EDGetTokenT<std::vector<reco::PFMET>  > METCollectionToken_;
       virtual void beginStream(edm::StreamID) override;
       virtual void produce(edm::Event&, const edm::EventSetup&) override;
