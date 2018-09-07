@@ -81,8 +81,9 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     int m_nEvent, m_nRun, m_nLumi;
     
     edm::Service<TFileService> m_fs;
-    
+ 
     edm::InputTag m_bsTag;
+    edm::InputTag m_genParticlesTag;
     edm::InputTag m_vertexTag;
     //edm::InputTag m_rCandsTag;
     edm::InputTag m_sCandsTag;
@@ -111,6 +112,7 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     edm::InputTag m_TKMETTag;
  
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
+    edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken;
     edm::EDGetTokenT<vector<reco::Vertex> > m_vertexToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_rCandsToken;
     //edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > m_sCandsToken;
@@ -142,7 +144,7 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
 
     int verbose=1;
     
-    TString a = "SingleMuon_2016_MultiCrab"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
+    TString a = "SingleMuon_2016_runG"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
     TString b = a + "_";
     
     //--------- Histogram Declaration --------------------//
