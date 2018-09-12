@@ -423,6 +423,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
   //do stuff with the scalars produced in the filters
 
+cout << "-6" << endl; 
  if(h_nPVs.isValid() && h_nPVs->size() > 0)  		 	histos_th1f[b+"h_h_nPVs"]->Fill(h_nPVs->at(0));
  if(h_nelectrons.isValid() && h_nelectrons->size() > 0 )	histos_th1f[b+"h_h_nelectrons"]->Fill(h_nelectrons->at(0));
  if(h_njets.isValid() && h_njets->size() > 0)			histos_th1f[b+"h_h_njets"]->Fill(h_njets->at(0));
@@ -438,6 +439,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
  if(h_HT.isValid() && h_HT->size() > 0)				histos_th1f[b+"h_h_HT"]->Fill(h_HT->at(0));
  if(h_TKHT.isValid() && h_TKHT->size() > 0)			histos_th1f[b+"h_h_TKHT"]->Fill(h_TKHT->at(0));
 
+cout << "-5" << endl; 
  
   //do stuff with the collections produced in the filters
   if(h_Lambdas_LambdaKshortFilter.isValid() && h_Kshorts_LambdaKshortFilter.isValid()){
@@ -462,6 +464,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
    	}
   }
   }
+cout << "-4" << endl; 
 /*
   for(unsigned int l = 0; l < h_Lambdas_LambdaKshortFilter->size(); ++l){
         for(unsigned int k = 0; k < h_Kshorts_LambdaKshortFilter->size(); ++k){
@@ -475,10 +478,12 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   if(h_Lambdas.isValid()){
 	for (unsigned int l = 0; l < h_Lambdas->size(); ++l) {
 		histos_th1f[b+"h_Lambda_mass"]->Fill(h_Lambdas->at(l).mass());
+		
+cout << "-4.1" << endl; 
 
-
-		if(h_genParticles.isValid())
+		if(h_genParticles.isValid() )
 		{
+cout << "-4.2" << endl; 
 			//the 1th gen particle is always the Labda particle which corresponds to the S here
 			histos_th1f[b+"h_genPartices_Lambda_origV0_pdgId"]->Fill(h_genParticles->at(1).pdgId());
 			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_pt"]->Fill(h_genParticles->at(1).pt()-h_Lambdas->at(l).pt());
@@ -494,12 +499,12 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			double error_vx = h_Lambdas->at(l).vertexCovariance(0,0);
 			double error_vy = h_Lambdas->at(l).vertexCovariance(1,1);
 			
-			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vx"]->Fill(h_genParticles->at(1).vx()-h_Lambdas->at(l).vx());
-			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vy"]->Fill(h_genParticles->at(1).vy()-h_Lambdas->at(l).vy());
-			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vz"]->Fill(h_genParticles->at(1).vz()-h_Lambdas->at(l).vz());
+			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vx"]->Fill(diff_vx);
+			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vy"]->Fill(diff_vy);
+			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vz"]->Fill(diff_vz);
 
-			histos_th2f[b+"h_genPartices_Lambda_origV0_pt_diff_vx"]->Fill(h_genParticles->at(1).pt() ,h_genParticles->at(1).vx()-h_Lambdas->at(l).vx());
-			histos_th2f[b+"h_genPartices_Lambda_origV0_diff_vx_error_vx"]->Fill(abs(h_genParticles->at(1).vx()-h_Kshorts->at(l).vx()), h_Kshorts->at(l).vertexCovariance(0,0));
+			histos_th2f[b+"h_genPartices_Lambda_origV0_pt_diff_vx"]->Fill(h_genParticles->at(1).pt() , diff_vx);
+			histos_th2f[b+"h_genPartices_Lambda_origV0_diff_vx_error_vx"]->Fill(abs(diff_vx), h_Lambdas->at(l).vertexCovariance(0,0));
 			
 			histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vx"]->Fill(diff_vx);
 			if(error_vx<0.01) histos_th1f[b+"h_genPartices_Lambda_origV0_diff_vx_error_vx_smaller_0.01"]->Fill(diff_vx);
@@ -515,12 +520,11 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 	}
   }
 
-
   if(h_Kshorts.isValid()){
 	for (unsigned int k = 0; k < h_Kshorts->size(); ++k) {
 		histos_th1f[b+"h_Kshort_mass"]->Fill(h_Kshorts->at(k).mass());
 		
-		if(h_genParticles.isValid())
+		if(h_genParticles.isValid() )
 		{
 			//the 2th gen particle is always the Kshort particle which corresponds to the S here
 			histos_th1f[b+"h_genPartices_Kshort_origV0_pdgId"]->Fill(h_genParticles->at(2).pdgId());
@@ -552,6 +556,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
 	}
   }
+cout << "-3" << endl; 
 
  if(h_Lambdas.isValid() && h_Kshorts.isValid()){
  for (unsigned int l = 0; l < h_Lambdas->size(); ++l) { //loop over reco V0 Lambdas
@@ -582,12 +587,14 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
  }
  }
 
+cout << "-2" << endl; 
 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!COMPARE THE PREVIOUS EVENT WITH THE CURRENT EVENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   bool emptyVectors = false;
   if(v_L0_phi.empty() && v_L0_eta.empty() && v_Ks_phi.empty() && v_Ks_eta.empty()) emptyVectors = true;//this means they have been cleared in the previous event or it is the first event
 
   
+cout << "-1" << endl; 
   if(h_Lambdas.isValid()){
   for (unsigned int i = 0; i < h_Lambdas->size(); ++i) { //loop over reco V0 Lambdas
   	if(emptyVectors){//just save the data if there is no data in these vectrors, make the histogram in the next event
@@ -611,6 +618,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   }//end loop over lambda
   }
   
+cout << "-0.5" << endl; 
   if(h_Kshorts.isValid()){
   for (unsigned int i = 0; i < h_Kshorts->size(); ++i) { //loop over reco Kshorts
  	 if(emptyVectors){
@@ -636,6 +644,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   }// end loop over Kshort
  }
 
+cout << "-0.2" << endl; 
 
   if(!emptyVectors){
 	v_L0_phi.clear();
@@ -644,12 +653,13 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 	v_Ks_eta.clear();
   } 
 
+cout << "0" << endl; 
 
  //make some distributions for the gen particles
  //
  std::cout << "-------------------------" << std::endl;
  std::cout << "starting the genParticles" << std::endl;
- if(h_genParticles.isValid()){
+ if(h_genParticles.isValid() ){
  	std::cout << "genparticles valid" << std::endl;
 	for(unsigned int i = 0; i < h_genParticles->size(); ++i){
  			std::cout << "running on gen particle:" << i << std::endl;
@@ -661,8 +671,8 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			string particle_name ="";
 			if(pdgId == 13324) particle_name = "Xi1820";
 			else if(pdgId == 3122) particle_name = "Lambda";
-			else if(pdgId == -311) particle_name = "Kshort";
-			if(pdgId == 13324 || pdgId == 3122 ||pdgId == -311){
+			else if(pdgId == -310) particle_name = "Kshort";
+			if(pdgId == 13324 || pdgId == 3122 ||pdgId == -310){
 				histos_th1f[b+"h_genParticles_"+particle_name+"_pt_all"]->Fill(h_genParticles->at(i).pt());
 				histos_th1f[b+"h_genParticles_"+particle_name+"_p_all"]->Fill(h_genParticles->at(i).p());
 				histos_th1f[b+"h_genParticles_"+particle_name+"_energy_all"]->Fill(h_genParticles->at(i).energy());
@@ -680,7 +690,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
  }
 
  //!!!!!!!!!!!!!!!!!!!!!!!!!!!make the same distribution but for the S candidates (if they are there, they are only there if they ran through the 2nd filter)!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- 
+cout << "1" << endl; 
   if(h_sCands.isValid()) {
 	unsigned int n_sCands = h_sCands->size();
 	for (unsigned int i = 0; i < n_sCands; ++i) { //loop over reco Kshorts	
@@ -767,7 +777,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Kshort_vertexNormalizedChi2_all"]->Fill(h_sCands->at(i).daughter(1)->vertexNormalizedChi2());
 
 
-			if(h_genParticles.isValid())
+			if(h_genParticles.isValid()  )
 			{
 				//the 1th gen particle is always the Labda particle which corresponds to the S here
 				histos_th1f[b+"h_genPartices_Lambda_diff_pdgId"]->Fill(h_genParticles->at(1).pdgId());
@@ -792,6 +802,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 	}
   }//end of sCands present
 
+cout << "2" << endl; 
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!make some distributions for the S and r candidates
   if((h_r_MassFilter).isValid()){
   	for (unsigned int r = 0; r < (*h_r_MassFilter).size(); ++r) {
@@ -800,6 +811,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 	}
   }
  
+cout << "3" << endl; 
   if((h_s_MassFilter).isValid()){
   	for (unsigned int s = 0; s < (*h_s_MassFilter).size(); ++s) {
 		
@@ -838,7 +850,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 		
 		}
 
-		if(h_genParticles.isValid())
+		if(h_genParticles.isValid() )
 		{
 			//the 0th gen particle is always the Xi particle which corresponds to the S here
 			histos_th1f[b+"h_genPartices_Scands_pdgId"]->Fill(h_genParticles->at(0).pdgId());
@@ -868,6 +880,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   }
 
 
+cout << "3" << endl; 
 } //end of analyzer
 
 

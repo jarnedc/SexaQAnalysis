@@ -130,6 +130,9 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
   // get the vector sizes before they disappear when putting in the event
   unsigned int nl = lambdas->size(), nk = kshorts->size();
 
+  iEvent.put(std::move(lambdas),"lambda");
+  iEvent.put(std::move(kshorts),"kshort");
+
   // throw away events on data without sufficient lambdas or kshorts
   if (nl < minNrLambda_ || nk < minNrKshort_) {
     ++nreject_;
@@ -157,8 +160,6 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
   }
 */
 
-  iEvent.put(std::move(lambdas),"lambda");
-  iEvent.put(std::move(kshorts),"kshort");
 
    return true;
 
