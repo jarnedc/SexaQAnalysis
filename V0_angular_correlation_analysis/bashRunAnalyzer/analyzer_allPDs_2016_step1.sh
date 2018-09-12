@@ -1,7 +1,6 @@
 #!/bin/bash
 
 CMSSW_DIR=/user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/
-CMSSW_CONFIG_FILE=$CMSSW_DIR/src/V0_angular_correlation_analysis/test/analyzer_AOD_cfg_test.py
 
 source $VO_CMS_SW_DIR/cmsset_default.sh
 # shopt -s expand_aliases is needed if you want to use the alias 'cmsenv' created by $VO_CMS_SW_DIR/cmsset_default.sh instead of the less mnemonic eval `scramv1 runtime -sh`
@@ -41,7 +40,7 @@ do
 
 		bare_filename1=$(basename $filename) 
 		bare_filename2="${bare_filename1%%.*}"
-		qsub ${pwd_name}/analyzer_allPDs_2016_step2.sh -v INPUT_ROOTFILE="file://$filename",OUTPUT_ROOTFILE="${pwd_name}/Results/analyzed_${bare_filename2}_${PARTS}.root",OUT_TXT="${pwd_name}/Results/out_${bare_filename2}_${PARTS}.txt",ERROR_TXT="${pwd_name}/Results/error_${bare_filename2}_${PARTS}.txt" 
+		qsub ${pwd_name}/analyzer_allPDs_2016_step2.sh -v INPUT_ROOTFILE="file://$filename",OUTPUT_ROOTFILE="${pwd_name}/Results/${PART1}/analyzed_${bare_filename2}_${PARTS}.root",OUT_TXT="${pwd_name}/Results/${PART1}/out_${bare_filename2}_${PARTS}.txt",ERROR_TXT="${pwd_name}/Results/${PART1}/error_${bare_filename2}_${PARTS}.txt" 
 
 	fi
     done

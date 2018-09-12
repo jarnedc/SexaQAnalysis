@@ -84,13 +84,13 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
           if (overlap) break;
         }
         if (!overlap) kshorts->push_back(std::move(kptr));
+      //  kshorts->push_back(std::move(kptr));
       }
     }
 
 
   // if not data, then select on gen particles
   } else {
-
 
     // read out genparticles
     edm::Handle<std::vector<reco::GenParticle> > h_genparts;
