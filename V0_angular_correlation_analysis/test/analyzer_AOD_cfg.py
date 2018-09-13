@@ -74,7 +74,7 @@ process.source = cms.Source("PoolSource",
 #		*tupleOfFiles #the * is to unpack the tuple of filenames
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
 
-      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/events_skimmed.root'
+      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/events_skimmed_Xi1820.root'
 #      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/V0_correlation_ZeroBias_single_file.root',
 
 		
@@ -93,5 +93,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('analysed_SingleMuon_LambdaKshort_correlation_onlyFirstFilter_new_Producer_single_file_put_after_cut_n_particles.root')
+    fileName = cms.string('analysed_events_skimmed_Xi1820.root')
 )

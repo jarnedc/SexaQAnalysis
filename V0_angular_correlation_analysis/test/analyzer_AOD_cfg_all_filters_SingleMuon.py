@@ -44,7 +44,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 #SingleMuon
 rangeOfStrings=[str(i) for i in range(1,295)] #1 to 148, normal range is 1 to 148, but the run over the events with only the LambdaKshortFilter gets killed all the time so to have comparable data also limit here
-tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180730_181549/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
+tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G/180505_032403/0000/events_skimmed_' + x + '.root' for x in rangeOfStrings])
 
 #zero bias
 #rangeOfStrings=[str(i) for i in range(1,500)] #1 to 500
@@ -71,11 +71,12 @@ tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/Single
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-		*tupleOfFiles #the * is to unpack the tuple of filenames
+#		*tupleOfFiles #the * is to unpack the tuple of filenames
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
 
 #      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/MC_events_skimmed.root',
 #      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/V0_correlation_ZeroBias_single_file.root',
+      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/events_skimmed.root',
 
 		
     )
@@ -93,5 +94,5 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('analysed_SingleMuon_LambdaKshort_correlation_allFilters_file1to295_180730_181549.root')
+    fileName = cms.string('analysed_Xi1820_4k_decay_length_5cm.root')
 )

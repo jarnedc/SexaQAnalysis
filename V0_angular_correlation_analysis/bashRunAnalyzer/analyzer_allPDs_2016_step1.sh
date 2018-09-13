@@ -10,10 +10,13 @@ shopt -s expand_aliases
 pwd_name=$(echo $PWD)
 echo "${pwd_name}"
 mkdir Results/"$1"
-mkdir Results/"$1"/analyzed_root_files
-mkdir Results/"$1"/error_txt_files
-mkdir Results/"$1"/output_txt_files
-
+cd Results/"$1"
+mkdir "$2"
+cd "$2"
+mkdir analyzed_root_files
+mkdir error_txt_files
+mkdir output_txt_files
+cd ../../..
 
 cd $CMSSW_DIR/src
 eval `scram runtime -sh`                                         # don't use cmsenv, won't work on batch                                                                                                                                            
@@ -22,13 +25,8 @@ if test $? -ne 0; then
    exit 1
 fi
 
-#pwd = $PWD
-#echo $pwd
-#echo $pwd | awk -F/ '{print 2}'
-#echo ./another/example/path | cut -d/ -f3
-#echo $PWD | cut -d/ -f3
 
-for D in `find /pnfs/iihe/cms/store/user/jdeclerc/$1 -type d`
+for D in `find /pnfs/iihe/cms/store/user/jdeclerc/$1/$2 -type d`
 do
    # echo "---------------------------------"
     #echo WILL RUN ON THE FOLLOWING DIRECTORY
@@ -36,17 +34,23 @@ do
 
     for filename in $D/*root; do
     #    echo "---------"
-	if [[ $filename = *"events_skimmed"* ]]; then
+	if [[ $filename = *"events_skimmed_2016_trialA"* ]]; then
 		
 		PART1=$(echo "$filename" | cut -d/ -f8)
-		PART2=$(echo "$filename" | cut -d/ -f10)
-		PART3=$(echo "$filename" | cut -d/ -f11)
-		PARTS="${PART1}_${PART2}_${PART3}"
+		PART2=$(echo "$filename" | cut -d/ -f9)
+		PART3=$(echo "$filename" | cut -d/ -f10)
+		PART4=$(echo "$filename" | cut -d/ -f11)
+		PARTS="${PART2}_${PART3}_${PART4}"
+
+		echo ${PART1} #eg Tau
+		echo ${PART2} #eg Tau_Run2016C-07Aug17-v1
+		echo ${PART3} #eg 180909_172549
+		echo ${PART4} #eg 0000
 
 		bare_filename1=$(basename $filename) 
 		bare_filename2="${bare_filename1%%.*}"
 		echo $filename
-		qsub ${pwd_name}/analyzer_allPDs_2016_step2.sh -v INPUT_ROOTFILE="file://$filename",OUTPUT_ROOTFILE="${pwd_name}/Results/${PART1}/analyzed_root_files/analyzed_${bare_filename2}_${PARTS}.root",OUT_TXT="${pwd_name}/Results/${PART1}/output_txt_files/out_${bare_filename2}_${PARTS}.txt",ERROR_TXT="${pwd_name}/Results/${PART1}/error_txt_files/error_${bare_filename2}_${PARTS}.txt" 
+		qsub ${pwd_name}/analyzer_allPDs_2016_step2.sh -v INPUT_ROOTFILE="file://$filename",OUTPUT_ROOTFILE="${pwd_name}/Results/$1/$2/analyzed_root_files/analyzed_${bare_filename2}_${PARTS}.root",OUT_TXT="${pwd_name}/Results/$1/$2/output_txt_files/out_${bare_filename2}_${PARTS}.txt",ERROR_TXT="${pwd_name}/Results/$1/$2/error_txt_files/error_${bare_filename2}_${PARTS}.txt" 
 
 	fi
     done
