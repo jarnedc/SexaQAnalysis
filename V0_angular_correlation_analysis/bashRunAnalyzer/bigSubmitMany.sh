@@ -1,0 +1,35 @@
+#!/bin/bash
+big-submission qsub_to_analyze_2016_DisplacedJet_A.txt
+big-submission qsub_to_analyze_2016_SingleElectron_A.txt
+big-submission qsub_to_analyze_2016_MuOnia_A.txt
+big-submission qsub_to_analyze_2016_SinglePhoton_A.txt
+big-submission qsub_to_analyze_2016_BTagMu_A.txt
+big-submission qsub_to_analyze_2016_Tau_A.txt
+big-submission qsub_to_analyze_2016_HTMHT_A.txt
+big-submission qsub_to_analyze_2016_MuonEG_A.txt
+big-submission qsub_to_analyze_2016_Charmonium_A.txt
+big-submission qsub_to_analyze_2016_DoubleMuonLowMass_A.txt
+big-submission qsub_to_analyze_2016_DoubleMuon_A.txt
+big-submission qsub_to_analyze_2016_JetHT_A.txt
+big-submission qsub_to_analyze_2016_SingleMuon_A.txt
+big-submission qsub_to_analyze_2016_MET_A.txt
+big-submission qsub_to_analyze_2016_DoubleEG_A.txt
+big-submission qsub_to_analyze_2016_BTagCSV_A.txt
+
+
+big-submission qsub_to_analyze_2017_DisplacedJet_A.txt
+big-submission qsub_to_analyze_2017_SingleElectron_A.txt
+big-submission qsub_to_analyze_2017_MuOnia_A.txt
+big-submission qsub_to_analyze_2017_SinglePhoton_A.txt
+big-submission qsub_to_analyze_2017_BTagMu_A.txt
+big-submission qsub_to_analyze_2017_Tau_A.txt
+big-submission qsub_to_analyze_2017_HTMHT_A.txt
+big-submission qsub_to_analyze_2017_MuonEG_A.txt
+big-submission qsub_to_analyze_2017_Charmonium_A.txt
+big-submission qsub_to_analyze_2017_DoubleMuonLowMass_A.txt
+big-submission qsub_to_analyze_2017_DoubleMuon_A.txt
+big-submission qsub_to_analyze_2017_JetHT_A.txt
+big-submission qsub_to_analyze_2017_SingleMuon_A.txt
+big-submission qsub_to_analyze_2017_MET_A.txt
+big-submission qsub_to_analyze_2017_DoubleEG_A.txt
+big-submission qsub_to_analyze_2017_BTagCSV_A.txt

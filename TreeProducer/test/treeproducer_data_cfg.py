@@ -133,7 +133,7 @@ process.out = cms.OutputModule("PoolOutputModule",
     'keep recoVertexCompositePtrCandidates_sMassFilter_sVertexCompositePtrCandidate_*',
     'keep *_*_*_SEXAQ'
   ),
-  fileName = cms.untracked.string("events_skimmed_2016_trialA.root"),
+  fileName = cms.untracked.string("events_skimmed_Xi1820.root"),
   SelectEvents = cms.untracked.PSet(
     SelectEvents = cms.vstring('p')
   )

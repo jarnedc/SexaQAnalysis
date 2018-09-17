@@ -144,8 +144,8 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
 
     int verbose=1;
     
-    TString a = "SingleMuon_2016_runG"; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
-    TString b = a + "_";
+    TString a = ""; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
+    TString b = a + "";
     
     //--------- Histogram Declaration --------------------//
     std::map<TString, TH1F *> histos_th1f;
