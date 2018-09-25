@@ -4,7 +4,7 @@
 #eg
 # ./haddAll.sh 2016 A
 declare -a PDs_array=(
-#"DisplacedJet"
+"DisplacedJet"
 #"SingleElectron"
 #"MuOnia"
 #"SinglePhoton"
@@ -18,13 +18,11 @@ declare -a PDs_array=(
 #"JetHT"
 #"SingleMuon"
 #"MET"
-"DoubleEG"
-"BTagCSV"
+#"DoubleEG"
+#"BTagCSV"
 )
 
 for i in "${PDs_array[@]}"
 do
-   cd Results/$1/"$i"/$2/analyzed_root_files/
-   hadd  combined.root ./*.root	
-   cd ../../../../..
+   qsub hadd.sh -v INPUT_PATH="/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/$1/$i/$2/analyzed_root_files/",OUTPUTFILENAME="/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined/combined_"$1"_"$i"_"$2".root"
 done
