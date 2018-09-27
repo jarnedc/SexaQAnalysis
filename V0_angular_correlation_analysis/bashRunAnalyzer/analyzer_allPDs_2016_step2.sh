@@ -1,7 +1,7 @@
 ###########################################################################
 ## YOUR FUNCTIONALITY CODE GOES HERE
 
-CMSSW_DIR=/user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30
+CMSSW_DIR=/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7
 CMSSW_CONFIG_FILE=$CMSSW_DIR/src/SexaQAnalysis/V0_angular_correlation_analysis/test/analyzer_AOD_cfg_test.py
 
 source $VO_CMS_SW_DIR/cmsset_default.sh
