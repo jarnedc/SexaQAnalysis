@@ -102,14 +102,14 @@ process.load("SexaQAnalysis.Skimming.InitialProducer_cff")
 process.p = cms.Path(
 #  process.genParticlePlusGEANT *
   process.nEvTotal *
+  process.InitialProducer * 
   process.lambdaKshortFilter *
   process.nEvLambdaKshort *
   process.lambdaKshortVertexFilter *
   process.nEvLambdaKshortVertex *
   process.rMassFilter *
   process.sMassFilter *
-  process.nEvSMass *
-  process.InitialProducer 
+  process.nEvSMass 
 #  process.tree 
 )
 
