@@ -23,16 +23,12 @@
 
 // CMSSW specific lib
 //#include "DataFormats/Common/interface/ValueMap.h"
-#include "RecoVertex/PrimaryVertexProducer/interface/PrimaryVertexSorter.h"
 #include "DataFormats/VertexReco/interface/Vertex.h"
-#include "DataFormats/VertexReco/interface/VertexFwd.h"
-#include "DataFormats/TrackReco/interface/Track.h"
-#include "DataFormats/TrackReco/interface/TrackBase.h"
-#include "DataFormats/TrackReco/interface/TrackFwd.h"
-#include "DataFormats/Math/interface/deltaR.h"
-#include "DataFormats/HepMCCandidate/interface/GenParticle.h"
-#include "DataFormats/Candidate/interface/VertexCompositeCandidate.h"
-#include "DataFormats/Candidate/interface/VertexCompositePtrCandidate.h"
+#include "DataFormats/JetReco/interface/PFJet.h"
+#include "DataFormats/MuonReco/interface/Muon.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
+#include "DataFormats/METReco/interface/PFMET.h"
+#include "DataFormats/Candidate/interface/LeafCandidate.h"
 
 // others
 using namespace std;
@@ -63,21 +59,24 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   void Init();
 
   // ----------member data ---------------------------
-  edm::InputTag _trigResultsTag;
-  edm::InputTag _vertexCollectionTag;
-  edm::InputTag _trackCollectionTag;
-  edm::InputTag _lambdaKshortCollectionTag;
-  edm::InputTag _sCollectionTag;
-  edm::InputTag _sTracksCollectionTag;
+      edm::InputTag trackCollectionTag_;
+      edm::InputTag lambdaCollectionTag_;
+      edm::InputTag kshortCollectionTag_;
+      edm::InputTag offlinePrimaryVerticesCollectionTag_;
+      edm::InputTag ak4PFJetsCollectionTag_;
+      edm::InputTag muonsCollectionTag_;
+      edm::InputTag electronsCollectionTag_;
+      edm::InputTag METCollectionTag_;
 
-  edm::EDGetTokenT<vector<reco::Vertex> > _vertexCollectionToken;
-  edm::EDGetTokenT<vector<reco::Track> > _trackCollectionToken;
-  edm::EDGetTokenT<vector<reco::VertexCompositePtrCandidate> > _lambdaKshortCollectionToken;
-  edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > _sCollectionToken;
-  edm::EDGetTokenT<vector<reco::Track> > _sTracksCollectionToken;
-  
-  bool _isData;
-  edm::EDGetToken  m_partons;
+      edm::EDGetTokenT<std::vector<reco::Track> > tracksCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > lambdaCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::VertexCompositeCandidate> > kshortCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::Vertex> > offlinePrimaryVerticesCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::PFJet> > ak4PFJetsCollectionToken_;
+      edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate> > > muonsCollectionToken_;
+      edm::EDGetTokenT<std::vector<edm::FwdPtr<reco::PFCandidate> > > electronsCollectionToken_;
+      edm::EDGetTokenT<std::vector<reco::PFMET>  > METCollectionToken_; 
+ 
 
 //   GlobalPoint vertexPosition;
 
@@ -85,78 +84,17 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   TTree* _tree;
 
   // Global quantities
-  int _nEvent, _nRun, _nLumi, _nTrack, _nTrack_stored;
+  int _nEvent, _nRun, _nLumi, _nTrack;
 
   // Vertices
   int _vtx_N, _vtx_N_stored;
-  std::vector<int> _vtx_ndof, _vtx_nTracks;
-  std::vector<int> _vtx_tracksSize;
-  std::vector<bool> _vtx_isValid, _vtx_isFake;
-  std::vector<double> _vtx_x, _vtx_y, _vtx_z;
-  std::vector<double> _vtx_normalizedChi2, _vtx_d0;
-  std::vector< std::vector<double> > _vtx_covariance;
-
-  //Tracks
-  std::vector<int> _track_Nhits, _track_NpixHits, _track_purity, _track_ndof;
-  std::vector<double> _track_eta, _track_pt, _track_px, _track_py, _track_pz, _track_x, _track_y, _track_z, _track_phi, _track_ptError, _track_dxy, _track_d0, _track_dzError, _track_dz, _track_normalizedChi2;
-  std::vector< std::vector<double> > _track_covariance;
-  std::vector<int> _track_charge;
 
   // Lambdas
   int _lambda_N;
-  std::vector<int> _lambda_ndof, _lambda_d1ch, _lambda_d2ch;
-  std::vector<double> _lambda_normalizedChi2, _lambda_m;
-  std::vector<double> _lambda_x, _lambda_y, _lambda_z;
-  std::vector<double> _lambda_px, _lambda_py, _lambda_pz;
-  std::vector<double> _lambda_d1px, _lambda_d1py, _lambda_d1pz;
-  std::vector<double> _lambda_d2px, _lambda_d2py, _lambda_d2pz;
 
   // Kshorts
   int _kshort_N;
-  std::vector<int> _kshort_ndof;
-  std::vector<double> _kshort_normalizedChi2, _kshort_m;
-  std::vector<double> _kshort_x, _kshort_y, _kshort_z;
-  std::vector<double> _kshort_px, _kshort_py, _kshort_pz;
-  std::vector<double> _kshort_d1px, _kshort_d1py, _kshort_d1pz;
-  std::vector<double> _kshort_d2px, _kshort_d2py, _kshort_d2pz;
 
-  // S
-  int _S_N;
-  std::vector<int> _S_ndof;
-  std::vector<double> _S_normalizedChi2, _S_m;
-  std::vector<double> _S_x, _S_y, _S_z;
-  std::vector<double> _S_px, _S_py, _S_pz;
-  std::vector<double> _S_d1px, _S_d1py, _S_d1pz;
-  std::vector<double> _S_d2px, _S_d2py, _S_d2pz;
-
-  //GenParticles
-  std::vector<double> _genp_x;
-  std::vector<double> _genp_y;
-  std::vector<double> _genp_z;
-  std::vector<double> _genp_px;
-  std::vector<double> _genp_py;
-  std::vector<double> _genp_pz;
-  std::vector<double> _genp_pt;
-  std::vector<double> _genp_p;
-  std::vector<double> _genp_eta;
-  std::vector<double> _genp_phi;
-  std::vector<double> _genp_mass;
-  std::vector<double> _genp_energy;
-  std::vector<int> _genp_charge;
-  std::vector<int> _genp_pdgid;
-  std::vector<int> _genp_status;
-  std::vector<int> _genp_mom;
-  std::vector<int> _genp_m2;
-  std::vector<int> _genp_d1;
-  std::vector<int> _genp_d2;
- 
-  //S Tracks
-  int _SnTrack, _SnTrack_stored;
-  std::vector<int> _Strack_Nhits, _Strack_NpixHits, _Strack_purity, _Strack_ndof;
-  std::vector<double> _Strack_eta, _Strack_pt, _Strack_px, _Strack_py, _Strack_pz, _Strack_x, _Strack_y, _Strack_z, _Strack_phi, _Strack_ptError, _Strack_dxy, _Strack_d0, _Strack_dzError, _Strack_dz, _Strack_normalizedChi2;
-  std::vector< std::vector<double> > _Strack_covariance;
-  std::vector<int> _Strack_charge;
- 
 };
 
 namespace reco {
