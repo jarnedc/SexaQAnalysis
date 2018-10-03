@@ -7,3 +7,7 @@ core.*
 *.d
 *.pcm
 *.pdf
+*.txt*
+*.sh*
+*.err
+*.log

@@ -93,7 +93,7 @@ process.sMassFilter.targetMass = 0.939565
 
 process.load("SexaQAnalysis.Skimming.InitialProducer_cff")
 
-#process.load("SexaQAnalysis.TreeProducer.Treeproducer_AOD_cfi")
+process.load("SexaQAnalysis.TreeProducer.Treeproducer_AOD_cfi")
 #process.tree.genCollection = cms.InputTag("genParticlePlusGEANT")
 #process.tree.sCollection = cms.InputTag("lambdaKshortVertexFilter","sParticles")
 #process.tree.sTrackCollection = cms.InputTag("lambdaKshortVertexFilter","sParticlesTracks")
@@ -101,6 +101,7 @@ process.load("SexaQAnalysis.Skimming.InitialProducer_cff")
 
 process.p = cms.Path(
 #  process.genParticlePlusGEANT *
+  process.tree* 
   process.nEvTotal *
   process.InitialProducer * 
   process.lambdaKshortFilter *
@@ -114,9 +115,9 @@ process.p = cms.Path(
 )
 
 # Output --> not used in the analyzer
-#process.TFileService = cms.Service('TFileService',
-#    fileName = cms.string('tree.root')
-#)
+process.TFileService = cms.Service('TFileService',
+    fileName = cms.string('preFilterInfo.root'), 
+)
 
 #Keep edm output file --> used in the analyzer
 process.out = cms.OutputModule("PoolOutputModule",

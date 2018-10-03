@@ -46,7 +46,7 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
   //special collection to check of the gen particles. It will not always be there... depending on the input file
   bool isMC = false;
   if(h_gen.isValid()) {
-      std::cout << "gen collection is here --> YOU ARE RUNNING ON MC " << std::endl;
+    //  std::cout << "gen collection is here --> YOU ARE RUNNING ON MC " << std::endl;
       isMC = true;
   }
  
@@ -59,6 +59,9 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
   
   // loop over all the lambdas in an event
   for (unsigned int l = 0; l < h_lambda->size(); ++l) {
+    //print the momenta from the lambdas for debugging:
+    //cout << "LambdaKshortVertexFilter lambda momenta:  " <<  (*h_lambda)[l]->px() << " " << (*h_lambda)[l]->py() << " " << (*h_lambda)[l]->pz() << endl;
+
     //get the daughters from the Lambdas
     const Candidate * V0LambdasDaughter1 = (*h_lambda)[l]->daughter(0);
     const Candidate * V0LambdasDaughter2 = (*h_lambda)[l]->daughter(1);
@@ -93,6 +96,9 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
 
   // loop over all kaons in the event
   for(unsigned int k = 0; k < h_kshort->size(); ++k){
+    //print the momenta from the kshorts for debugging:
+    //cout << "LambdaKshortVertexFilter: kshort momenta: " <<  (*h_kshort)[k]->px() << " " << (*h_kshort)[k]->py() << " " << (*h_kshort)[k]->pz() << endl;
+
     //get the daughters from the Kshorts
     const Candidate * V0KaonsDaughter1 = (*h_kshort)[k]->daughter(0);
     const Candidate * V0KaonsDaughter2 = (*h_kshort)[k]->daughter(1);
@@ -117,7 +123,7 @@ bool LambdaKshortVertexFilter::filter(edm::Event & iEvent, edm::EventSetup const
   //only if there are GEN particles
   if(isMC){
 	for (unsigned int g = 0; g < h_gen->size(); ++g) {
-		cout << "x position of gen particle vertex " << (*h_gen)[g].vx() << endl;	
+//		cout << "x position of gen particle vertex " << (*h_gen)[g].vx() << endl;	
 	}//end loop over gen particles
   }//end isMC
 

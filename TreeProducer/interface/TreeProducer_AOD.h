@@ -84,16 +84,9 @@ class TreeProducer_AOD : public edm::EDAnalyzer {
   TTree* _tree;
 
   // Global quantities
-  int _nEvent, _nRun, _nLumi, _nTrack;
+  int _nEvent, _nRun, _nLumi;
 
-  // Vertices
-  int _vtx_N, _vtx_N_stored;
-
-  // Lambdas
-  int _lambda_N;
-
-  // Kshorts
-  int _kshort_N;
+  int _nTrack, _nLambdas, _nKshorts, _nPV, _nmuons,  _nelectrons;
 
 };
 

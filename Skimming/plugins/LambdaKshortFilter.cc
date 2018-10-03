@@ -50,7 +50,7 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
       std::cout << "Missing collection during LambdaKshortFilter : " << kshortCollectionTag_ << " ... skip entry !" << std::endl;
       return false;
     }
-
+    std::cout << "LambdaKshortFilter: Starting a new event" << std::endl;
     // select the lambdas passing kinematic cuts
     for (unsigned int l = 0; l < h_lambda->size(); ++l) {
       if (h_lambda->at(l).pt()       > minPtLambda_   &&
@@ -81,7 +81,10 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
 	      }
 	    }
           }
-          if (overlap) break;
+          if (overlap){
+		 //std::cout << "LambdaKshortFilter: OVERLAP FOUND" << std::endl;
+		 break;
+	  }	
         }
         if (!overlap) kshorts->push_back(std::move(kptr));
       //  kshorts->push_back(std::move(kptr));
@@ -132,6 +135,20 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
 
   iEvent.put(std::move(lambdas),"lambda");
   iEvent.put(std::move(kshorts),"kshort");
+/*  if(kshorts != NULL){
+  for(int k = 0; k<(int)kshorts->size(); k++){
+        std::cout << "LambdaKshortFilter: kshort momenta " << k << "px,py,pz: " << (*kshorts)[k]->px() << "," << (*kshorts)[k]->py() << "," << (*kshorts)[k]->pz() << std::endl; 
+  }
+  }
+
+  if(lambdas != NULL){
+  for(int l = 0; l<(int)lambdas->size(); l++){
+        std::cout << "LambdaKshortFilter: lambda momenta " << l << "px,py,pz: " << (*lambdas)[l]->px() << "," << (*lambdas)[l]->py() << "," << (*lambdas)[l]->pz() << std::endl; 
+  }
+  }
+*/
+  //std::cout << "LambdaKshortFilter: n lambdas put in events " << nl << std::endl;
+  //std::cout << "LambdaKshortFilter: n kshorts put in events " << nk << std::endl;
 
   // throw away events on data without sufficient lambdas or kshorts
   if (nl < minNrLambda_ || nk < minNrKshort_) {

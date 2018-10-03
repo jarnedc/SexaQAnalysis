@@ -124,6 +124,7 @@ METCollectionTag_(pset.getParameter<edm::InputTag>("METCollection"))
    produces<std::vector<int>>("ntracks");
    produces<std::vector<int>>("nlambdas");
    produces<std::vector<int>>("nkshorts");
+   produces<std::vector<int>>("nkshortsAndNlambdas");
    produces<std::vector<int>>("nPVs");
    produces<std::vector<int>>("njets");
    produces<std::vector<reco::Particle::LorentzVector>>("TwoTopJets");
@@ -157,7 +158,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace edm;
    using namespace reco; 
    using namespace std;
-   
+  std::cout << "InitialProducer: starting for a new event" << std::endl; 
   //ntracks part
   edm::Handle<std::vector<reco::Track >> h_tracks;
   iEvent.getByToken(tracksCollectionToken_, h_tracks);
@@ -187,6 +188,21 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
   auto nkshorts = std::make_unique<std::vector<int>>();
   nkshorts->push_back((int)h_kshorts->size());
   iEvent.put(std::move(nkshorts), "nkshorts");
+
+  //nkshorts and nlambdas part: if at least 1 kshort and at least 1 lambda is present then there is the potential to reconstruct an S
+  auto nkshortsAndNlambdas = std::make_unique<std::vector<int>>();
+  int nkshort_and_nlambdas_present = 0;
+/*  if((int)h_kshorts->size() >= 1) std::cout << "InitialProducer: Found " << (int)h_kshorts->size() << "kshorts" << std::endl;
+  if((int)h_lambdas->size() >= 1) std::cout << "InitialProduer: Found " << (int)h_lambdas->size() << "lambdas" << std::endl;
+  if((int)h_kshorts->size() >= 1 && (int)h_lambdas->size() >= 1) std::cout << "InitialProducer: Found both a kshort and a lambda: " << std::endl;
+  for(int k = 0; k<(int)h_kshorts->size(); k++){
+	std::cout << "Initialproducer: kshort " << k << "px,py,pz: " << h_kshorts->at(k).px() << "," << h_kshorts->at(k).py() << "," << h_kshorts->at(k).pz() << std::endl; 
+  }
+  for(int l = 0; l<(int)h_lambdas->size(); l++){
+	std::cout << "Initialproducer: lambda " << l << "px,py,pz: " << h_lambdas->at(l).px() << "," << h_lambdas->at(l).py() << "," << h_lambdas->at(l).pz() << std::endl; 
+  }*/
+  nkshortsAndNlambdas->push_back((int) nkshort_and_nlambdas_present);
+  iEvent.put(std::move(nkshortsAndNlambdas), "nkshortsAndNlambdas");
 
   //nPVs part
   edm::Handle<std::vector<reco::Vertex> > h_PVs;
