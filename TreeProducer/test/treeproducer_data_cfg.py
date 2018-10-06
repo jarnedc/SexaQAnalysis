@@ -53,6 +53,7 @@ process.source = cms.Source("PoolSource",
 
 process.nEvTotal        = cms.EDProducer("EventCountProducer")
 process.nEvLambdaKshort = cms.EDProducer("EventCountProducer")
+process.nEvOverlapFilter = cms.EDProducer("EventCountProducer")
 process.nEvLambdaKshortVertex = cms.EDProducer("EventCountProducer")
 process.nEvSMass        = cms.EDProducer("EventCountProducer")
 
@@ -75,6 +76,10 @@ process.lambdaKshortFilter.isData = True
 process.lambdaKshortFilter.minPtLambda = 1.5 # gives pT(proton,pion)>0.5GeV
 process.lambdaKshortFilter.minPtKshort = 0.9 # gives pT(pion,pion)>0.5GeV
 process.lambdaKshortFilter.checkLambdaDaughters = True
+process.lambdaKshortFilter.prescaleFalse = 0
+
+process.load("SexaQAnalysis.Skimming.OverlapFilter_cfi")
+process.lambdaKshortFilter.isData = True
 process.lambdaKshortFilter.prescaleFalse = 0
 
 process.load("SexaQAnalysis.Skimming.LambdaKshortVertexFilter_cfi")
@@ -104,6 +109,8 @@ process.p = cms.Path(
   process.tree* 
   process.nEvTotal *
   process.InitialProducer * 
+  process.OverlapFilter *
+  process.nEvOverlapFilter *
   process.lambdaKshortFilter *
   process.nEvLambdaKshort *
   process.lambdaKshortVertexFilter *
@@ -134,7 +141,8 @@ process.out = cms.OutputModule("PoolOutputModule",
     'keep recoVertexCompositePtrCandidates_sMassFilter_sVertexCompositePtrCandidate_*',
     'keep *_*_*_SEXAQ'
   ),
-  fileName = cms.untracked.string("events_skimmed_Xi1820.root"),
+  #fileName = cms.untracked.string("events_skimmed_2016_trialB.root"),
+  fileName = cms.untracked.string("events_skimmed_Xi1820_new_overlap_filter.root"),
   SelectEvents = cms.untracked.PSet(
     SelectEvents = cms.vstring('p')
   )

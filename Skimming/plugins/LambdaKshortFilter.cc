@@ -50,11 +50,11 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
       std::cout << "Missing collection during LambdaKshortFilter : " << kshortCollectionTag_ << " ... skip entry !" << std::endl;
       return false;
     }
-    std::cout << "LambdaKshortFilter: Starting a new event" << std::endl;
+    //std::cout << "LambdaKshortFilter: Starting a new event" << std::endl;
     // select the lambdas passing kinematic cuts
     for (unsigned int l = 0; l < h_lambda->size(); ++l) {
       if (h_lambda->at(l).pt()       > minPtLambda_   &&
-          fabs(h_lambda->at(l).eta() < maxEtaLambda_) &&
+          fabs(h_lambda->at(l).eta()) < maxEtaLambda_ &&
           h_lambda->at(l).mass()     > minMassLambda_ &&
           h_lambda->at(l).mass()     < maxMassLambda_) {
         edm::Ptr<reco::VertexCompositeCandidate> lptr(h_lambda,l);
@@ -62,31 +62,14 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
       }
     }
 
-    // select the kshorts passing kinematic cuts and non-overlapping with lambdas
+    // select the kshorts passing kinematic cuts
     for (unsigned int k = 0; k < h_kshort->size(); ++k) {
       if (h_kshort->at(k).pt()       > minPtKshort_   &&
-          fabs(h_kshort->at(k).eta() < maxEtaKshort_) &&
+          fabs(h_kshort->at(k).eta()) < maxEtaKshort_ &&
 	  h_kshort->at(k).mass()     > minMassKshort_ &&
 	  h_kshort->at(k).mass()     < maxMassKshort_) {
         edm::Ptr<reco::VertexCompositeCandidate> kptr(h_kshort,k);
-	// check for overlaps with the lambdas, and keep the lambda in case
-        bool overlap = false;
-        for (auto lptr : *lambdas) {
-          for (unsigned int li = 0; li < lptr->numberOfDaughters() && !overlap; ++li) {
-            for (unsigned int ki = 0; ki < kptr->numberOfDaughters() && !overlap; ++ki) {
-	      if (lptr->daughter(li)->px() == kptr->daughter(ki)->px() &&
-	          lptr->daughter(li)->py() == kptr->daughter(ki)->py() &&
-	          lptr->daughter(li)->pz() == kptr->daughter(ki)->pz()) {
-                overlap = true;
-	      }
-	    }
-          }
-          if (overlap){
-		 //std::cout << "LambdaKshortFilter: OVERLAP FOUND" << std::endl;
-		 break;
-	  }	
-        }
-        if (!overlap) kshorts->push_back(std::move(kptr));
+        kshorts->push_back(std::move(kptr));
       //  kshorts->push_back(std::move(kptr));
       }
     }
@@ -177,7 +160,21 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
   }
 */
 
+   std::cout << "survived the LambdaKshortFilter" << std::endl;
+  std::cout << "LambdaKshortFilter: n lambdas put in events " << nl << std::endl;
+  std::cout << "LambdaKshortFilter: n kshorts put in events " << nk << std::endl;
+if(kshorts){
+  for (auto kptr : *kshorts) {
+//  for(int k = 0; k<(int)kshorts->size(); k++){
+        std::cout << "LambdaKshortFilter: kshort momenta " << "px,py,pz: " << kptr->px() << "," << kptr->py() << "," << kptr->pz() << std::endl; 
+  }
+}
 
+  if(lambdas != NULL){
+  for(int l = 0; l<(int)lambdas->size(); l++){
+        std::cout << "LambdaKshortFilter: lambda momenta " << l << "px,py,pz: " << (*lambdas)[l]->px() << "," << (*lambdas)[l]->py() << "," << (*lambdas)[l]->pz() << std::endl; 
+  }
+  }
    return true;
 
 }
