@@ -15,7 +15,7 @@ config.JobType.psetName = '../../treeproducer_data_cfg.py'
 #config.Data.inputDataset = '/SingleMuon/Run2016G-23Sep2016-v1/AOD'
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'EventAwareLumiBased'
-config.Data.unitsPerJob = 500000
+config.Data.unitsPerJob = 5000000
 config.Data.lumiMask = 'https://cms-service-dqm.web.cern.ch/cms-service-dqm/CAF/certification/Collisions17/13TeV/ReReco/Cert_294927-306462_13TeV_EOY2017ReReco_Collisions17_JSON.txt'
 config.Data.runRange = ''
 config.Data.outLFNDirBase = '/store/user/jdeclerc/'
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     # We want to put all the CRAB project directories from the tasks we submit here into one common directory.
     # That's why we need to set this parameter (here or above in the configuration file, it does not matter, we will not overwrite it).
-    config.General.workArea = 'crab_projects17_trialA'
+    config.General.workArea = 'crab_projects17_trialB'
 
     def submit(config):
         try:

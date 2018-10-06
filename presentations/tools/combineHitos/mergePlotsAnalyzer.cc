@@ -43,45 +43,44 @@ void mergePlotsAnalyzer()
    TFile *OutputFile = new TFile("Combine_Analyzer_plots.root","RECREATE");
    
    vector<string> data;
-   data.push_back("MET");
-   data.push_back("SingleMuon");
-   data.push_back("ZeroBias"); 
-  
-   TFile *hfile1 = new TFile(("../../../Data_analysis/Results/"+data[0]+".root").c_str());
-   TFile *hfile2 = new TFile(("../../../Data_analysis/Results/"+data[1]+".root").c_str());
-   TFile *hfile3 = new TFile(("../../../Data_analysis/Results/"+data[2]+".root").c_str());
-	
+   data.push_back("RunB");
+   data.push_back("RunF");
+   data.push_back("RunB");
+   data.push_back("RunF");
+ 
+   TFile *hfile1 = new TFile(("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined_2016_SinglePhoton_"+data[0]+"_A").c_str());
+   TFile *hfile2 = new TFile(("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined_2016_SinglePhoton_"+data[1]+"_A").c_str());
+   TFile *hfile3 = new TFile(("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined_2017_SinglePhoton_"+data[2]+"_A").c_str());
+   TFile *hfile4 = new TFile(("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined_2017_SinglePhoton_"+data[3]+"_A").c_str());
+
    vector<string> v_histos;
-   v_histos.push_back("_sCand_delta_phi");
+   v_histos.push_back("h_S_vtx_distance_to_beamspot");
+   v_histos.push_back("h_S_vtx_distance_to_beamspot_error");
    //v_histos.push_back("_sCand_L0_delta_phi");
    //v_histos.push_back("_sCand_antiL0_delta_phi");
-   v_histos.push_back("_rCandMass_with_dxy_smaller_0p2_and_dr_daughters_smaller_0p8");
-   v_histos.push_back("_rCandMass_with_dxy_smaller_0p1_and_dr_daughters_smaller_0p8");
-   v_histos.push_back("_rCandMass_with_dxy_smaller_0p05_and_dr_daughters_smaller_0p8");
-   v_histos.push_back("_rCandMass_with_dxy_smaller_0p01_and_dr_daughters_smaller_0p8");
    
    for(int i = 0; i < (int)v_histos.size(); i++  ){
 	   TCanvas *c1 = new TCanvas(v_histos[i].c_str(),v_histos[i].c_str(),600,400);
 	   gStyle->SetOptStat(kFALSE);
-	 //  auto legend = new TLegend(0.1,0.7,0.48,0.9);
 	   cout << ("analyzer/"+data[0]+v_histos[i]).c_str() << endl;
 	   cout << ("analyzer/"+data[1]+v_histos[i]).c_str() << endl; 
 	   cout << ("analyzer/"+data[2]+v_histos[i]).c_str() << endl; 
-	   TH1F *h1 = (TH1F*)hfile1->Get(("analyzer/"+data[0]+v_histos[i]).c_str()); 
-	   TH1F *h2 = (TH1F*)hfile2->Get(("analyzer/"+data[1]+v_histos[i]).c_str()); 
-	   TH1F *h3 = (TH1F*)hfile3->Get(("analyzer/"+data[2]+v_histos[i]).c_str()); 
+	   cout << ("analyzer/"+data[3]+v_histos[i]).c_str() << endl; 
 
-	   //h1->Scale(1/h1->GetEntries());
-	   //h2->Scale(1/h2->GetEntries());
-	   //h3->Scale(1/h3->GetEntries());
+
+	   TH1F *h1 = (TH1F*)hfile1->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h2 = (TH1F*)hfile2->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h3 = (TH1F*)hfile3->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h4 = (TH1F*)hfile4->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
 
 	   int binmax1 = h1->GetMaximumBin();
 	   int binmax2 = h2->GetMaximumBin();
 	   int binmax3 = h3->GetMaximumBin();
-
+	   int binmax4 = h4->GetMaximumBin();
 	   double binmax1content = h1-> GetBin(binmax1);
 	   double binmax2content = h2-> GetBin(binmax2);
 	   double binmax3content = h3-> GetBin(binmax3);
+	   double binmax4content = h4-> GetBin(binmax4);
 
 	   double binmaxcontent = binmax1content;
  	   if(binmax1content < binmax2content) binmaxcontent = binmax2content; 
@@ -92,24 +91,32 @@ void mergePlotsAnalyzer()
 	   if(h2->GetEntries() > h3->GetEntries()) maxNEntries = h3->GetEntries();
           
 	   h1->SetLineColor(kRed);
-	   h1->DrawNormalized("E1");
+	   h1->DrawNormalized("E1l");
 	   h2->SetLineColor(kBlue);
-	   h2->DrawNormalized("sameE1");
+	   h2->DrawNormalized("sameE1l");
 	   h3->SetLineColor(kGreen);
-	   h3->DrawNormalized("sameE1");
+	   h3->DrawNormalized("sameE1l");
+	   h4->SetLineColor(kBlack);
+	   h4->DrawNormalized("sameE1l");
 	   
 	   h1->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h2->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h3->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+	   h4->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 
 	   c1->Update();
-
-	   auto legend = new TLegend(0.1,0.7,0.48,0.9);
-   	   legend->AddEntry(h1,data[0].c_str(),"l");
+	   TLegend* legend = new TLegend(0.1,0.7,0.48,0.9);
+   	  /* legend->AddEntry(h1,data[0].c_str(),"l");
    	   legend->AddEntry(h2,data[1].c_str(),"l");
    	   legend->AddEntry(h3,data[2].c_str(),"l");
+   	   legend->AddEntry(h4,data[3].c_str(),"l");
+   	  */ 
+	   legend->AddEntry(h1,"2016 RunB","l");
+   	   legend->AddEntry(h2,"2016 RunF","l");
+   	   legend->AddEntry(h3,"2017 RunB","l");
+   	   legend->AddEntry(h4,"2017 FunF","l");
    	   legend->Draw();
-	   
+   	   legend->Draw();
            OutputFile->cd();
            c1->Write();
 

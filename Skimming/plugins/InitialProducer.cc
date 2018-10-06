@@ -158,7 +158,7 @@ InitialProducer::produce(edm::Event& iEvent, const edm::EventSetup& iSetup)
    using namespace edm;
    using namespace reco; 
    using namespace std;
-  std::cout << "InitialProducer: starting for a new event" << std::endl; 
+  //std::cout << "InitialProducer: starting for a new event" << std::endl; 
   //ntracks part
   edm::Handle<std::vector<reco::Track >> h_tracks;
   iEvent.getByToken(tracksCollectionToken_, h_tracks);

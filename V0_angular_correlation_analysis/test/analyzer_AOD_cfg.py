@@ -71,10 +71,10 @@ tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/Single
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-#		*tupleOfFiles #the * is to unpack the tuple of filenames
+		*tupleOfFiles #the * is to unpack the tuple of filenames
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
 
-      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_Xi1820.root'
+#      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_Xi1820.root'
 #      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/V0_correlation_ZeroBias_single_file.root',
 
 		
@@ -93,5 +93,6 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('Xi_1820.root')
+    #fileName = cms.string('Xi_1820_test_dxy.root')
+    fileName = cms.string('SingleMuon_test_dxy.root')
 )

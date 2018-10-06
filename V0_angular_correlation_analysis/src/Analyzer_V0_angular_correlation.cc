@@ -220,6 +220,7 @@ void Analyzer_V0_angular_correlation::beginJob() {
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8; R mass [GeV]",20000, 0,20);
     //for the r candidate, you made some cuts. Now investigate these cuts:    
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8; lxy(S interaction vertex, beamspot)", 5000, 0, 50);
+    histos_th1f[b+"h_all_r_candidates_delta_R"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_delta_R", b+"h_all_r_candidates_delta_R; lxy(S interaction vertex, beamspot)", 5000, 0, 50);
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8;error lxy(S interaction vertex, beamspot)", 5000, 0, 50);
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1;error lxy(S interaction vertex, beamspot)", 5000, 0, 50);
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1;#Delta R(K_{S}^{0},#Lambda^{0})", 2000, 0, 20);
@@ -324,7 +325,8 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th2f[b+"h_S_vtx_distance_to_beamspot_vx_vy"]= dir_dist_beamspot_S.make<TH2F>(b+"h_S_vtx_distance_to_beamspot_vx_vy",b+"h_S_vtx_distance_to_beamspot_vx_vy; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
 
    TFileDirectory dir_dist_beamspot_S_cut_on_decay_vertex = dir_dist_beamspot_S.mkdir("dist_beamspot_S_cut_on_decay_vertex");
-   histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_delta_phi_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_delta_phi_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
+   histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
+   histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5",b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
 
    //for distance between beamspot and anti-S candidate vertex 
    TFileDirectory dir_dist_beamspot_anti_S = dir_LambdaKshortVertexFilter.mkdir("dist_beamspot_anti_S_BLINDED");
@@ -336,7 +338,8 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th2f[b+"h_anti_S_vtx_distance_to_beamspot_vx_vy"]= dir_dist_beamspot_anti_S.make<TH2F>(b+"h_anti_S_vtx_distance_to_beamspot_vx_vy",b+"h_anti_S_vtx_distance_to_beamspot_vx_vy; vx (distance beamspot to anti S annihilation vertex); vy (distance beamspot to anti S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
 
    TFileDirectory dir_dist_beamspot_anti_S_cut_on_decay_vertex = dir_dist_beamspot_anti_S.mkdir("dist_beamspot_anti_S_cut_on_decay_vertex");
-   histos_th2f[b+"h_delta_phi_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_dist_beamspot_anti_S_cut_on_decay_vertex.make<TH2F>(b+"h_delta_phi_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_delta_phi_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; vx (distance beamspot to anti S annihilation vertex); vy (distance beamspot to anti S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
+   histos_th2f[b+"h_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_dist_beamspot_anti_S_cut_on_decay_vertex.make<TH2F>(b+"h_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; vx (distance beamspot to anti S annihilation vertex); vy (distance beamspot to anti S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
+   histos_th2f[b+"h_anti_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5"]= dir_dist_beamspot_anti_S_cut_on_decay_vertex.make<TH2F>(b+"h_anti_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5",b+"h_anti_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5; vx (distance beamspot to anti S annihilation vertex); vy (distance beamspot to anti S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
 
 
    //for angular coorelation between the daughters of the S candidates
@@ -807,7 +810,6 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			}
 	}
  }
-cout << "beofore the h_sCands.isValid" << endl;
  //!!!!!!!!!!!!!!!!!!!!!!!!!!!make the same distribution but for the S candidates (if they are there, they are only there if they ran through the 2nd filter)!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   if(h_sCands.isValid()) {
 	unsigned int n_sCands = h_sCands->size();
@@ -861,9 +863,18 @@ cout << "beofore the h_sCands.isValid" << endl;
 			double v_S_b_std_dev = sqrt(v_S_b_std_dev_nominator/v_S_b_std_dev_denominator);
 			double significance_v_S_b = v_S_b/v_S_b_std_dev;
 
+			//impact parameters
+			//std::cout << "starting to get the dxy" << std::endl;
+			//const reco::Candidate* S_candidate_daughter = h_sCands->at(i).daughter(0);
+			const reco::Candidate* S_candidate = h_sCands->at(i);
+			//std::cout << "got the mother" << std::endl;
+			//const reco::Track* S_candidate_track =S_candidate->bestTrack();	
+			//std::cout << "got the track" << std::endl;
+			//std::cout << "S candidate transv impact parameter (dxy): " << S_candidate_track->dxy() << std::endl;
+			if(S_candidate)std::cout << "S candidate transv impact parameter (dxy): " << S_candidate->pt() << std::endl;
+
 			//angular correlations of the daughter:
 			//for the S candidates
-			cout << "1" << endl;
 		        if(h_sCands->at(i).charge() == 1){	
 				histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]->Fill(delta_phi);
 				histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta"]->Fill(delta_eta);
@@ -904,7 +915,6 @@ cout << "beofore the h_sCands.isValid" << endl;
 				if(v_S_b < 1.9 && v_S_b_std_dev > 0.01)histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_smaller_1.9cm_and_error_larger_0.01cm"]->Fill(delta_phi,delta_eta);
 			}
 
-			cout << "2" << endl;
 			//for the anti-S candidates
 			if(h_sCands->at(i).charge() == -1){
 
@@ -928,7 +938,6 @@ cout << "beofore the h_sCands.isValid" << endl;
 
 		        //distances to the beamspot
 		        //for the S candidates
-			cout << "3" << endl;
 		        if(h_sCands->at(i).charge() == 1){	
 				histos_th1f[b+"h_S_vtx_distance_to_beamspot"]->Fill(v_S_b);
 				histos_th1f[b+"h_S_vtx_distance_to_beamspot_error"]->Fill(v_S_b_std_dev);
@@ -947,12 +956,12 @@ cout << "beofore the h_sCands.isValid" << endl;
 				histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_significance"]->Fill(delta_phi, significance_v_S_b);
 				histos_th2f[b+"h_S_vtx_distance_to_beamspot_vx_vy"]->Fill(vx_S_candidate,vy_S_candidate);
 				if(v_S_b > 1.9 && v_S_b_std_dev < 0.01){
-					histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(vx_S_candidate,vy_S_candidate);
+					histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(vx_S_candidate,vy_S_candidate);
 				}
+				if(v_S_b > 1.9 && v_S_b_std_dev < 0.01 && 1 < abs(delta_phi) && abs(delta_phi) < 2.5) histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5"]->Fill(vx_S_candidate,vy_S_candidate);
 			}
 
 		        //for the anti-S candidates
-			cout << "4" << endl;
 		        if(h_sCands->at(i).charge() == -1){	
 				histos_th1f[b+"h_anti_S_vtx_distance_to_beamspot"]->Fill(v_S_b);
 				histos_th1f[b+"h_anti_S_vtx_distance_to_beamspot_error"]->Fill(v_S_b_std_dev);
@@ -960,12 +969,12 @@ cout << "beofore the h_sCands.isValid" << endl;
 				histos_th2f[b+"h_anti_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error"]->Fill(v_S_b, v_S_b_std_dev);
 				histos_th2f[b+"h_anti_S_vtx_distance_to_beamspot_vx_vy"]->Fill(vx_S_candidate,vy_S_candidate);
 				if(v_S_b > 1.9 && v_S_b_std_dev < 0.01){
-					histos_th2f[b+"h_delta_phi_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(vx_S_candidate,vy_S_candidate);
+					histos_th2f[b+"h_anti_S_vtx_distance_to_beamspot_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(vx_S_candidate,vy_S_candidate);
 				}
+				if(v_S_b > 1.9 && v_S_b_std_dev < 0.01 && 1 < abs(delta_phi) && abs(delta_phi) < 2.5) histos_th2f[b+"h_anti_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5"]->Fill(vx_S_candidate,vy_S_candidate);
 			}
 
 			//masses of the S candidates
-			cout << "5" << endl;
 			if(h_sCands->at(i).charge() == 1){
 				histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter"]->Fill(M_S);
 				if(v_S_b > 1.9) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm"]->Fill(M_S);
@@ -984,7 +993,6 @@ cout << "beofore the h_sCands.isValid" << endl;
 			}
 		
 			//masses of the anti S candidates
-			cout << "6" << endl;
 			if(h_sCands->at(i).charge() == -1){
 				histos_th1f[b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter"]->Fill(M_S);
 				if(v_S_b > 1.9 && v_S_b_std_dev < 0.01) histos_th1f[b+"h_anti_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(M_S);
@@ -1001,7 +1009,7 @@ cout << "beofore the h_sCands.isValid" << endl;
 			if(v_S_b < 0.1 && v_S_b_std_dev < 0.01 && delta_R < 0.8)histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8"]->Fill(M_Xi);
 		
 			//look at the cut by cut for the Xi candidate and look at the same time at the distribution of the other variables:
-			cout << "7" << endl;
+			histos_th1f[b+"h_all_r_candidates_delta_R"]->Fill(delta_R);
 			if(delta_R < 0.8){
 				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"]->Fill(v_S_b);
 				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"]->Fill(v_S_b_std_dev);
@@ -1033,11 +1041,9 @@ cout << "beofore the h_sCands.isValid" << endl;
 			
 			}	
 			//masses of the daughters
-			//masses of the daughters
 			histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass_all"]->Fill(h_sCands->at(i).daughter(0)->mass());
                         histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass_all"]->Fill(h_sCands->at(i).daughter(1)->mass());	
 	
-			cout << "8" << endl;
 			if(h_sCands->at(i).charge()==1){
 			              histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass"]->Fill(h_sCands->at(i).daughter(0)->mass());
 			              histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass"]->Fill(h_sCands->at(i).daughter(1)->mass());
@@ -1048,7 +1054,6 @@ cout << "beofore the h_sCands.isValid" << endl;
 			}
 			//other kinematic variables of the daughters
 			//Lambda
-			cout << "9" << endl;
 			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_pt_all"]->Fill(h_sCands->at(i).daughter(0)->pt());
 			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_p_all"]->Fill(h_sCands->at(i).daughter(0)->p());
 			histos_th1f[b+"h_s_candidates_after_LambdaKshortVertexFilter_Lambda_energy_all"]->Fill(h_sCands->at(i).daughter(0)->energy());
@@ -1099,7 +1104,6 @@ cout << "beofore the h_sCands.isValid" << endl;
 	}
   }//end of sCands present
 
-cout << "after the h_sCands.isValid" << endl;
   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!make some distributions for the S and r candidates
   if((h_r_MassFilter).isValid()){
   	for (unsigned int r = 0; r < (*h_r_MassFilter).size(); ++r) {

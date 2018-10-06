@@ -11,7 +11,7 @@ for D in `find ./crab_projects17_trialA -type d` -maxdepth 0
 do
     echo WILL RUN ON THE FOLLOWING DIRECTORY
     echo $D
-    crab resubmit -d  $D 
-    #crab status -d  $D --verboseErrors
+    #crab resubmit -d  $D 
+    crab status -d  $D --verboseErrors
     echo ------------------------------------------------------
 done
