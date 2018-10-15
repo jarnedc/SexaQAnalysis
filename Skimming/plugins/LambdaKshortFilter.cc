@@ -54,7 +54,7 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
     // select the lambdas passing kinematic cuts
     for (unsigned int l = 0; l < h_lambda->size(); ++l) {
       if (h_lambda->at(l).pt()       > minPtLambda_   &&
-          fabs(h_lambda->at(l).eta() < maxEtaLambda_) &&
+          fabs(h_lambda->at(l).eta()) < maxEtaLambda_ &&
           h_lambda->at(l).mass()     > minMassLambda_ &&
           h_lambda->at(l).mass()     < maxMassLambda_) {
         edm::Ptr<reco::VertexCompositeCandidate> lptr(h_lambda,l);
@@ -65,7 +65,7 @@ bool LambdaKshortFilter::filter(edm::Event & iEvent, edm::EventSetup const & iSe
     // select the kshorts passing kinematic cuts and non-overlapping with lambdas
     for (unsigned int k = 0; k < h_kshort->size(); ++k) {
       if (h_kshort->at(k).pt()       > minPtKshort_   &&
-          fabs(h_kshort->at(k).eta() < maxEtaKshort_) &&
+          fabs(h_kshort->at(k).eta()) < maxEtaKshort_ &&
 	  h_kshort->at(k).mass()     > minMassKshort_ &&
 	  h_kshort->at(k).mass()     < maxMassKshort_) {
         edm::Ptr<reco::VertexCompositeCandidate> kptr(h_kshort,k);
