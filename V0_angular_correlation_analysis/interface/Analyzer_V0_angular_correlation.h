@@ -9,6 +9,7 @@
 #include "TTree.h"
 #include "TH1F.h"
 #include "TH2F.h"
+#include "TH3F.h"
 #include "TFile.h"
 #include "TProfile.h"
 #include <TMath.h>
@@ -73,7 +74,13 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     virtual void analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup);
     virtual void endJob();
     virtual ~Analyzer_V0_angular_correlation();
-
+    TVector3 PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double xy_PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double xy_signed_PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double z_PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double lxy(TVector3 v1, TVector3 v2);
+    double std_dev_lxy(double vx, double vy, double vx_var, double vy_var, double bx_x, double bx_y, double bx_x_var, double bx_y_var);
+    double lxy_signed(TVector3 particle_vertex, TVector3 beamspot, TVector3 particle_direction);
   private:
     //---- configurable parameters --------
     bool m_isData;
@@ -150,6 +157,7 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     //--------- Histogram Declaration --------------------//
     std::map<TString, TH1F *> histos_th1f;
     std::map<TString, TH2F *> histos_th2f;
+    //std::map<TString, TH3F *> histos_th3f;
     std::map<TString, TProfile *> histos_TProfile;
 
      };
