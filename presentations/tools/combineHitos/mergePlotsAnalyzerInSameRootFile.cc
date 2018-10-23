@@ -43,11 +43,12 @@ void mergePlotsAnalyzerInSameRootFile()
    TFile *OutputFile = new TFile("Combine_Analyzer_plots.root","RECREATE");
    
  
-   TFile *hfile1 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run151018/Combined_by_run/combined_2017.root");
+   TFile *hfile1 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined_2016.root");
 
-   TH1F *h1 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_correlation/h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr");
-   TH1F *h2 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_peak/h_s_candidates_lxy_signed_in_peak");
-   TH1F *h3 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_outside_correlation/h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr");
+   TH1F *h1 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_correlation/h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr");
+   TH1F *h2 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_peak/h_s_candidates_error_lxy_in_peak");
+   TH1F *h3 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_back_to_back/h_s_candidates_error_lxy_in_back_to_back");
+   TH1F *h4 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_outside_correlation/h_s_candidates_error_lxy_outside_delta_phi_delta_eta_corr");
    //TH1F *h4 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_then_30_smaller_or_equal_to_40");
    //TH1F *h5 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_then_40");
    //v_histos.push_back("_sCand_L0_delta_phi");
@@ -81,16 +82,16 @@ void mergePlotsAnalyzerInSameRootFile()
 	   h2->DrawNormalized("sameE1l");
 	   h3->SetLineColor(kGreen);
 	   h3->DrawNormalized("sameE1l");
-	   //h4->SetLineColor(kBlack);
-	   //h4->DrawNormalized("sameE1l");
-	   //h5->SetLineColor(kOrange);
-	   //h5->DrawNormalized("sameE1l");
+	   h4->SetLineColor(kBlack);
+	   h4->DrawNormalized("sameE1l");
+//	   h5->SetLineColor(kOrange);
+//	   h5->DrawNormalized("sameE1l");
 	   
 	   h1->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h2->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h3->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
-	   //h4->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
-	   //h5->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+	   h4->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+//	   h5->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 
 	   c1->Update();
 	   TLegend* legend = new TLegend(0.1,0.7,0.48,0.9);
@@ -99,9 +100,11 @@ void mergePlotsAnalyzerInSameRootFile()
    	   legend->AddEntry(h3,data[2].c_str(),"l");
    	   legend->AddEntry(h4,data[3].c_str(),"l");
    	  */ 
-	   legend->AddEntry(h1,"in correlation (fabs(delta_phi) < 0.1 && fabs(delta_eta) > 0.5 && fabs(delta_eta) < 3)","l");
-   	   legend->AddEntry(h2,"in peak (fabs(delta_phi < 0.1 && fabs(delta_eta) < 0.1))","l");
-   	   legend->AddEntry(h3,"others","l");
+	   legend->AddEntry(h1,"in correlation","l");
+	   legend->AddEntry(h2,"in peak","l");
+   	   legend->AddEntry(h3,"in back to back","l");
+   	   legend->AddEntry(h4,"others","l");
+ //  	   legend->AddEntry(h5,"nPVs > 40","l");
    	   //legend->AddEntry(h4,"30 < nPVs <= 40","l");
    	   //legend->AddEntry(h5,"nPVs > 40","l");
    	   legend->Draw();
