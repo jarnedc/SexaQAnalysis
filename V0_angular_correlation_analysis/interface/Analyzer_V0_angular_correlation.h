@@ -75,9 +75,10 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     virtual void endJob();
     virtual ~Analyzer_V0_angular_correlation();
     TVector3 PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
-    double xy_PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
-    double xy_signed_PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
-    double z_PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double dxy_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double dxy_signed_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double dxy_signed_line_point2(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double dz_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
     double lxy(TVector3 v1, TVector3 v2);
     double std_dev_lxy(double vx, double vy, double vx_var, double vy_var, double bx_x, double bx_y, double bx_x_var, double bx_y_var);
     double lxy_signed(TVector3 particle_vertex, TVector3 beamspot, TVector3 particle_direction);
