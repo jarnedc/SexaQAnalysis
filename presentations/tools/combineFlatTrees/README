@@ -1,0 +1,13 @@
+i The files in this directory are meant to combine the data from the FlatTree produced by running the treeproducer. These Trees have inside information on the data on which was run, before the cuts were applied.
+
+To run:
+First make a list of the root files which you will want to compare:
+./listFlatTrees.sh > listFlatTrees.txt 
+
+This script runs through the /user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results_FlatTree/ directory and looks for filenames containing combined_FlatTree and preFilterInfo. If they are found they are echode so will end up in the  listFlatTrees.txt. A separator = --NEW_RUN_AND_OR_YEAR-- is added between the years and or new PD. 
+
+This list is used in the mergeFlatTrees.cc file which for every root file between two --NEW_RUN_AND_OR_YEAR-- will overlap the nPV histogram and will also write out to a txt file the nEvents which were run over (nevents_file.txt). 
+
+To run (do this in a tmux session, because it takes really long...there is a lot of data in these files...):
+root -l
+.x mergeFlatTrees.cc++() 
