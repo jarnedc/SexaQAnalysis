@@ -43,8 +43,8 @@ do
 
     for filename in $D/*root; do
     #    echo "---------"
-	if [[ $filename = *"events_skimmed_"$1"_trial"$3""* ]]; then
-		
+	if [[ $filename = *"events_skimmed_"$1"_trial"$3""* ]] && [[ $filename != *"preFilterInfo"* ]]; then
+	
 		PART1=$(echo "$filename" | cut -d/ -f8)
 		PART2=$(echo "$filename" | cut -d/ -f9)
 		PART3=$(echo "$filename" | cut -d/ -f10)
