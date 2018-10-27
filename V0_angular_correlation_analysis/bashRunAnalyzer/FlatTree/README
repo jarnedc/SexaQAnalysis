@@ -1,0 +1,22 @@
+step 0: 
+remove or back up the Results_FlatTree directory
+
+then run e.g.:
+
+./printQSUBcommandsForSpecificYearTrialFlatTree.sh 2016 D
+
+to search for preFilterInfo_events_skimmed_ files  in the /pnfs directory. This script will for each run and year and trial then make a .sh file which has inside the hadd commands to combine the root files from a given year, run and trial. 
+
+An example .sh file will be: FlatTree_to_hadd_2016_HTMHT_D.sh
+
+You can now run all these .sh files in another .sh file which simply loops over all these initial .sh files: 
+
+./haddAllFlatTree.sh
+
+this will create the hadded files in the Results_FlatTree directory 
+
+You can now go to ../../../../SexaQAnalysis/presentations/tools/combineFlatTrees/ where there is another .sh file which you can run to list all the data in the Results_FlatTree. This .sh file is:
+
+listFlatTrees.sh > listFlatTrees.txt
+
+it generates the listFlatTrees.txt which is needed for the mergeFlatTrees.cc macro. This macro will run over the listFlatTrees.txt file and merge the data from the root files which are between the separators in listFlatTrees.txt, like this the root macro will produce a root file with the nPV histograms from each year and primary dataset with all the runs overlapped in 1 histogram and it also produces a nevents_file.txt which has the number of events which were run over by multicrab. This can be used to check how much data was actually processed. 

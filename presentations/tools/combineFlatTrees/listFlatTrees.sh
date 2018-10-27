@@ -1,5 +1,5 @@
 #!/bin/bash
-for D in `find /user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results_FlatTree/ -type d`
+for D in `find /user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/FlatTree/Results_FlatTree/ -type d`
 do
    # echo "---------------------------------"
    # echo WILL RUN ON THE FOLLOWING DIRECTORY
@@ -10,7 +10,7 @@ do
         if [[ $filename = *"combined_FlatTree"* ]] && [[ $filename != *"preFilterInfo"* ]]; 
 	then
 
-                PART=$(echo "$filename" | cut -d/ -f13)
+                PART=$(echo "$filename" | cut -d/ -f14)
 
 		if [[ "$PREV_PART" != "$PART" ]]; 
 		then

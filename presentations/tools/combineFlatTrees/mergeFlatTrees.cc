@@ -81,12 +81,12 @@ void mergeFlatTrees()
   TCanvas *myCanvas = new TCanvas();
 
  
-  ifstream runList("listFlatTrees5.txt");
-  TFile* output_f = TFile::Open("combined_FlatTrees5.root","RECREATE");
+  ifstream runList("listFlatTrees.txt");
+  TFile* output_f = TFile::Open("combined_FlatTrees.root","RECREATE");
   output_f->cd(); 
 
   ofstream nevents_file;
-  nevents_file.open("nevents_file5.txt");
+  nevents_file.open("nevents_file.txt");
 
   int totalNumberOfEvents = 0;
   int grand_totalNumberOfEvents = 0;
