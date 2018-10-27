@@ -2,9 +2,9 @@ import FWCore.ParameterSet.Config as cms
 
 Analyzer_V0_angular_correlation = cms.EDAnalyzer('Analyzer_V0_angular_correlation',
     isData = cms.untracked.bool(True),
-    genCollection =  cms.InputTag("genParticles","","HLT"),
     beamspot = cms.InputTag("offlineBeamSpot"),
-    #vertexCollection = cms.InputTag("offlinePrimaryVertices"),
+    vertexCollection = cms.InputTag("offlinePrimaryVertices"),
+    genCollection =  cms.InputTag("genParticles","","HLT"),
     #resonCandidates = cms.InputTag("rMassFilter", "sVertexCompositePtrCandidate","SEXAQ"),
     #sexaqCandidates = cms.InputTag("sMassFilter", "sVertexCompositePtrCandidate","SEXAQ"),
     sexaqCandidates = cms.InputTag("lambdaKshortVertexFilter", "sParticles","SEXAQ"),

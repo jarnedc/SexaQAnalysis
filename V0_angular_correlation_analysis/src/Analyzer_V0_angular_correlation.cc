@@ -5,7 +5,8 @@
 Analyzer_V0_angular_correlation::Analyzer_V0_angular_correlation(edm::ParameterSet const& pset):
   m_isData(pset.getUntrackedParameter<bool>("isData")),
   //m_rCandsTag(pset.getParameter<edm::InputTag>("resonCandidates")),
-  m_bsTag    (pset.getParameter<edm::InputTag>("beamspot")),
+  m_bsTag(pset.getParameter<edm::InputTag>("beamspot")),
+  m_vertexTag(pset.getParameter<edm::InputTag>("vertexCollection")),
   m_genParticlesTag(pset.getParameter<edm::InputTag>("genCollection")),
   m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
   m_KshortsTag(pset.getParameter<edm::InputTag>("kshortCollection")),
@@ -29,6 +30,7 @@ Analyzer_V0_angular_correlation::Analyzer_V0_angular_correlation(edm::ParameterS
   //m_rCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_rCandsTag)),
   //m_sCandsToken(consumes<vector<reco::VertexCompositePtrCandidate> >(m_sCandsTag)),
   m_bsToken    (consumes<reco::BeamSpot>(m_bsTag)),
+  m_vertexToken    (consumes<vector<reco::Vertex>>(m_vertexTag)),
   m_genParticlesToken(consumes<vector<reco::GenParticle> >(m_genParticlesTag)),
   m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag)),
   m_KshortsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_KshortsTag)),
@@ -213,9 +215,12 @@ void Analyzer_V0_angular_correlation::beginJob() {
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter; S mass [GeV]",20000, 0,20);
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm; S mass (GeV)",20000, 0,20);
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.01cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.01cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.01cm; S mass (GeV)",20000, 0,20);
+    histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.1cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.1cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.1cm; S mass (GeV)",20000, 0,20);
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; S mass (GeV)",20000, 0,20);
+    histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; S mass (GeV)",20000, 0,20);
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5; S mass [GeV]",20000, 0,20);
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; S mass [GeV]",20000, 0,20);
+    histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; S mass [GeV]",20000, 0,20);
     histos_th1f[b+"h_s_candidates_vertex_beamspot_dist_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_vertex_beamspot_dist_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm", b+"h_s_candidates_vertex_beamspot_dist_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; lxy (cm)",20000, 0,20);
     histos_th1f[b+"h_s_candidates_error_vertex_beamspot_dist_error_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_error_vertex_beamspot_dist_error_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm", b+"h_s_candidates_error_vertex_beamspot_dist_error_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; error lxy (cm)",20000, 0,20);
     histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_R_larger_0.8"] = dir_masses_S.make<TH1F>(b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_R_larger_0.8", b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_R_larger_0.8; S mass [GeV]",20000, 0,20);
@@ -235,9 +240,6 @@ void Analyzer_V0_angular_correlation::beginJob() {
     //masses of all the reconances
     TFileDirectory dir_masses_all_R = dir_LambdaKshortVertexFilter.mkdir("masses_all_r");
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter; R mass [GeV]",20000, 0,20);
-    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm; R mass [GeV]",20000, 0,20);
-    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8; R mass [GeV]",20000, 0,20);
-    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8; R mass [GeV]",20000, 0,20);
     //for the r candidate, you made some cuts. Now investigate these cuts:    
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8; lxy(S interaction vertex, beamspot)", 5000, 0, 50);
     histos_th1f[b+"h_all_r_candidates_delta_R"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_delta_R", b+"h_all_r_candidates_delta_R; #Delta R(K_{S}^{0},#Lambda^{0})", 5000, 0, 50);
@@ -246,26 +248,25 @@ void Analyzer_V0_angular_correlation::beginJob() {
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_delta_R_slammer_0.8;error lxy(S interaction vertex, beamspot)", 5000, 0, 50);
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1;error lxy(S interaction vertex, beamspot)", 5000, 0, 50);
     histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1;#Delta R(K_{S}^{0},#Lambda^{0})", 2000, 0, 20);
-    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.01"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.01", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.01;lxy(S interaction vertex, beamspot)", 5000, 0, 50);
-    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.01"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.01", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.01;#Delta R(K_{S}^{0},#Lambda^{0})", 2000, 0, 20);
+    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.1"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.1", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.1;lxy(S interaction vertex, beamspot)", 5000, 0, 50);
+    histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.1"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.1", b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.1;#Delta R(K_{S}^{0},#Lambda^{0})", 2000, 0, 20);
     
-   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p005", b+"h_all_r_candidates_mass_dxy_smaller_0p005; R Mass",20000, -20,20);
-   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8", b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p05", b+"h_all_r_candidates_mass_dxy_smaller_0p05; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8", b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8; R Mass",20000, -20,20);
 
-   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08", b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08; R Mass",20000, -20,20);
-   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R", b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R; R Mass",20000, -20,20);
-   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R_and_daughters"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R_and_daughters", b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R_and_daughters; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5", b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R", b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R_and_daughters"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R_and_daughters", b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R_and_daughters; R Mass",20000, -20,20);
 
-   histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p05"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dz_smaller_0p05", b+"h_all_r_candidates_mass_dz_smaller_0p05; R Mass",20000, -20,20);
-   histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8", b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8; R Mass",20000, -20,20);
-   histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8", b+"h_all_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8; R Mass",20000, -20,20);
-   histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8_dxy_smaller_0p5"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8_dxy_smaller_0p5", b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8_dxy_smaller_0p5; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_Dz_smaller_0p05"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_Dz_smaller_0p05", b+"h_all_r_candidates_mass_Dz_smaller_0p05; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_Dz_smaller_0p05_and_delta_R_between_0p1_and_0p8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_Dz_smaller_0p05_and_delta_R_between_0p1_and_0p8", b+"h_all_r_candidates_mass_Dz_smaller_0p05_and_delta_R_between_0p1_and_0p8; R Mass",20000, -20,20);
+   histos_th1f[b+"h_all_r_candidates_mass_Dz_smaller_0p05_dxy_smaller_0p05_and_delta_R_between_0p1_and_0p8"] = dir_masses_all_R.make<TH1F>(b+"h_all_r_candidates_mass_Dz_smaller_0p05_dxy_smaller_0p05_and_delta_R_between_0p1_and_0p8", b+"h_all_r_candidates_mass_Dz_smaller_0p05_dxy_smaller_0p05_and_delta_R_between_0p1_and_0p8; R Mass",20000, -20,20);
     //masses of the reconances decaying to  protons
     TFileDirectory dir_masses_R = dir_LambdaKshortVertexFilter.mkdir("masses_r");
     histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_after_LambdaKshortVertexFilter", b+"h_r_candidates_mass_after_LambdaKshortVertexFilter; R mass [GeV]",20000, 0,20);
-    histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm", b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm; R mass [GeV]",20000, 0,20);
+    histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm", b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm; R mass [GeV]",20000, 0,20);
     histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8", b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8; R mass [GeV]",20000, 0,20);
-    histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8", b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8; R mass [GeV]",20000, 0,20);
+    histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm_delta_R_smaller_0.8"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8", b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm_delta_R_smaller_0.8; R mass [GeV]",20000, 0,20);
     histos_th1f[b+"h_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8", b+"h_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8; R mass [GeV]",20000, 0,20);
     histos_th1f[b+"h_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8"] = dir_masses_R.make<TH1F>(b+"h_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8", b+"h_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8; R mass [GeV]",20000, 0,20);
     
@@ -283,13 +284,18 @@ void Analyzer_V0_angular_correlation::beginJob() {
     TFileDirectory dir_PCA_R = dir_LambdaKshortVertexFilter.mkdir("PCA_R");
    histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter; dxy [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter", b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter; dxy signed[cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dxy_signed_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dxy_signed_after_LambdaKshortVertexFilter", b+"h_r_candidates_Dxy_signed_after_LambdaKshortVertexFilter; dxy signed[cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter2"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter2", b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter2; dxy signed[cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter; dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter; Dz [cm]",20000, -20,20);
    histos_th2f[b+"h_r_candidates_dxy_dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH2F>(b+"h_r_candidates_dxy_dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_dxy_dz_after_LambdaKshortVertexFilter;dxy [cm]; dz [cm]",4000, -20,20, 4000, -20,20);
    histos_th2f[b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH2F>(b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter; signed dxy [cm]; dz [cm]",4000, -20,20, 4000, -20,20);
+   histos_th2f[b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH2F>(b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter; signed dxy [cm]; dz [cm]",4000, -20,20, 4000, -20,20);
+ 
+   histos_th1f[b+"h_r_candidates_Kshort_Dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Kshort_Dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_Kshort_Dz_after_LambdaKshortVertexFilter; Dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Lambda_Dz_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Lambda_Dz_after_LambdaKshortVertexFilter", b+"h_r_candidates_Lambda_Dz_after_LambdaKshortVertexFilter; Dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_delta_Dz_Kshort_Lambda_after_LambdaKshortVertexFilter"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_delta_Dz_Kshort_Lambda_after_LambdaKshortVertexFilter", b+"h_r_candidates_delta_Dz_Kshort_Lambda_after_LambdaKshortVertexFilter; delta Dz [cm]",20000, -20,20);
    
-   histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11; dxy [cm]",20000, -20,20);
-   histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11; dz [cm]",20000, -20,20);
   
    TFileDirectory dir_reduced_mass_range = dir_LambdaKshortVertexFilter.mkdir("Reduced_mass_range_reconance");
    histos_th1f[b+"h_all_r_candidates_r_vertex_beamspot_distance_reduced_mass_range"] = dir_reduced_mass_range.make<TH1F>(b+"h_all_r_candidates_r_vertex_beamspot_distance_reduced_mass_range", b+"h_all_r_candidates_r_vertex_beamspot_distance_reduced_mass_range; lxy (cm)",2000, 0,20);
@@ -297,15 +303,22 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_reduced_mass_range"] = dir_reduced_mass_range.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_reduced_mass_range", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_reduced_mass_range; dxy (cm)",2000,0 ,20);
    histos_th1f[b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter_reduced_mass_range"] = dir_reduced_mass_range.make<TH1F>(b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter_reduced_mass_range", b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter_reduced_mass_range; error dxy (cm)",20000,-20 ,20);
  
-   //pile-up dependence of the dxy and dz 
+   //pile-up dependence of the dxy and dz and Dz 
+   histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11; dxy [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11; dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11", b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11; Dz [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20; dxy [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20; dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20", b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20; Dz [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30; dxy [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30; dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30", b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30; Dz [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40; dxy [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40; dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40", b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40; Dz [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40", b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40; dxy [cm]",20000, -20,20);
    histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40", b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40; dz [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40"] = dir_PCA_R.make<TH1F>(b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40", b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40; Dz [cm]",20000, -20,20);
 
    //masses of Ks and Lambda after the LambdaKshortVertexFilter
     TFileDirectory dir_masses_daugthers = dir_LambdaKshortVertexFilter.mkdir("masses daughters");
@@ -390,6 +403,13 @@ void Analyzer_V0_angular_correlation::beginJob() {
    TFileDirectory dir_dist_beamspot_S = dir_LambdaKshortVertexFilter.mkdir("dist_beamspot_S");
    histos_th1f[b+"h_S_vtx_distance_to_beamspot"] = dir_dist_beamspot_S.make<TH1F>(b+"h_S_vtx_distance_to_beamspot",b+"h_S_vtx_distance_to_beamspot; lxy(S interaction vertex,  beamspot) [cm];",3000,0,30);
    histos_th1f[b+"h_S_vtx_distance_to_beamspot_error"] = dir_dist_beamspot_S.make<TH1F>(b+"h_S_vtx_distance_to_beamspot_error",b+"h_S_vtx_distance_to_beamspot_error; error lxy(S interaction vertex,  beamspot) [cm];",3000,0,30);
+   
+   histos_th1f[b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter"] = dir_dist_beamspot_S.make<TH1F>(b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter", b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter; lxy signed[cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1"] = dir_dist_beamspot_S.make<TH1F>(b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1", b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1; lxy signed[cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter"] = dir_dist_beamspot_S.make<TH1F>(b+"h_r_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter", b+"h_r_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter; lxy signed[cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_error_lxy_after_LambdaKshortVertexFilter"] = dir_dist_beamspot_S.make<TH1F>(b+"h_r_candidates_error_lxy_after_LambdaKshortVertexFilter", b+"h_r_candidates_error_lxy_after_LambdaKshortVertexFilter; error lxy [cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_significance_lxy_after_LambdaKshortVertexFilter"] = dir_dist_beamspot_S.make<TH1F>(b+"h_r_candidates_significance_lxy_after_LambdaKshortVertexFilter", b+"h_r_candidates_significance_lxy_after_LambdaKshortVertexFilter; significance lxy signed[cm]",20000, -20,20);
+   histos_th1f[b+"h_r_candidates_Lxy_signed_after_LambdaKshortVertexFilter"] = dir_dist_beamspot_S.make<TH1F>(b+"h_r_candidates_Lxy_signed_after_LambdaKshortVertexFilter", b+"h_r_candidates_Lxy_signed_after_LambdaKshortVertexFilter; Lxy signed[cm]",20000, -20,20);
    //try to see if the error on the vertex is dependent on the #PVs
 
    histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_smaller_11"] = dir_dist_beamspot_S.make<TH1F>(b+"h_S_vtx_distance_to_beamspot_for_nPVs_smaller_11",b+"h_S_vtx_distance_to_beamspot_for_nPVs_smaller_11; lxy(S interaction vertex,  beamspot) [cm];",3000,0,30);
@@ -406,7 +426,7 @@ void Analyzer_V0_angular_correlation::beginJob() {
 
    histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot"]= dir_dist_beamspot_S.make<TH2F>(b+"h_delta_phi_S_vtx_distance_to_beamspot",b+"h_delta_phi_S_vtx_distance_to_beamspot; #Delta #Phi [rad]; lxy(S interaction vertex,  beamspot) [cm];",4000, -4, 4,3000,0,30); 
  //  histos_th3f[b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot"]= dir_dist_beamspot_S.make<TH3F>(b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot",b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot; #Delta #Phi [rad]; #Delta #eta; lxy(S interaction vertex,  beamspot) [cm];",4000, -4, 4, 4000, -4, 4,3000,0,30); 
-   histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm"]= dir_dist_beamspot_S.make<TH2F>(b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm",b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm; #Delta #Phi [rad]; lxy(S interaction vertex,  beamspot) [cm];",4000, -4, 4,3000,0,30); 
+   histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.1cm"]= dir_dist_beamspot_S.make<TH2F>(b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.1cm",b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.1cm; #Delta #Phi [rad]; lxy(S interaction vertex,  beamspot) [cm];",4000, -4, 4,3000,0,30); 
  //  histos_th3f[b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm"]= dir_dist_beamspot_S.make<TH3F>(b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm",b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm; #Delta #Phi [rad]; #Delta #eta; lxy(S interaction vertex,  beamspot) [cm];",4000, -4, 4, 4000, -4, 4,3000,0,30); 
    histos_th2f[b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error"]= dir_dist_beamspot_S.make<TH2F>(b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error",b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error; lxy(S interaction vertex,  beamspot) [cm]; errror lxy(S interaction vertex,  beamspot) [cm];",3000, 0, 30,3000,0,30); 
    histos_th2f[b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error_for_delta_phi_between_1_and_2.5"]= dir_dist_beamspot_S.make<TH2F>(b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error_for_delta_phi_between_1_and_2.5",b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error_for_delta_phi_between_1_and_2.5; lxy(S interaction vertex,  beamspot) [cm]; errror lxy(S interaction vertex,  beamspot) [cm];",3000, 0, 30,3000,0,30); 
@@ -414,8 +434,8 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th2f[b+"h_S_vtx_distance_to_beamspot_vx_vy"]= dir_dist_beamspot_S.make<TH2F>(b+"h_S_vtx_distance_to_beamspot_vx_vy",b+"h_S_vtx_distance_to_beamspot_vx_vy; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
 
    TFileDirectory dir_dist_beamspot_S_cut_on_decay_vertex = dir_dist_beamspot_S.mkdir("dist_beamspot_S_cut_on_decay_vertex");
-   histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
-   histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5",b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
+   histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm",b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
+   histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm_delta_phi_between_1_and_2.5"]= dir_dist_beamspot_S_cut_on_decay_vertex.make<TH2F>(b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm_delta_phi_between_1_and_2.5",b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm_delta_phi_between_1_and_2.5; vx (distance beamspot to S annihilation vertex); vy (distance beamspot to S annihilation vertex)",1000, -50, 50,1000, -50, 50); 
 
    //for distance between beamspot and anti-S candidate vertex 
    TFileDirectory dir_dist_beamspot_anti_S = dir_LambdaKshortVertexFilter.mkdir("dist_beamspot_anti_S_BLINDED");
@@ -436,15 +456,25 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_phi",b+"h_Sdaughters_L0_Ks_delta_phi; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad];",1000,-4,4); 
    histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_eta",b+"h_Sdaughters_L0_Ks_delta_eta; delta eta;",4000,-10,10); 
    histos_th1f[b+"h_Sdaughters_L0_Ks_delta_R"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_R",b+"h_Sdaughters_L0_Ks_delta_R; delta R;",1000,0,10); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1",b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p08"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p08",b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p08; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p06"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p06",b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p06; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p04"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p04",b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p04; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p02"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p02",b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p02; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter",b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p08_after_LambdaKshortVertexFilter"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p08_after_LambdaKshortVertexFilter",b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p08_after_LambdaKshortVertexFilter; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p06_after_LambdaKshortVertexFilter"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p06_after_LambdaKshortVertexFilter",b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p06_after_LambdaKshortVertexFilter; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p04_after_LambdaKshortVertexFilter"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p04_after_LambdaKshortVertexFilter",b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p04_after_LambdaKshortVertexFilter; signed lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p02_after_LambdaKshortVertexFilter"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH1F>(b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p02_after_LambdaKshortVertexFilter",b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p02_after_LambdaKshortVertexFilter; signed lxy (cm);",1000,-20,20); 
    histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
    histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_no_cent"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_no_cent",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_no_cent; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
 
    TFileDirectory dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex = dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.mkdir("Angular_Correlation_Daughters_S_cut_on_decay_vertices");
    			
-   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_Sdaughters_L0_Ks_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad];",1000,-4,4); 
-   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm;",4000,-10,10); 
-   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; delta R;",1000,0,10); 
-   histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
+   histos_th1f[b+"h_Sdaughters_L0_K_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH1F>(b+"h_Sdaughters_L0_K_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm",b+"h_Sdaughters_L0_K_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad];",1000,-4,4); 
+   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm",b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm;",4000,-10,10); 
+   histos_th1f[b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH1F>(b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm",b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; delta R;",1000,0,10); 
+   histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
    histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_0.5cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_0.5cm",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_0.5cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
    histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.0cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.0cm",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.0cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
    histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.5cm"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S_cut_decay_vertex.make<TH2F>(b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.5cm",b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.5cm; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]; delta eta",1000,-4,4, 4000, -10, 10); 
@@ -490,7 +520,14 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th1f[b+"h_s_candidates_lxy_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_lxy_in_delta_phi_delta_eta_corr",b+"h_s_candidates_lxy_in_delta_phi_delta_eta_corr; lxy (cm);",1000,0,20); 
    histos_th1f[b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr",b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr; signed lxy (cm);",1000,-20,20); 
    histos_th1f[b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr_error_lxy_smaller_0p1"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr_error_lxy_smaller_0p1",b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr_error_lxy_smaller_0p1; signed lxy (cm);",1000,-20,20); 
-   histos_th1f[b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr",b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr; error lxy (cm);",1000,0,20); 
+   histos_th1f[b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr",b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr; error lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_Kshort_Lambda_same_PV_in_delta_phi_delta_eta_corr",b+"h_s_candidates_Kshort_Lambda_same_PV_in_delta_phi_delta_eta_corr; 0: Ks and Lambda different PV;",2,0,2);
+   histos_th1f[b+"h_s_candidates_dxy_signed_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_dxy_signed_in_delta_phi_delta_eta_corr",b+"h_s_candidates_dxy_signed_in_delta_phi_delta_eta_corr; dxy signed;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_Dz_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_Dz_in_delta_phi_delta_eta_corr",b+"h_s_candidates_Dz_in_delta_phi_delta_eta_corr; Dz;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_correlation.make<TH1F>(b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_delta_phi_delta_eta_corr",b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_delta_phi_delta_eta_corr; delta(Dz(Ks),Dz(Lambda)) (cm);", 1000,-20,20);
+
+
+
    TFileDirectory dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak = dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.mkdir("Angular_Correlation_Daughters_S_kinematics_S_in_peak");
    histos_th1f[b+"h_s_candidates_mass_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_mass_in_peak",b+"h_s_candidates_mass_in_peak; Mass (GeV);",1000,0,20); 
    histos_th1f[b+"h_s_candidates_pt_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_pt_in_peak",b+"h_s_candidates_pt_in_peak; pT (GeV);",1000,0,20); 
@@ -502,7 +539,16 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th1f[b+"h_s_candidates_lxy_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_in_peak",b+"h_s_candidates_lxy_in_peak; lxy (cm);",1000,0,20); 
    histos_th1f[b+"h_s_candidates_lxy_signed_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_signed_in_peak",b+"h_s_candidates_lxy_signed_in_peak;lxy signed (cm) ;",1000,-20,20); 
    histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p1"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p1",b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p1;lxy signed (cm) ;",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p08"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p08",b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p08;lxy signed (cm) ;",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p06"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p06",b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p06;lxy signed (cm) ;",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p04"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p04",b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p04;lxy signed (cm) ;",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p02"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p02",b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p02;lxy signed (cm) ;",1000,-20,20); 
    histos_th1f[b+"h_s_candidates_error_lxy_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_error_lxy_in_peak",b+"h_s_candidates_error_lxy_in_peak; error lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_Kshort_Lambda_same_PV_in_peak",b+"h_s_candidates_Kshort_Lambda_same_PV_in_peak; 0: Ks and Lambda different PV;",2,0,2); 
+   histos_th1f[b+"h_s_candidates_dxy_signed_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_dxy_signed_in_peak",b+"h_s_candidates_dxy_signed_in_peak; dxy signed;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_Dz_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_Dz_in_peak",b+"h_s_candidates_Dz_in_peak; Dz;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_peak"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_peak.make<TH1F>(b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_peak",b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_peak; delta(Dz(Ks),Dz(Lambda));", 1000,-20,20);
+
 
    TFileDirectory dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back = dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.mkdir("Angular_Correlation_Daughters_S_kinematics_S_in_back_to_back");
    histos_th1f[b+"h_s_candidates_mass_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_mass_in_back_to_back",b+"h_s_candidates_mass_in_back_to_back; Mass (GeV);",1000,0,20); 
@@ -516,27 +562,37 @@ void Analyzer_V0_angular_correlation::beginJob() {
    histos_th1f[b+"h_s_candidates_lxy_signed_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_lxy_signed_in_back_to_back",b+"h_s_candidates_lxy_signed_in_back_to_back;lxy signed (cm) ;",1000,-20,20); 
    histos_th1f[b+"h_s_candidates_lxy_signed_in_back_to_back_error_lxy_smaller_0p1"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_lxy_signed_in_back_to_back_error_lxy_smaller_0p1",b+"h_s_candidates_lxy_signed_in_back_to_back_error_lxy_smaller_0p1;lxy signed (cm) ;",1000,-20,20); 
    histos_th1f[b+"h_s_candidates_error_lxy_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_error_lxy_in_back_to_back",b+"h_s_candidates_error_lxy_in_back_to_back; error lxy (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_Kshort_Lambda_same_PV_in_back_to_back",b+"h_s_candidates_Kshort_Lambda_same_PV_in_back_to_back; 0: Ks and Lambda different PV;",2,0,2); 
+   histos_th1f[b+"h_s_candidates_dxy_signed_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_dxy_signed_in_back_to_back",b+"h_s_candidates_dxy_signed_in_back_to_back; dxy signed;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_Dz_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_Dz_in_back_to_back",b+"h_s_candidates_Dz_in_back_to_back; Dz;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_back_to_back"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_in_back_to_back.make<TH1F>(b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_back_to_back",b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_back_to_back; delta(Dz(Ks),Dz(Lambda));", 1000,-20,20);
 
 
-   TFileDirectory dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation = dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.mkdir("Angular_Correlation_Daughters_S_kinematics_S_outside_correlation");
+
+   TFileDirectory dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation = dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_S.mkdir("Angular_Correlation_Daughters_S_kinematics_S_others");
  
-   histos_th1f[b+"h_s_candidates_mass_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_mass_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_mass_outside_delta_phi_delta_eta_corr; mass (GeV);",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_pt_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_pt_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_pt_outside_delta_phi_delta_eta_corr; pt (GeV);",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_p_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_p_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_p_outside_delta_phi_delta_eta_corr; p (GeV);",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_energy_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_energy_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_energy_outside_delta_phi_delta_eta_corr; energy (GeV);",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_et_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_et_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_et_outside_delta_phi_delta_eta_corr; et (GeV);",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_mt_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_mt_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_mt_outside_delta_phi_delta_eta_corr; mt (GeV);",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_phi_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_phi_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_phi_outside_delta_phi_delta_eta_corr; #Phi (rad);",4000,-4,4); 
-   histos_th1f[b+"h_s_candidates_theta_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_theta_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_theta_outside_delta_phi_delta_eta_corr; #theta (rad);",4000,-4,4); 
-   histos_th1f[b+"h_s_candidates_eta_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_eta_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_eta_outside_delta_phi_delta_eta_corr; #eta (rad);",4000,-10,10); 
-   histos_th1f[b+"h_s_candidates_vx_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vx_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_vx_outside_delta_phi_delta_eta_corr; vx (cm);",1000,-50,50); 
-   histos_th1f[b+"h_s_candidates_vy_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vy_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_vy_outside_delta_phi_delta_eta_corr; vy (GeV);",1000,-50,50); 
-   histos_th1f[b+"h_s_candidates_vz_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vz_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_vz_outside_delta_phi_delta_eta_corr; vz (GeV);",1000,-50,50); 
-   histos_th1f[b+"h_s_candidates_vertexNormalizedChi2_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vertexNormalizedChi2_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_vertexNormalizedChi2_outside_delta_phi_delta_eta_corr; Chi2/ndof;",1000,0,50); 
-   histos_th1f[b+"h_s_candidates_lxy_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_lxy_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_lxy_outside_delta_phi_delta_eta_corr; lxy (cm);",1000,0,20); 
-   histos_th1f[b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr; lxy signed (cm);",1000,-20,20); 
-   histos_th1f[b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr_error_lxy_smaller_0p1"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr_error_lxy_smaller_0p1",b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr_error_lxy_smaller_0p1; lxy signed (cm);",1000,-20,20); 
-   histos_th1f[b+"h_s_candidates_error_lxy_outside_delta_phi_delta_eta_corr"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_error_lxy_outside_delta_phi_delta_eta_corr",b+"h_s_candidates_error_lxy_outside_delta_phi_delta_eta_corr; error lxy (cm);",1000,0,20); 
+   histos_th1f[b+"h_s_candidates_mass_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_mass_others",b+"h_s_candidates_mass_others; mass (GeV);",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_pt_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_pt_others",b+"h_s_candidates_pt_others; pt (GeV);",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_p_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_p_others",b+"h_s_candidates_p_others; p (GeV);",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_energy_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_energy_others",b+"h_s_candidates_energy_others; energy (GeV);",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_et_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_et_others",b+"h_s_candidates_et_others; et (GeV);",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_mt_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_mt_others",b+"h_s_candidates_mt_others; mt (GeV);",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_phi_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_phi_others",b+"h_s_candidates_phi_others; #Phi (rad);",4000,-4,4); 
+   histos_th1f[b+"h_s_candidates_theta_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_theta_others",b+"h_s_candidates_theta_others; #theta (rad);",4000,-4,4); 
+   histos_th1f[b+"h_s_candidates_eta_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_eta_others",b+"h_s_candidates_eta_others; #eta (rad);",4000,-10,10); 
+   histos_th1f[b+"h_s_candidates_vx_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vx_others",b+"h_s_candidates_vx_others; vx (cm);",1000,-50,50); 
+   histos_th1f[b+"h_s_candidates_vy_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vy_others",b+"h_s_candidates_vy_others; vy (GeV);",1000,-50,50); 
+   histos_th1f[b+"h_s_candidates_vz_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vz_others",b+"h_s_candidates_vz_others; vz (GeV);",1000,-50,50); 
+   histos_th1f[b+"h_s_candidates_vertexNormalizedChi2_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_vertexNormalizedChi2_others",b+"h_s_candidates_vertexNormalizedChi2_others; Chi2/ndof;",1000,0,50); 
+   histos_th1f[b+"h_s_candidates_lxy_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_lxy_others",b+"h_s_candidates_lxy_others; lxy (cm);",1000,0,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_lxy_signed_others",b+"h_s_candidates_lxy_signed_others; lxy signed (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_lxy_signed_others_error_lxy_smaller_0p1"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_lxy_signed_others_error_lxy_smaller_0p1",b+"h_s_candidates_lxy_signed_others_error_lxy_smaller_0p1; lxy signed (cm);",1000,-20,20); 
+   histos_th1f[b+"h_s_candidates_error_lxy_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_error_lxy_others",b+"h_s_candidates_error_lxy_others; error lxy (cm);",1000,0,20); 
+   histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_Kshort_Lambda_same_PV_others",b+"h_s_candidates_Kshort_Lambda_same_PV_others; 0: Ks and Lambda different PV;",2,0,2); 
+   histos_th1f[b+"h_s_candidates_dxy_signed_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_dxy_signed_others",b+"h_s_candidates_dxy_signed_others; dxy signed;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_Dz_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_Dz_others",b+"h_s_candidates_Dz_others; Dz;", 1000,-20,20);
+   histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_others"]= dir_LambdaKshortVertexFilter_Angular_Correlation_Daughters_kinematics_S_outside_correlation.make<TH1F>(b+"h_s_candidates_delta_Dz_Kshort_Lambda_others",b+"h_s_candidates_delta_Dz_Kshort_Lambda_others; delta(Dz(Ks),Dz(Lambda));", 1000,-20,20);
+
 
 
    //for angular coorelation between the daughters of the anti-S candidates
@@ -702,6 +758,10 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   edm::Handle<reco::BeamSpot> h_bs;
   iEvent.getByToken(m_bsToken, h_bs);
 
+  //primary vertices
+  edm::Handle<vector<reco::Vertex>> h_vertex;
+  iEvent.getByToken(m_vertexToken, h_vertex);
+
   //lambdaKshortVertexFilter sexaquark candidates
   edm::Handle<vector<reco::VertexCompositeCandidate> > h_sCands;
   iEvent.getByToken(m_sCandsToken, h_sCands);
@@ -758,17 +818,11 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
   
   double bx_x_std_dev = h_bs->x0Error(); 
   double bx_y_std_dev = h_bs->y0Error(); 
-  double bx_z_std_dev = h_bs->z0Error(); 
+  //double bx_z_std_dev = h_bs->z0Error(); 
 
 
   if(h_bs.isValid()){ 	
 
-	double bx_x = h_bs->x0(); 
-	double bx_y = h_bs->y0(); 
-	double bx_z = h_bs->z0(); 
-	double bx_x_std_dev = h_bs->x0Error(); 
-	double bx_y_std_dev = h_bs->y0Error(); 
-	double bx_z_std_dev = h_bs->z0Error(); 
 	
         double lxy_beamspot = sqrt(bx_x*bx_x+bx_y*bx_y);
 	double lxy_beamspot_std_dev = std_dev_lxy(bx_x, bx_y, bx_x_std_dev*bx_x_std_dev, bx_y_std_dev*bx_y_std_dev, 0, 0, 0, 0);
@@ -835,7 +889,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 		if(fabs(delta_phi) < 0.1 && fabs(delta_eta) > 0.5 && fabs(delta_eta) < 3){
                 	histos_th1f[b+"h_L0_Ks_delta_dz_Filters_Collection_in_reconance"]->Fill(delta_dz);
 		}
-		else if(fabs(delta_phi) < 0.1 && fabs(delta_eta) < 0.1){
+		else if(delta_R<0.2){
                         histos_th1f[b+"h_L0_Ks_delta_dz_Filters_Collection_in_peak"]->Fill(delta_dz);
 		}
 		else if(fabs(delta_phi) > 2.9){
@@ -888,7 +942,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 		//vertex error
 		double vx_Lambda_var = h_Lambdas->at(l).vertexCovariance(0,0);
 		double vy_Lambda_var = h_Lambdas->at(l).vertexCovariance(1,1);
-		double vz_Lambda_var = h_Lambdas->at(l).vertexCovariance(2,2);
+		//double vz_Lambda_var = h_Lambdas->at(l).vertexCovariance(2,2);
 	
 		//displacement
 		double lxy_Lambda_b = lxy(Lambda_v, beamspot);
@@ -958,7 +1012,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 		//vertex error
 		double vx_Kshort_var = h_Kshorts->at(k).vertexCovariance(0,0);
 		double vy_Kshort_var = h_Kshorts->at(k).vertexCovariance(1,1);
-		double vz_Kshort_var = h_Kshorts->at(k).vertexCovariance(2,2);
+		//double vz_Kshort_var = h_Kshorts->at(k).vertexCovariance(2,2);
 	
 		//displacement
 		double lxy_Kshort_b = lxy(Kshort_v, beamspot);
@@ -1163,7 +1217,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
 			double vx_S_candidate_var = h_sCands->at(i).vertexCovariance(0,0);
 			double vy_S_candidate_var = h_sCands->at(i).vertexCovariance(1,1);
-			double vz_S_candidate_var = h_sCands->at(i).vertexCovariance(2,2);
+			//double vz_S_candidate_var = h_sCands->at(i).vertexCovariance(2,2);
 
 			//Lambda
 			double vx_Lambda = h_sCands->at(i).daughter(0)->vx(); 
@@ -1221,7 +1275,56 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			double dz_Kshort_b = dz_line_point(Kshort_v, Kshort_p, beamspot);
 			double dz_Lambda_b = dz_line_point(Lambda_v, Lambda_p, beamspot);
 			
+			//first based on Dz find the best vertex: have to loop over all of them to find the best one
+			int n_bestPrimaryVertex_S = 0;
+			int n_bestPrimaryVertex_Kshort = 0;
+			int n_bestPrimaryVertex_Lambda = 0;
+			
+			if(h_vertex.isValid()) {
+				
+				Double_t Dz_best_S = 999;
+				Double_t Dz_best_Ks = 999;
+				Double_t Dz_best_Lambda = 999;
 
+        			for (unsigned int n = 0; n < h_vertex->size(); ++n) {
+					
+					TVector3 TrialPrimaryVertex(h_vertex->at(n).x(),h_vertex->at(n).y(),h_vertex->at(n).z());
+
+					//based on Dz find the best vertex for the S
+					double Dz_trial_S = dz_line_point(S_v, S_p, TrialPrimaryVertex);
+					if(Dz_trial_S < Dz_best_S) {
+						Dz_best_S = Dz_trial_S;
+						n_bestPrimaryVertex_S = n;
+					}
+
+					//based on Dz find the best vertex for the Ks
+					double Dz_trial_Ks = dz_line_point(Kshort_v, Kshort_p, TrialPrimaryVertex);
+					if(Dz_trial_Ks < Dz_best_Ks) {
+						Dz_best_Ks = Dz_trial_Ks;
+						n_bestPrimaryVertex_Kshort = n;
+					}
+					
+					//based on Dz find the best vertex for the Lambda
+					double Dz_trial_Lambda = dz_line_point(Lambda_v, Lambda_p, TrialPrimaryVertex);
+					if(Dz_trial_Lambda < Dz_best_Lambda) {
+						Dz_best_Lambda = Dz_trial_Lambda;
+						n_bestPrimaryVertex_Lambda = n;
+					}
+
+				}
+			}
+			TVector3 bestPrimaryVertex_S(h_vertex->at(n_bestPrimaryVertex_S).x(),h_vertex->at(n_bestPrimaryVertex_S).y(),h_vertex->at(n_bestPrimaryVertex_S).z());
+			TVector3 bestPrimaryVertex_Kshort(h_vertex->at(n_bestPrimaryVertex_Kshort).x(),h_vertex->at(n_bestPrimaryVertex_Kshort).y(),h_vertex->at(n_bestPrimaryVertex_Kshort).z());
+			TVector3 bestPrimaryVertex_Lambda(h_vertex->at(n_bestPrimaryVertex_Lambda).x(),h_vertex->at(n_bestPrimaryVertex_Lambda).y(),h_vertex->at(n_bestPrimaryVertex_Lambda).z());
+
+			double Lxy_S_PV_signed =  lxy_signed(S_v, beamspot, bestPrimaryVertex_S);
+			double Dxy_signed_S_PV = dxy_signed_line_point(S_v, S_p, bestPrimaryVertex_S);
+			
+			double Dz_S_PV = dz_line_point(S_v, S_p, bestPrimaryVertex_S);
+			
+			double Dz_Kshort_PV = dz_line_point(Kshort_v, Kshort_p, bestPrimaryVertex_Kshort);
+			double Dz_Lambda_PV = dz_line_point(Lambda_v, Lambda_p, bestPrimaryVertex_Lambda);
+			double delta_Dz_Kshort_Lambda = fabs(Dz_Kshort_PV-Dz_Lambda_PV);
 			//impact parameters
 			//std::cout << "starting to get the dxy" << std::endl;
 			//const reco::Candidate* S_candidate_daughter = h_sCands->at(i).daughter(0);
@@ -1241,13 +1344,26 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				histos_th1f[b+"h_Sdaughters_L0_Ks_delta_R"]->Fill(delta_R);
 				histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta"]->Fill(delta_phi,delta_eta);
 				if( abs(delta_phi) > 0.1 || abs(delta_eta) > 0.1 )histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_no_cent"]->Fill(delta_phi,delta_eta);
+
+				if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
+				if(lxy_S_b_std_dev<0.08)histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p08"]->Fill(lxy_S_b_signed);
+				if(lxy_S_b_std_dev<0.06)histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p06"]->Fill(lxy_S_b_signed);
+				if(lxy_S_b_std_dev<0.04)histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p04"]->Fill(lxy_S_b_signed);
+				if(lxy_S_b_std_dev<0.02)histos_th1f[b+"h_s_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p02"]->Fill(lxy_S_b_signed);
+	                        if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+	                        if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.08)histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p08_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+	                        if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.06)histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p06_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+	                        if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.04)histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p04_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+	                        if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.02)histos_th1f[b+"h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p02_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+
+
 				//make angular correlation plots for the particles which survive the constraint on the decay vertex
-				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01){
+				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1){
 					
-					histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(delta_phi);
-					histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(delta_eta);
-					histos_th1f[b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(delta_R);
-					histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(delta_phi,delta_eta);
+					histos_th1f[b+"h_Sdaughters_L0_K_delta_phi_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(delta_phi);
+					histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(delta_eta);
+					histos_th1f[b+"h_Sdaughters_L0_Ks_delta_R_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(delta_R);
+					histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(delta_phi,delta_eta);
 				
 				}
 /*
@@ -1294,9 +1410,14 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 					histos_th1f[b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr"]->Fill(lxy_S_b_signed);
 					if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_in_delta_phi_delta_eta_corr_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
 					histos_th1f[b+"h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr"]->Fill(lxy_S_b_std_dev);
-				}
+					if(n_bestPrimaryVertex_Kshort == n_bestPrimaryVertex_Lambda)histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_delta_phi_delta_eta_corr"]->Fill(1);
+					else histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_delta_phi_delta_eta_corr"]->Fill(0);
+					histos_th1f[b+"h_s_candidates_dxy_signed_in_delta_phi_delta_eta_corr"]->Fill(dxy_signed_S_b);				
+					histos_th1f[b+"h_s_candidates_Dz_in_delta_phi_delta_eta_corr"]->Fill(Dz_S_PV);
+					histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_delta_phi_delta_eta_corr"]->Fill(delta_Dz_Kshort_Lambda);
+					}
 				//select the ones in the 0,0 peak
-				else if(fabs(delta_phi) < 0.1 && fabs(delta_eta) < 0.1){
+				else if(delta_R < 0.2){
 					histos_th1f[b+"h_s_candidates_mass_in_peak"]->Fill(h_sCands->at(i).mass());
 					histos_th1f[b+"h_s_candidates_pt_in_peak"]->Fill(h_sCands->at(i).pt());
 					histos_th1f[b+"h_s_candidates_phi_in_peak"]->Fill(h_sCands->at(i).phi());
@@ -1307,7 +1428,16 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 					histos_th1f[b+"h_s_candidates_lxy_in_peak"]->Fill(lxy_S_b);
                                         histos_th1f[b+"h_s_candidates_lxy_signed_in_peak"]->Fill(lxy_S_b_signed);
                                         if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
+                                        if(lxy_S_b_std_dev<0.08)histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p08"]->Fill(lxy_S_b_signed);
+                                        if(lxy_S_b_std_dev<0.06)histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p06"]->Fill(lxy_S_b_signed);
+                                        if(lxy_S_b_std_dev<0.04)histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p04"]->Fill(lxy_S_b_signed);
+                                        if(lxy_S_b_std_dev<0.02)histos_th1f[b+"h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p02"]->Fill(lxy_S_b_signed);
                                         histos_th1f[b+"h_s_candidates_error_lxy_in_peak"]->Fill(lxy_S_b_std_dev);
+					if(n_bestPrimaryVertex_Kshort == n_bestPrimaryVertex_Lambda)histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_peak"]->Fill(1);
+					else histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_peak"]->Fill(0);
+					histos_th1f[b+"h_s_candidates_dxy_signed_in_peak"]->Fill(dxy_signed_S_b);				
+					histos_th1f[b+"h_s_candidates_Dz_in_peak"]->Fill(Dz_S_PV);
+					histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_peak"]->Fill(delta_Dz_Kshort_Lambda);
 				}
 				//select the back to back ones
 				else if(fabs(delta_phi) > 2.9){
@@ -1322,26 +1452,35 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
                                         histos_th1f[b+"h_s_candidates_lxy_signed_in_back_to_back"]->Fill(lxy_S_b_signed);
                                         if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_in_back_to_back_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
                                         histos_th1f[b+"h_s_candidates_error_lxy_in_back_to_back"]->Fill(lxy_S_b_std_dev);
+					if(n_bestPrimaryVertex_Kshort == n_bestPrimaryVertex_Lambda)histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_back_to_back"]->Fill(1);
+					else histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_in_back_to_back"]->Fill(0);
+					histos_th1f[b+"h_s_candidates_dxy_signed_in_back_to_back"]->Fill(dxy_signed_S_b);				
+					histos_th1f[b+"h_s_candidates_Dz_in_back_to_back"]->Fill(Dz_S_PV);
+					histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_in_back_to_back"]->Fill(delta_Dz_Kshort_Lambda);
 				}
 				else{
-       		                        histos_th1f[b+"h_s_candidates_mass_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).mass());
-					histos_th1f[b+"h_s_candidates_pt_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).pt());
-					histos_th1f[b+"h_s_candidates_p_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).p());
-					histos_th1f[b+"h_s_candidates_energy_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).energy());
-					histos_th1f[b+"h_s_candidates_et_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).et());
-					histos_th1f[b+"h_s_candidates_mt_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).mt());
-					histos_th1f[b+"h_s_candidates_phi_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).phi());
-					histos_th1f[b+"h_s_candidates_theta_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).theta());
-					histos_th1f[b+"h_s_candidates_eta_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).eta());
-					histos_th1f[b+"h_s_candidates_vx_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).vx());
-					histos_th1f[b+"h_s_candidates_vy_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).vy());
-					histos_th1f[b+"h_s_candidates_vz_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).vz());
-					histos_th1f[b+"h_s_candidates_vertexNormalizedChi2_outside_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).vertexNormalizedChi2());
-					histos_th1f[b+"h_s_candidates_lxy_outside_delta_phi_delta_eta_corr"]->Fill(lxy_S_b);
-					histos_th1f[b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr"]->Fill(lxy_S_b_signed);
-					if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_outside_delta_phi_delta_eta_corr_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
-					histos_th1f[b+"h_s_candidates_error_lxy_outside_delta_phi_delta_eta_corr"]->Fill(lxy_S_b_std_dev);
-
+       		                        histos_th1f[b+"h_s_candidates_mass_others"]->Fill(h_sCands->at(i).mass());
+					histos_th1f[b+"h_s_candidates_pt_others"]->Fill(h_sCands->at(i).pt());
+					histos_th1f[b+"h_s_candidates_p_others"]->Fill(h_sCands->at(i).p());
+					histos_th1f[b+"h_s_candidates_energy_others"]->Fill(h_sCands->at(i).energy());
+					histos_th1f[b+"h_s_candidates_et_others"]->Fill(h_sCands->at(i).et());
+					histos_th1f[b+"h_s_candidates_mt_others"]->Fill(h_sCands->at(i).mt());
+					histos_th1f[b+"h_s_candidates_phi_others"]->Fill(h_sCands->at(i).phi());
+					histos_th1f[b+"h_s_candidates_theta_others"]->Fill(h_sCands->at(i).theta());
+					histos_th1f[b+"h_s_candidates_eta_others"]->Fill(h_sCands->at(i).eta());
+					histos_th1f[b+"h_s_candidates_vx_others"]->Fill(h_sCands->at(i).vx());
+					histos_th1f[b+"h_s_candidates_vy_others"]->Fill(h_sCands->at(i).vy());
+					histos_th1f[b+"h_s_candidates_vz_others"]->Fill(h_sCands->at(i).vz());
+					histos_th1f[b+"h_s_candidates_vertexNormalizedChi2_others"]->Fill(h_sCands->at(i).vertexNormalizedChi2());
+					histos_th1f[b+"h_s_candidates_lxy_others"]->Fill(lxy_S_b);
+					histos_th1f[b+"h_s_candidates_lxy_signed_others"]->Fill(lxy_S_b_signed);
+					if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_s_candidates_lxy_signed_others_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
+					histos_th1f[b+"h_s_candidates_error_lxy_others"]->Fill(lxy_S_b_std_dev);
+					if(n_bestPrimaryVertex_Kshort == n_bestPrimaryVertex_Lambda)histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_others"]->Fill(1);
+					else histos_th1f[b+"h_s_candidates_Kshort_Lambda_same_PV_others"]->Fill(0);
+					histos_th1f[b+"h_s_candidates_dxy_signed_others"]->Fill(dxy_signed_S_b);				
+					histos_th1f[b+"h_s_candidates_Dz_others"]->Fill(Dz_S_PV);
+					histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_others"]->Fill(delta_Dz_Kshort_Lambda);
 				}
 
 			}
@@ -1373,31 +1512,31 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				//look for #PV dependence on the error of the reconstructed vertex
 				double n_PVs = h_nPVs->at(0);
 				if(n_PVs <= 10) {
-					histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_smaller_11"]->Fill(lxy_S_b_std_dev);
+					histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_smaller_11"]->Fill(lxy_S_b);
 					histos_th1f[b+"h_S_vtx_distance_to_beamspot_error_for_nPVs_smaller_11"]->Fill(lxy_S_b_std_dev);
 				}
 				if(n_PVs > 10 && n_PVs <= 20){
-				 	histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_10_smaller_or_equal_to_20"]->Fill(lxy_S_b_std_dev);
+				 	histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_10_smaller_or_equal_to_20"]->Fill(lxy_S_b);
 				 	histos_th1f[b+"h_S_vtx_distance_to_beamspot_error_for_nPVs_larger_than_10_smaller_or_equal_to_20"]->Fill(lxy_S_b_std_dev);
 				}
 				if(n_PVs > 20 && n_PVs <= 30){ 
-					histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_20_smaller_or_equal_to_30"]->Fill(lxy_S_b_std_dev);
+					histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_20_smaller_or_equal_to_30"]->Fill(lxy_S_b);
 					histos_th1f[b+"h_S_vtx_distance_to_beamspot_error_for_nPVs_larger_than_20_smaller_or_equal_to_30"]->Fill(lxy_S_b_std_dev);
 				}
 				if(n_PVs > 30 && n_PVs <= 40){
-					histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_30_smaller_or_equal_to_40"]->Fill(lxy_S_b_std_dev);
+					histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_30_smaller_or_equal_to_40"]->Fill(lxy_S_b);
 					histos_th1f[b+"h_S_vtx_distance_to_beamspot_error_for_nPVs_larger_than_30_smaller_or_equal_to_40"]->Fill(lxy_S_b_std_dev);
 				}
 				if(n_PVs > 40){
-					 histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_40"]->Fill(lxy_S_b_std_dev);
+					 histos_th1f[b+"h_S_vtx_distance_to_beamspot_for_nPVs_larger_than_40"]->Fill(lxy_S_b);
 					 histos_th1f[b+"h_S_vtx_distance_to_beamspot_error_for_nPVs_larger_than_40"]->Fill(lxy_S_b_std_dev);
 				}
 				
 				histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot"]->Fill(delta_phi, lxy_S_b);
 				//histos_th3f[b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot"]->Fill(delta_phi, delta_eta, lxy_S_b);
 				
-				if(lxy_S_b_std_dev < 0.01){
-					histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm"]->Fill(delta_phi, lxy_S_b);
+				if(lxy_S_b_std_dev < 0.1){
+					histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.1cm"]->Fill(delta_phi, lxy_S_b);
 				//	histos_th3f[b+"h_delta_phi_delta_eta_S_vtx_distance_to_beamspot_vertex_beamspot_dist_error_smaller_0.01cm"]->Fill(delta_phi, delta_eta, lxy_S_b);
 
 				}
@@ -1405,10 +1544,10 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				if(1 < abs(delta_phi) && abs(delta_phi) < 2.5)histos_th2f[b+"h_S_vtx_distance_to_beamspot_S_vtx_distance_to_beamspot_error_for_delta_phi_between_1_and_2.5"]->Fill(lxy_S_b, lxy_S_b_std_dev);
 				histos_th2f[b+"h_delta_phi_S_vtx_distance_to_beamspot_significance"]->Fill(delta_phi, significance_lxy_S_b);
 				histos_th2f[b+"h_S_vtx_distance_to_beamspot_vx_vy"]->Fill(vx_S_candidate,vy_S_candidate);
-				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01){
-					histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(vx_S_candidate,vy_S_candidate);
+				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1){
+					histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(vx_S_candidate,vy_S_candidate);
 				}
-				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01 && 1 < abs(delta_phi) && abs(delta_phi) < 2.5) histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm_delta_phi_between_1_and_2.5"]->Fill(vx_S_candidate,vy_S_candidate);
+				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1 && 1 < abs(delta_phi) && abs(delta_phi) < 2.5) histos_th2f[b+"h_S_vx_vy_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm_delta_phi_between_1_and_2.5"]->Fill(vx_S_candidate,vy_S_candidate);
 			}
 		        //for the anti-S candidates
 		        if(h_sCands->at(i).charge() == -1){	
@@ -1428,7 +1567,9 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter"]->Fill(M_S);
 				if(lxy_S_b > 1.9) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm"]->Fill(M_S);
 				if(lxy_S_b_std_dev < 0.01) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.01cm"]->Fill(M_S);
+				if(lxy_S_b_std_dev < 0.1) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_error_smaller_0.1cm"]->Fill(M_S);
 				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(M_S);
+				if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(M_S);
 				if(abs(delta_phi)<2.5 && abs(delta_phi)>1) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5"]->Fill(M_S);
 				if(abs(delta_phi)<2.5 && abs(delta_phi)>1 && lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01){
 					 //std::cout << "EventID which survive the abs(delta_phi)<2.5 && abs(delta_phi)>1 && lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01 cuts: " << iEvent.GetEventID() << std::endl;
@@ -1437,6 +1578,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 					 histos_th1f[b+"h_s_candidates_error_vertex_beamspot_dist_error_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(lxy_S_b_std_dev);
 					
 				}
+				if(abs(delta_phi)<2.5 && abs(delta_phi)>1 && lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1)histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_phi_daughters_between_1_and_2.5_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.1cm"]->Fill(M_S);
 				if(delta_R > 0.8) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_R_larger_0.8"]->Fill(M_S);
 				if(delta_R > 0.8 && lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.01) histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_delta_R_larger_0.8_and_S_vertex_beamspot_dist_larger_1.9cm_and_error_smaller_0.01cm"]->Fill(M_S);
 			}
@@ -1453,15 +1595,11 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
 			//masses of the reconance candidate (Xi)
 			histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter"]->Fill(M_Xi);
-			if(lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.01)histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm"]->Fill(M_Xi);
-			if(delta_R < 0.8)histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8"]->Fill(M_Xi);
-			if(lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.01 && delta_R < 0.8)histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8"]->Fill(M_Xi);
 		
 			//look at the cut by cut for the Xi candidate and look at the same time at the distribution of the other variables:
 			histos_th1f[b+"h_all_r_candidates_delta_R"]->Fill(delta_R);
 			histos_th1f[b+"h_all_r_candidates_r_vertex_beamspot_distance"]->Fill(lxy_S_b);
 			histos_th1f[b+"h_all_r_candidates_r_vertex_beamspot_distance_error"]->Fill(lxy_S_b_std_dev);
-			
 			
 			if(delta_R < 0.8){
 				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_delta_R_slammer_0.8"]->Fill(lxy_S_b);
@@ -1471,17 +1609,16 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_error_r_vertex_beamspot_distance_for_r_vertex_beamspot_distance_smaller_0.1"]->Fill(lxy_S_b_std_dev);
 				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_r_vertex_beamspot_distance_smaller_0.1"]->Fill(delta_R);
 			}
-			if(lxy_S_b_std_dev < 0.01){
-				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.01"]->Fill(lxy_S_b);
-				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.01"]->Fill(delta_R);
+			if(lxy_S_b_std_dev < 0.1){
+				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_for_error_r_vertex_beamspot_distance_smaller_0.1"]->Fill(lxy_S_b);
+				histos_th1f[b+"h_all_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_for_error_r_vertex_beamspot_distance_smaller_0.1"]->Fill(delta_R);
 			}
-			
 			if(h_sCands->at(i).charge()==1){
 
 				histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter"]->Fill(M_Xi);
-				if(lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.01)histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm"]->Fill(M_Xi);
+				if(lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.1)histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm"]->Fill(M_Xi);
 				if(delta_R < 0.8)histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_delta_R_smaller_0.8"]->Fill(M_Xi);
-				if(lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.01 && delta_R < 0.8)histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.01cm_delta_R_smaller_0.8"]->Fill(M_Xi);
+				if(lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.1 && delta_R < 0.8)histos_th1f[b+"h_r_candidates_mass_after_LambdaKshortVertexFilter_r_vertex_beamspot_distance_smaller_0.1_and_error_smaller_0.1cm_delta_R_smaller_0.8"]->Fill(M_Xi);
 				if(dz_S_b < 0.05 && delta_R < 0.8){
                                 	histos_th1f[b+"h_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8"]->Fill(M_Xi);
                         	}
@@ -1489,7 +1626,6 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
                                 	histos_th1f[b+"h_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8"]->Fill(M_Xi);
                         	}	
 			}	
-
 			if(h_sCands->at(i).charge()==-1){
 
 				histos_th1f[b+"h_anti_r_candidates_mass_after_LambdaKshortVertexFilter"]->Fill(M_Xi);
@@ -1504,14 +1640,28 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
                         	}	
 			
 			}
-
+			//distances to beamspot and PV
+			histos_th1f[b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+			if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
+			if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.1)histos_th1f[b+"h_r_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
+			histos_th1f[b+"h_r_candidates_error_lxy_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_std_dev);
+			histos_th1f[b+"h_r_candidates_significance_lxy_after_LambdaKshortVertexFilter"]->Fill(significance_lxy_S_b);
+			histos_th1f[b+"h_r_candidates_Lxy_signed_after_LambdaKshortVertexFilter"]->Fill(Lxy_S_PV_signed);
+			
 			//PCA for the reconance candidate:
 			histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter"]->Fill(dxy_S_b);
 			histos_th1f[b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter"]->Fill(dxy_signed_S_b);
+			histos_th1f[b+"h_r_candidates_Dxy_signed_after_LambdaKshortVertexFilter"]->Fill(Dxy_signed_S_PV);
 			histos_th1f[b+"h_r_candidates_dxy_signed_after_LambdaKshortVertexFilter2"]->Fill(dxy_signed_S_b2);
 			histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter"]->Fill(dz_S_b);
+			histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter"]->Fill(Dz_S_PV);
 			histos_th2f[b+"h_r_candidates_dxy_dz_after_LambdaKshortVertexFilter"]->Fill(dxy_S_b ,dz_S_b);
 			histos_th2f[b+"h_r_candidates_signed_dxy_dz_after_LambdaKshortVertexFilter"]->Fill(dxy_signed_S_b, dz_S_b);
+
+			
+			histos_th1f[b+"h_r_candidates_Kshort_Dz_after_LambdaKshortVertexFilter"]->Fill(Dz_Kshort_PV);
+			histos_th1f[b+"h_r_candidates_Lambda_Dz_after_LambdaKshortVertexFilter"]->Fill(Dz_Lambda_PV);
+			histos_th1f[b+"h_r_candidates_delta_Dz_Kshort_Lambda_after_LambdaKshortVertexFilter"]->Fill(delta_Dz_Kshort_Lambda);
 		
 			if(M_Xi > 1.77 && M_Xi < 1.87){	
 				histos_th1f[b+"h_all_r_candidates_r_vertex_beamspot_distance_reduced_mass_range"]->Fill(lxy_S_b);
@@ -1525,55 +1675,55 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			if(n_PVs <= 10) {
 				histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"]->Fill(dxy_S_b);
 				histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"]->Fill(dz_S_b);
+				histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_smaller_11"]->Fill(Dz_S_PV);
 			}
 			if(n_PVs > 10 && n_PVs <= 20){
 				histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20"]->Fill(dxy_S_b);
 				histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20"]->Fill(dz_S_b);
+				histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_10_smaller_or_equal_to_20"]->Fill(Dz_S_PV);
 			}
 			if(n_PVs > 20 && n_PVs <= 30){ 
 				histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30"]->Fill(dxy_S_b);
 				histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30"]->Fill(dz_S_b);
+				histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30"]->Fill(Dz_S_PV);
 			}
 			if(n_PVs > 30 && n_PVs <= 40){
 				histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40"]->Fill(dxy_S_b);
 				histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40"]->Fill(dz_S_b);
+				histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40"]->Fill(Dz_S_PV);
 			}
 			if(n_PVs > 40){
 				 histos_th1f[b+"h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40"]->Fill(dxy_S_b);
 				 histos_th1f[b+"h_r_candidates_dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40"]->Fill(dz_S_b);
+				 histos_th1f[b+"h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40"]->Fill(Dz_S_PV);
 			}
 			
 
-
-			if(dxy_S_b < 0.005){
-				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005"]->Fill(M_Xi);
+			if(dxy_S_b < 0.05){
+				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05"]->Fill(M_Xi);
 			}
-			if(dxy_S_b < 0.005 && delta_R > 0.1 && delta_R < 0.8){
-				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8"]->Fill(M_Xi);
+			if(dxy_S_b < 0.05 && delta_R > 0.1 && delta_R < 0.8){
+				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8"]->Fill(M_Xi);
 			}
-			if(dxy_S_b < 0.005 && delta_R > 0.1 && delta_R < 0.8 && lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.08){
-				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08"]->Fill(M_Xi);				       		     
+			if(dxy_S_b < 0.05 && delta_R > 0.1 && delta_R < 0.8 && lxy_S_b < 0.5 && lxy_S_b_std_dev < 0.5){
+				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5"]->Fill(M_Xi);				       		     	         
 			}
-			if(dxy_S_b < 0.005 && delta_R > 0.1 && delta_R < 0.8 && lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.08 && h_sCands->at(i).pt() > 2 && h_sCands->at(i).pt() > 8){
-				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R"]->Fill(M_Xi);
+			if(dxy_S_b < 0.05 && delta_R > 0.1 && delta_R < 0.8 && lxy_S_b < 0.5 && lxy_S_b_std_dev < 0.5 && h_sCands->at(i).pt() > 2 && h_sCands->at(i).pt() > 8){
+				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R"]->Fill(M_Xi);
 			}
-			if(dxy_S_b < 0.005 && delta_R > 0.1 && delta_R < 0.8 && lxy_S_b < 0.1 && lxy_S_b_std_dev < 0.08 && h_sCands->at(i).pt() > 2 && h_sCands->at(i).pt() > 8 && h_sCands->at(i).daughter(0)->pt() < 6 && h_sCands->at(i).daughter(1)->pt() < 4){
-				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p005_dlta_R_between_0p1_and_0p8_lxy_smaller_0p1_error_lxy_smaller_0p08_pt_cuts_R_and_daughters"]->Fill(M_Xi);
+			if(dxy_S_b < 0.05 && delta_R > 0.1 && delta_R < 0.8 && lxy_S_b < 0.5 && lxy_S_b_std_dev < 0.5 && h_sCands->at(i).pt() > 2 && h_sCands->at(i).pt() > 8 && h_sCands->at(i).daughter(0)->pt() < 6 && h_sCands->at(i).daughter(1)->pt() < 4){
+				histos_th1f[b+"h_all_r_candidates_mass_dxy_smaller_0p05_dlta_R_between_0p1_and_0p8_lxy_smaller_0p5_error_lxy_smaller_0p5_pt_cuts_R_and_daughters"]->Fill(M_Xi);
 			}
-			if(dz_S_b < 0.05){
-				histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p05"]->Fill(M_Xi);
+			if(fabs(Dz_S_PV) < 0.05){
+				histos_th1f[b+"h_all_r_candidates_mass_Dz_smaller_0p05"]->Fill(M_Xi);
 			}
-			if(dz_S_b < 0.05 && delta_R < 0.8){
-				histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8"]->Fill(M_Xi);
+			if(fabs(Dz_S_PV) < 0.05 && delta_R > 0.1 && delta_R < 0.8 ){
+				histos_th1f[b+"h_all_r_candidates_mass_Dz_smaller_0p05_and_delta_R_between_0p1_and_0p8"]->Fill(M_Xi);
 			}	
-			if(dz_S_b < 0.01 && delta_R < 0.8){
-				histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p01_and_delta_R_smaller_0p8"]->Fill(M_Xi);
+			if(fabs(Dz_S_PV) < 0.05 && delta_R > 0.1 && delta_R < 0.8 && dxy_S_b < 0.05){
+				histos_th1f[b+"h_all_r_candidates_mass_Dz_smaller_0p05_dxy_smaller_0p05_and_delta_R_between_0p1_and_0p8"]->Fill(M_Xi);
 			}	
-			if(fabs(dz_S_b) < 0.05 && delta_R < 0.8 && fabs(dxy_signed_S_b) < 0.5){
-				histos_th1f[b+"h_all_r_candidates_mass_dz_smaller_0p05_and_delta_R_smaller_0p8_dxy_smaller_0p5"]->Fill(M_Xi);
-			}	
-			
-
+				
 			//masses of the daughters
 			histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Lambda_mass_all"]->Fill(h_sCands->at(i).daughter(0)->mass());
                         histos_th1f[b+"h_s_candidates_mass_after_LambdaKshortVertexFilter_Kshort_mass_all"]->Fill(h_sCands->at(i).daughter(1)->mass());	
@@ -1804,12 +1954,12 @@ double Analyzer_V0_angular_correlation::dxy_signed_line_point(TVector3 Point_lin
 }
 
 double Analyzer_V0_angular_correlation::dxy_signed_line_point2(TVector3 Point_line_in, TVector3 Vector_along_line_in, TVector3 Point_in){
-  Double_t vz = Point_line_in.Z();
+  //Double_t vz = Point_line_in.Z();
   Double_t vx = Point_line_in.X();
   Double_t vy = Point_line_in.Y();
   Double_t px = Vector_along_line_in.X();
   Double_t py = Vector_along_line_in.Y();
-  Double_t pz = Vector_along_line_in.Z();
+  //Double_t pz = Vector_along_line_in.Z();
   Double_t pt = sqrt(px*px+py*py);
   return  (-(vx - Point_in.X()) * py + (vy - Point_in.y()) * px) / pt;
 }
