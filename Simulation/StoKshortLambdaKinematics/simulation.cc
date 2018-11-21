@@ -22,7 +22,6 @@
     
 
     //settings
-
     string particle = "S";
     //constants
     Double_t m_Ks = 0.497611;//Kshort mass
@@ -470,21 +469,21 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
     //pt distribution of the S particle:  https://arxiv.org/pdf/1401.4835.pdf
     Double_t pt_S = fTSalisSpt->GetRandom(); 
 
-	//from https://arxiv.org/pdf/1002.0621.pdf, page 14 the eta distribution is relatively flat
+    //from https://arxiv.org/pdf/1002.0621.pdf, page 14 the eta distribution is relatively flat
     //Double_t eta_S = random->Uniform(-2.5,2.5);
     Double_t eta_S = fEtaDistrHadr->GetRandom(0.,10.);
     if(random->Uniform(0,1)<0.5) eta_S = -eta_S;
     
 
     //phi of the S, should be a uniform distribution in 0 to 2*pi
-	Double_t phi_S = random->Uniform(2.*TMath::Pi());	
+    Double_t phi_S = random->Uniform(2.*TMath::Pi());	
 
     //theta of the Ks, distributed according to a cosine for a isotropic distribution or differently for polarised particles
     Double_t argument_cos = return_argument_Acos_theta_Ks_angle(random, polarization);
     Double_t theta_Ks_star = TMath::ACos(argument_cos);
     
     //phi of the Ks, should be uniform distribution from 0 to 2*pi
-	Double_t phi_Ks_star = random->Uniform(2.*TMath::Pi());	
+    Double_t phi_Ks_star = random->Uniform(2.*TMath::Pi());	
 
     fillHistosSettings(argument_cos, theta_Ks_star);
    
