@@ -45,7 +45,7 @@
     TH1F *h_theta_Ks = new TH1F("h_theta_Ks","h_theta_Ks",1000,-2*TMath::Pi(),2*TMath::Pi());
 
     //start particle plots
-    TH1F *h_S_pt = new TH1F("h_Start_pt", "h_Start_pt", 50, 0,10);
+    TH1F *h_S_pt = new TH1F("h_Start_pt", "h_Start_pt; p_{t}(S) [GeV]", 500, 0,10);
     TH1F *h_S_p = new TH1F(("h_"+particle+"_p").c_str(), ("h_"+particle+"_p").c_str(), 500, 0,10);
     TH1F *h_theta_S = new TH1F("h_theta_S", "h_theta_S", 100, -10,10);
     TH1F *h_eta_S = new TH1F("h_eta_S", "h_eta_S", 1200, -12,12);
@@ -131,7 +131,7 @@
     TH2F *h2_p_Ks_l_trans = new TH2F("h2_p_Ks_l_trans","h2_p_Ks_l_trans;transversal momentum Ks wrt Start particle;transversal momentum Lambda wrt Start particle",1000,-1,1,1000,-1,1);
     TH2F *h2_p_Ks_l_long = new TH2F("h2_p_Ks_l_long","h2_p_Ks_l_long;longitudnal momentum Ks wrt Start particle;longitudnal momentum Lambda wrt Start particle",100,-10,10,100,-10,10);
 
-    TH1F *h_delta_phi_Ks_l = new TH1F("h_delta_phi_Ks_l", "h_delta_phi_Ks_l", 100, -4, 4);
+    TH1F *h_delta_phi_Ks_l = new TH1F("h_delta_phi_Ks_l", "h_delta_phi_Ks_l; #Delta #Phi (K_{S}^{0},#Lambda^{0}) [rad]", 400, -4, 4);
     TH1F *h_delta_theta_Ks_l = new TH1F("h_delta_theta_Ks_l", "h_delta_theta_Ks_l", 100, -TMath::Pi(), TMath::Pi());
     TH1F *h_delta_eta_Ks_l = new TH1F("h_delta_eta_Ks_l", "h_delta_eta_Ks_l", 100, -TMath::Pi(), TMath::Pi());
     TH1F *h_delta_R_Ks_l = new TH1F("h_delta_R_Ks_l", "h_delta_R_Ks_l", 200, 0, 10);
@@ -144,7 +144,7 @@
     TH1F *h_l_pt_before_cuts = new TH1F("h_l_pt_before_cuts", "h_l_pt_before_cuts;pT(L) (GeV)", 200, 0, 10);
     TH1F *h_l_eta_before_cuts = new TH1F("h_l_eta_before_cuts", "h_l_eta_before_cuts; eta(L)", 200, -15, 15);
 
-    TH1F *h_S_pt_after_cuts = new TH1F("h_S_pt_after_cuts", "h_S_pt_after_cuts; pT(S) (GeV)", 200, 0, 10);
+    TH1F *h_S_pt_after_cuts = new TH1F("h_S_pt_after_cuts", "h_S_pt_after_cuts; p_{t}(S) (GeV)", 200, 0, 10);
     TH1F *h_S_p_after_cuts = new TH1F("h_S_p_after_cuts", "h_S_p_after_cuts; p(S) (GeV)", 200, 0, 10);
     TH1F *h_S_eta_after_cuts = new TH1F("h_S_eta_after_cuts", "h_S_eta_after_cuts; eta(S)", 200, -15, 15);
     TH1F *h_Ks_pt_after_cuts = new TH1F("h_Ks_pt_after_cuts", "h_Ks_pt_after_cuts; pT(Ks) (GeV)", 200, 0, 10);
@@ -167,6 +167,9 @@
     TH2F *h2_ArmPod_Lambda = new TH2F("h2_ArmPod_Lambda","h2_ArmPod_Lambda;alpha;pT(Lambda)",100,-ArmPod_alpha_range,ArmPod_alpha_range,100,0,5);
 
     TH1F *h_M_Start_n_check =  new TH1F(("h_M_"+particle+"_n_check").c_str(), ("h_M_"+particle+"_n_check").c_str(), 200, 0, 20);    
+    string h2_pt_M_Start_n_check_name =  ("h_pt_M_"+particle+"_n_check").c_str();
+    string h2_pt_M_Start_n_check_name_with_axis = (h2_pt_M_Start_n_check_name+";pT(S)[GeV];Invariant Mass S [GeV]");
+    TH2F *h2_pt_M_Start_n_check =  new TH2F(h2_pt_M_Start_n_check_name.c_str(), h2_pt_M_Start_n_check_name_with_axis.c_str(), 200, 0, 20, 200, 0, 20 );    
     TH1F *h_M_Start_n_Inv_Mass_calc =  new TH1F(("h_M_"+particle+"_n_Inv_Mass_calc").c_str(), ("h_M_"+particle+"_n_Inv_Mass_calc").c_str(),200,0,20);
 
     
@@ -453,10 +456,10 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
     TEfficiency *TEff_L0_pt = getRecoEfficiencyKs_L0("L0_recoeff_gen_Pt");    
 
     int i = 0; 
-    int numerator_eff = 0; 
+    int i_particles_surviving_delta_phi_cut= 0; 
 
     int i_particles_produced = 0;
-    int i_particles_surviving_cuts = 0;
+    int i_particles_surviving_pt_eta_cuts = 0;
     bool verbose = false;  
     
     //start the main loop where you generate particles
@@ -596,10 +599,10 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
     else{ 
         if(Ks_reco_eff <= 0.4) KsReconstructed = true;
     }
-    bool Ks_survives_cuts =  (p4_Ks_star.Pt() > min_pt_Ks) && (abs(p4_Ks_star.Eta()) <= max_eta)  && KsReconstructed;
+    bool Ks_survives_pt_eta_cuts =  (p4_Ks_star.Pt() > min_pt_Ks) && (abs(p4_Ks_star.Eta()) <= max_eta)  && KsReconstructed;
 
 
-    hEff_Ks->Fill(Ks_survives_cuts, pt_S);
+    hEff_Ks->Fill(Ks_survives_pt_eta_cuts, pt_S);
     
     bool L0Reconstructed = false;
     if(p4_l_star.Pt()< 4.){
@@ -608,17 +611,17 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
     else{ 
         if(L0_reco_eff <= 0.55) L0Reconstructed = true;
     }
-    bool l_survives_cuts = (p4_l_star.Pt() > min_pt_l) && (abs(p4_l_star.Eta()) <= max_eta) &&  L0Reconstructed;
+    bool l_survives_pt_eta_cuts = (p4_l_star.Pt() > min_pt_l) && (abs(p4_l_star.Eta()) <= max_eta) &&  L0Reconstructed;
 
 
-    hEff_L0->Fill(l_survives_cuts, pt_S);
+    hEff_L0->Fill(l_survives_pt_eta_cuts, pt_S);
 
-    hEff_L0_Ks->Fill(l_survives_cuts && Ks_survives_cuts, pt_S);
+    hEff_L0_Ks->Fill(l_survives_pt_eta_cuts && Ks_survives_pt_eta_cuts, pt_S);
 
     i_particles_produced++;
-    if(!Ks_survives_cuts) continue;
-    if(!l_survives_cuts) continue;
-    i_particles_surviving_cuts++;
+    if(!Ks_survives_pt_eta_cuts) continue;
+    if(!l_survives_pt_eta_cuts) continue;
+    i_particles_surviving_pt_eta_cuts++;
 
     Double_t delta_phi_Ks_l = p4_Ks_star.DeltaPhi(p4_l_star);
     Double_t delta_theta_Ks_l =p4_Ks_star.Theta()-p4_l_star.Theta();
@@ -655,38 +658,39 @@ int simulation(string outputDir, string rootFileName, int nIterations, string po
 	//******************check the above calculation by calculating the invariant mass of the S****************************************//
     TLorentzVector p4_sum_Ks_l = p4_Ks_star+p4_l_star;
 
-    Double_t M_Start_n_check = p4_sum_Ks_l.M();
+    Double_t M_Start_n_check = p4_sum_Ks_l.M()-m_n;
 
     Double_t approx_Inv_Mass =  M_Start + m_n + m_n*p3_S*p3_S/(4*M_Start*(M_Start+m_n)) ;
     //cout << "Inv mass Ks and Lambda 2: " << approx_Inv_Mass << endl;
     h_M_Start_n_check->Fill(M_Start_n_check);
+    h2_pt_M_Start_n_check->Fill(pt_S, M_Start_n_check);
     h_M_Start_n_Inv_Mass_calc->Fill(approx_Inv_Mass);
     h_M_Start_n_Inv_Mass_calc->SetFillColor(42);
 
     //******************end check the above calculation by calculating the invariant mass of the S****************************************//
 
-	if(abs(delta_phi_Ks_l)>1 && abs(delta_phi_Ks_l)<2.5) numerator_eff++;
+	if(abs(delta_phi_Ks_l)>1 && abs(delta_phi_Ks_l)<2.5) i_particles_surviving_delta_phi_cut++;
 
 	i++;
 
     }//end for loop
 
- cout << std::setprecision(12) << "fraction of generated S particles surviving the pt cuts on the daughters, the eta cuts on the daughter and weighted with the reconstruction efficiencies: " <<  (double)i_particles_surviving_cuts/(double)i_particles_produced << endl;
- cout << "the efficiency on the signal as a result of the delta_phi cut on background: " << (double)numerator_eff/(double)i << endl; 
+ cout << std::setprecision(12) << "fraction of generated S particles surviving the pt cuts on the daughters, the eta cuts on the daughter and weighted with the reconstruction efficiencies: " <<  (double)i_particles_surviving_pt_eta_cuts/(double)i_particles_produced << endl;
+ cout << "Fraction of particles which survive the pt and eta cuts on the Ks and L, which survive the delta phi cut: " << (double)i_particles_surviving_delta_phi_cut/(double)i_particles_surviving_pt_eta_cuts << endl; 
 
  //*****************************CALCULATE THE RECONSTRUCTION EFFICIENCY FOR ONE S*******************************************
  Double_t numerator = 0;
  Double_t denumenator = 0;
  for(int pt_bin = 0; pt_bin <= 50; pt_bin++){
     Double_t n_S_pt = h_S_pt->GetBinContent(pt_bin);
-    Double_t effL0 = hEff_L0->GetEfficiency(pt_bin);
-    Double_t effKs = hEff_Ks->GetEfficiency(pt_bin);
+    Double_t effL0 = hEff_L0->GetEfficiency(pt_bin); //these include the eta and pt cuts
+    Double_t effKs = hEff_Ks->GetEfficiency(pt_bin); //these include the eta and pt cuts
 
     numerator = numerator + n_S_pt*effL0*effKs;
     denumenator = denumenator + n_S_pt;
  }
 
- cout << "The overall reconstruction efficiency of the S particle: " << numerator/denumenator << endl;
+ cout << "The overall reconstruction efficiency of the S particle (taking into account the pt cuts on the Ks and L and there reconstruction efficiency): " << numerator/denumenator << endl;
  //*************************************************************************************************************************
 
 
@@ -991,7 +995,11 @@ dir_DecayProductsLabAfterCuts->cd();
  h_M_Start_n_check->Write();
  h_M_Start_n_check->Draw();
  c1->SaveAs((outputDir+"/h_M_"+particle+"_n_check.pdf").c_str(),"pdf");
+
  
+ h2_pt_M_Start_n_check->Write();
+
+  
  h_M_Start_n_Inv_Mass_calc->Write();
  h_M_Start_n_Inv_Mass_calc->Draw("same");
  c1->SaveAs((outputDir+"/h_M_"+particle+"_n_Inv_Mass_calc.pdf").c_str(),"pdf");
