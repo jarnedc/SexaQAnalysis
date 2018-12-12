@@ -11,3 +11,6 @@ core.*
 *.sh*
 *.err
 *.log
+*.stdout
+*.stderr
+RunManyAnalyzerMC/analyzer_AOD_1_*_cfg.py
