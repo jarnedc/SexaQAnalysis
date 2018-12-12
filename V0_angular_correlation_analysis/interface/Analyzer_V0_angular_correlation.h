@@ -82,6 +82,7 @@ class Analyzer_V0_angular_correlation : public edm::EDAnalyzer
     double lxy(TVector3 v1, TVector3 v2);
     double std_dev_lxy(double vx, double vy, double vx_var, double vy_var, double bx_x, double bx_y, double bx_x_var, double bx_y_var);
     double lxy_signed(TVector3 particle_vertex, TVector3 beamspot, TVector3 particle_direction);
+    double openings_angle(reco::Candidate::Vector momentum1, reco::Candidate::Vector momentum2);
   private:
     //---- configurable parameters --------
     bool m_isData;
