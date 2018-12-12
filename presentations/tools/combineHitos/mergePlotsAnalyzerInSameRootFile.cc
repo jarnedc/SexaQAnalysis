@@ -43,12 +43,13 @@ void mergePlotsAnalyzerInSameRootFile()
    TFile *OutputFile = new TFile("Combine_Analyzer_plots.root","RECREATE");
    
  
-   TFile *hfile1 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined_2016.root");
+   TFile *hfile1 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2017.root");
 
-   TH1F *h1 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_correlation/h_s_candidates_error_lxy_in_delta_phi_delta_eta_corr");
-   TH1F *h2 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_peak/h_s_candidates_error_lxy_in_peak");
-   TH1F *h3 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_back_to_back/h_s_candidates_error_lxy_in_back_to_back");
-   TH1F *h4 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_outside_correlation/h_s_candidates_error_lxy_outside_delta_phi_delta_eta_corr");
+   TH1F *h1 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/Angular_Correlation_Daughters_S_kinematics_S_in_peak/h_s_candidates_lxy_signed_in_peak_error_lxy_smaller_0p1");
+   TH1F *h2 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/Angular_Correlation_Daughters_S/h_s_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter");
+//   TH1F *h3 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_20_smaller_or_equal_to_30");
+//   TH1F *h4 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_30_smaller_or_equal_to_40");
+//   TH1F *h5 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_Dz_after_LambdaKshortVertexFilter_for_nPVs_larger_than_40");
    //TH1F *h4 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_then_30_smaller_or_equal_to_40");
    //TH1F *h5 = (TH1F*)hfile1->Get("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/PCA_R/h_r_candidates_dxy_after_LambdaKshortVertexFilter_for_nPVs_larger_then_40");
    //v_histos.push_back("_sCand_L0_delta_phi");
@@ -61,36 +62,36 @@ void mergePlotsAnalyzerInSameRootFile()
 
 	   int binmax1 = h1->GetMaximumBin();
 	   int binmax2 = h2->GetMaximumBin();
-	   int binmax3 = h3->GetMaximumBin();
+//	   int binmax3 = h3->GetMaximumBin();
 	   //int binmax4 = h4->GetMaximumBin();
 	   double binmax1content = h1-> GetBin(binmax1);
 	   double binmax2content = h2-> GetBin(binmax2);
-	   double binmax3content = h3-> GetBin(binmax3);
+//	   double binmax3content = h3-> GetBin(binmax3);
 	   //double binmax4content = h4-> GetBin(binmax4);
 
 	   double binmaxcontent = binmax1content;
  	   if(binmax1content < binmax2content) binmaxcontent = binmax2content; 
-	   if(binmaxcontent < binmax3content) binmaxcontent = binmax3content;
+//	   if(binmaxcontent < binmax3content) binmaxcontent = binmax3content;
 	
            int maxNEntries = h1->GetEntries();
 	   if(h1->GetEntries() > h2->GetEntries()) maxNEntries = h2->GetEntries();
-	   if(h2->GetEntries() > h3->GetEntries()) maxNEntries = h3->GetEntries();
+//	   if(h2->GetEntries() > h3->GetEntries()) maxNEntries = h3->GetEntries();
           
 	   h1->SetLineColor(kRed);
-	   h1->DrawNormalized("E1l");
+	   h1->DrawNormalized("");
 	   h2->SetLineColor(kBlue);
-	   h2->DrawNormalized("sameE1l");
-	   h3->SetLineColor(kGreen);
-	   h3->DrawNormalized("sameE1l");
-	   h4->SetLineColor(kBlack);
-	   h4->DrawNormalized("sameE1l");
+	   h2->DrawNormalized("same");
+//	   h3->SetLineColor(kGreen);
+//	   h3->DrawNormalized("sameE1l");
+//	   h4->SetLineColor(kBlack);
+//	   h4->DrawNormalized("sameE1l");
 //	   h5->SetLineColor(kOrange);
 //	   h5->DrawNormalized("sameE1l");
 	   
 	   h1->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h2->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
-	   h3->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
-	   h4->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+//	   h3->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+//	   h4->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 //	   h5->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 
 	   c1->Update();
@@ -100,10 +101,10 @@ void mergePlotsAnalyzerInSameRootFile()
    	   legend->AddEntry(h3,data[2].c_str(),"l");
    	   legend->AddEntry(h4,data[3].c_str(),"l");
    	  */ 
-	   legend->AddEntry(h1,"in correlation","l");
-	   legend->AddEntry(h2,"in peak","l");
-   	   legend->AddEntry(h3,"in back to back","l");
-   	   legend->AddEntry(h4,"others","l");
+	   legend->AddEntry(h1,"#Delta R(K_{S}^{0}, #Lambda^{0}) < 0.2","l");
+	   legend->AddEntry(h2,"lxy > 1.9cm, #sigma(lxy) < 0.1cm, 1 < #Delta #Phi(K_{S}^{0}, #Lambda^{0}) < 2.5","l");
+ //  	   legend->AddEntry(h3,"20 < nPVs <= 30","l");
+ //  	   legend->AddEntry(h4,"30 < nPVs <= 40","l");
  //  	   legend->AddEntry(h5,"nPVs > 40","l");
    	   //legend->AddEntry(h4,"30 < nPVs <= 40","l");
    	   //legend->AddEntry(h5,"nPVs > 40","l");

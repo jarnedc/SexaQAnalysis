@@ -43,20 +43,20 @@ void mergePlotsAnalyzer()
    TFile *OutputFile = new TFile("Combine_Analyzer_plots.root","RECREATE");
    
  
-   TFile *hfile1 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2016_runB.root");
-   TFile *hfile2 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2016_runC.root");
-   TFile *hfile3 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2016_runD.root");
-   TFile *hfile4 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2016_runE.root");
-   TFile *hfile5 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2016_runF.root");
-   TFile *hfile6 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2016_runG.root");
+   TFile *hfile1 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2016_runB.root");
+   TFile *hfile2 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2016_runG.root");
 
-   TFile *hfile7 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2017_runB.root");
-   TFile *hfile8 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/combined2017_runF.root");
+   TFile *hfile3 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2017_runB.root");
+   TFile *hfile4 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2017_runC.root");
+   TFile *hfile5 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2017_runD.root");
+   TFile *hfile6 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2017_runE.root");
+
+   TFile *hfile7 = new TFile("/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/V0_angular_correlation_analysis/bashRunAnalyzer/Results/Combined_by_run/2017_runF.root");
 
    vector<string> v_histos;
-   v_histos.push_back("h_Lambda_lxy");
-   v_histos.push_back("h_Lambda_lxy_error");
-   v_histos.push_back("h_Lambda_lxy_signed");
+   v_histos.push_back("h_r_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter");
+   //v_histos.push_back("h_Lambda_lxy_error");
+   //v_histos.push_back("h_Lambda_lxy_signed");
    //v_histos.push_back("_sCand_L0_delta_phi");
    //v_histos.push_back("_sCand_antiL0_delta_phi");
    
@@ -65,14 +65,14 @@ void mergePlotsAnalyzer()
 	   gStyle->SetOptStat(kFALSE);
 
 
-	   TH1F *h1 = (TH1F*)hfile1->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
-	   TH1F *h2 = (TH1F*)hfile2->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
-	   TH1F *h3 = (TH1F*)hfile3->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
-	   TH1F *h4 = (TH1F*)hfile4->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
-	   //TH1F *h5 = (TH1F*)hfile5->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Kshort/"+v_histos[i]).c_str()); 
-	   TH1F *h6 = (TH1F*)hfile6->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
-	   TH1F *h7 = (TH1F*)hfile7->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
-	   TH1F *h8 = (TH1F*)hfile8->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
+	   TH1F *h1 = (TH1F*)hfile1->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h2 = (TH1F*)hfile2->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h3 = (TH1F*)hfile3->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h4 = (TH1F*)hfile4->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h5 = (TH1F*)hfile5->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h6 = (TH1F*)hfile6->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   TH1F *h7 = (TH1F*)hfile7->Get(("Analyzer_V0_angular_correlation/LambdaKshortVertexFilter/dist_beamspot_S/"+v_histos[i]).c_str()); 
+	   //TH1F *h8 = (TH1F*)hfile8->Get(("Analyzer_V0_angular_correlation/OriginalV0s/displacement/Lambda/"+v_histos[i]).c_str()); 
 
 	   int binmax1 = h1->GetMaximumBin();
 	   int binmax2 = h2->GetMaximumBin();
@@ -99,23 +99,23 @@ void mergePlotsAnalyzer()
 	   h3->DrawNormalized("sameE1l");
 	   h4->SetLineColor(kBlack);
 	   h4->DrawNormalized("sameE1l");
-	  // h5->SetLineColor(kYellow);
-	  // h5->DrawNormalized("sameE1l");
+	   h5->SetLineColor(kYellow);
+	   h5->DrawNormalized("sameE1l");
 	   h6->SetLineColor(kCyan);
 	   h6->DrawNormalized("sameE1l");
 	   h7->SetLineColor(kMagenta);
 	   h7->DrawNormalized("sameE1l");
-	   h8->SetLineColor(kOrange);
-	   h8->DrawNormalized("sameE1l");
+	  // h8->SetLineColor(kOrange);
+	  // h8->DrawNormalized("sameE1l");
 	   
 	   h1->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h2->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h3->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h4->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
-	   //h5->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+	   h5->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h6->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 	   h7->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
-	   h8->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
+	  // h8->GetYaxis()->SetRangeUser(0,binmaxcontent/maxNEntries*20);
 
 	   c1->Update();
 	   TLegend* legend = new TLegend(0.1,0.7,0.48,0.9);
@@ -125,13 +125,13 @@ void mergePlotsAnalyzer()
    	   legend->AddEntry(h4,data[3].c_str(),"l");
    	  */ 
 	   legend->AddEntry(h1,"2016 RunB","l");
-	   legend->AddEntry(h2,"2016 RunC","l");
-	   legend->AddEntry(h3,"2016 RunD","l");
-	   legend->AddEntry(h4,"2016 RunE","l");
-	   //legend->AddEntry(h5,"2016 RunF","l");
-   	   legend->AddEntry(h6,"2016 RunG","l");
-   	   legend->AddEntry(h7,"2017 RunB","l");
-   	   legend->AddEntry(h8,"2017 RunF","l");
+	   legend->AddEntry(h2,"2016 RunG","l");
+	   legend->AddEntry(h3,"2017 RunB","l");
+	   legend->AddEntry(h4,"2017 RunC","l");
+	   legend->AddEntry(h5,"2017 RunD","l");
+   	   legend->AddEntry(h6,"2017 RunE","l");
+   	   legend->AddEntry(h7,"2017 RunF","l");
+   	   //legend->AddEntry(h8,"2017 RunF","l");
    	   legend->Draw();
    	   legend->Draw();
            OutputFile->cd();
