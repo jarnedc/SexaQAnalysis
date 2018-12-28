@@ -38,7 +38,7 @@ else:
 
 process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(options.maxEvts))
 process.MessageLogger.cerr.FwkReport.reportEvery = cms.untracked.int32(1)
-process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
+process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True),SkipEvent = cms.untracked.vstring('ProductNotFound'))
 
 #Jarne
 
@@ -82,20 +82,41 @@ process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
 	#	*tupleOfFiles #the * is to unpack the tuple of filenames
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
+      
+      #'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_XiGun_GENSIM_IIDD_10k_events_decay_length_5cm_no_EvtGen_step2.root',
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT.root'
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial4_neutron_mass_0/combined/crmc_Sexaq_combined_no_PU_neutron_mass_0.root'
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/Combined/crmc_Sexaq_GENSIM_combined.root'
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/sexaq_GENSIM_1_4.root'
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial4_NO_PU/events_skimmed_MC_Sexaq_1_17.root',
 
-      #'file:///user/jdeclerc/CMSSW_7_1_20_patch2/src/IOMC/Input/test/hepmc2genRootFiles_antiSOnly/crmc_Sexaq_combined_all.root',
-      #'file:///user/jdeclerc/CMSSW_7_1_20_patch2/src/sexaqtest_GENSIM_short_test.root',
-      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/crmc_Sexaq_GENSIM_combined001.root',
-      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/crmc_Sexaq_GENSIM_combined002.root',
-      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/crmc_Sexaq_GENSIM_combined003.root',
-      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/crmc_Sexaq_GENSIM_combined004.root',
-      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/crmc_Sexaq_GENSIM_combined005.root',
-      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/GENSIM/Sexaquark_13TeV_trial4/crmc_Sexaq_GENSIM_combined006.root',
-      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_XiGun_GENSIM_IIDD_10k_events_decay_length_5cm_no_EvtGen_step2.root',
+	#all the files after Step2 = Reco
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT1.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT2.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT3.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT4.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT5.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT6.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT7.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT8.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT9.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT10.root',
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/combined/crmc_Sexaq_combined_keep_genParticlesPlusGEANT11.root',
+	#a single Step2 file 
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial4_NO_PU_keep_genParticlesPlusGEANT/SUS-RunIISummer16DR80Premix-00068_1_17.root'
 
-#      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/V0_correlation_ZeroBias_single_file.root',
+	#combined files of the RECO = Step2 with the smeared vertex (~30k antiS produced)
+	'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial5_Vtx_smeared/combined/crmc_Sexaq_combined_trial5_Vtx_Smeared.root',
+	#combined files of the RECO = Step2 with the smeared vertex (~130k antiS produced)
+	'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/Sexaquark_13TeV_trial6_Vtx_smeared/combined/crmc_Sexaq_combined_trial6_Vtx_Smeared_Step2.root',
+	#the skimmed files of teh run with the smeared vertex
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial5_Vtx_smeared/combined/crmc_Sexaq_combined_trial5_Vtx_Smeared_Skimmed.root',
 
-		
+	#the skimmed files of the run with smeared vertex and status 1 particles
+	#'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial5_Vtx_smeared_status1/combined/crmc_Sexaq_combined_trial5_Vtx_Smeared_status1_Skimmed.root'
+
+	#a MinBias sample:
+	#'file:///user/lowette/SexaQ/RunIISummer16DR80_MinBias_TuneCUETP8M1_13TeV-pythia8_GEN-SIM-RECO_NoPU_RECO_80X_mcRun2_asymptotic_v14-v1_100000_00150044-D075-E611-AAE8-001E67505A2D.root'	
     ),
     duplicateCheckMode = cms.untracked.string ("noDuplicateCheck")
 )
@@ -112,8 +133,15 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('events_analysed_XiGun_GENSIM_IIDD_10k_events_decay_length_5cm_no_EvtGen_step2.root')
-#    fileName = cms.string('MinBias_no_pile_up.root')
-#    fileName = cms.string('WJets_with_pile_up.root')
-#    fileName = cms.string('XiGun_0_displacement.root')
+#    fileName = cms.string('analyzed_Xi1820.root')
+#    fileName = cms.string('analyzed_sexaq_NO_PU.root')
+#    fileName = cms.string('analyzed_sexaq_NO_PU_neutron_mass_0.root')
+#    fileName = cms.string('analyzed_sexaq_GENSIM.root')
+#    fileName = cms.string('analyzed_sexaq_GENSIM_single_file_4.root')
+#    fileName = cms.string('analyzed_sexaq_Step2.root')
+    fileName = cms.string('analyzed_sexaq_Step2_Vtx_smeared.root')
+#    fileName = cms.string('analyzed_sexaq_Step2_Vtx_smeared_skimmed.root')
+#    fileName = cms.string('analyzed_sexaq_Step2_Vtx_smeared_status1_skimmed.root')
+#    fileName = cms.string('analyzed_sexaq_minBias.root')
+#    fileName = cms.string('analyzed_sexaq_Step2_file17.root')
 )

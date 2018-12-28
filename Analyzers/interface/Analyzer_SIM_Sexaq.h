@@ -10,6 +10,7 @@
 #include "TH1F.h"
 #include "TH2F.h"
 #include "TH3F.h"
+#include "TEfficiency.h"
 #include "TFile.h"
 #include "TProfile.h"
 #include <TMath.h>
@@ -57,6 +58,11 @@ class Analyzer_SIM_Sexaq : public edm::EDAnalyzer
     virtual void endJob();
     virtual ~Analyzer_SIM_Sexaq();
     double openings_angle(reco::Candidate::Vector momentum1, reco::Candidate::Vector momentum2);
+    double deltaR(double phi1, double eta1, double phi2, double eta2);
+    double lxy(TVector3 v1, TVector3 v2);
+    TVector3 PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+    double dxy_signed_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
+
   private:
     //---- configurable parameters --------
     bool m_isData;
@@ -65,17 +71,22 @@ class Analyzer_SIM_Sexaq : public edm::EDAnalyzer
     
     edm::Service<TFileService> m_fs;
  
+    edm::InputTag m_bsTag;
     edm::InputTag m_genParticlesTag_GEN;
     edm::InputTag m_genParticlesTag_SIM_GEANT;
+    edm::InputTag m_generalTracksTag;
     edm::InputTag m_sCandsTag;
+    edm::InputTag m_V0KsTag;
+    edm::InputTag m_V0LTag;
 
+    edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
     edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken_GEN;
     edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken_SIM_GEANT;
+    edm::EDGetTokenT<vector<reco::Track>> m_generalTracksToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_V0KsToken;
+    edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_V0LToken;
     
-    
-
-
     int verbose=1;
     
     TString a = ""; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
@@ -84,6 +95,7 @@ class Analyzer_SIM_Sexaq : public edm::EDAnalyzer
     //--------- Histogram Declaration --------------------//
     std::map<TString, TH1F *> histos_th1f;
     std::map<TString, TH2F *> histos_th2f;
+    std::map<TString, TEfficiency *> histos_teff;
     //std::map<TString, TH3F *> histos_th3f;
     std::map<TString, TProfile *> histos_TProfile;
 
