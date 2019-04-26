@@ -1,7 +1,7 @@
 from WMCore.Configuration import Configuration
 
-day = "24042019"
-version = "v1"
+day = "25042019"
+version = "v2"
 
 config = Configuration()
 config.section_('General')
@@ -20,7 +20,8 @@ config.Data.publication = False
 config.Data.splitting = 'FileBased' 
 config.Data.outLFNDirBase = '/store/user/jdeclerc/crmc_Sexaq/Analyzed_Skimmed' 
 config.Data.userInputFiles = open('/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/AnalyzerAllSteps/test/crab/inputFilesAllSkimmed.txt').readlines() 
-config.Data.outputPrimaryDataset = "CRAB_AnalyzerAllSteps"+day+'_'+version
+#config.Data.userInputFiles = open('/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/AnalyzerAllSteps/test/crab/inputFilesAllSkimmedNoKsAntiLambdaPtCutsAndEtaCuts.txt').readlines() 
+config.Data.outputPrimaryDataset = "CRAB_AnalyzerAllStepsOldSkimming"+day+'_'+version
 
 config.section_('User') 
 config.User.voGroup = 'becms'

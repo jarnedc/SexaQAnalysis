@@ -63,6 +63,8 @@ class AnalyzerAllSteps : public edm::EDAnalyzer
     TVector3 PCA_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
     double dxy_signed_line_point(TVector3 Point_line, TVector3 Vector_along_line, TVector3 Point);
     double std_dev_lxy(double vx, double vy, double vx_var, double vy_var, double bx_x, double bx_y, double bx_x_var, double bx_y_var);
+    double XYpointingAngle(const reco::Candidate  * particle,TVector3 beamspot);
+    double CosOpeningsAngle(TVector3 vec1, TVector3 vec2);
 
     void FillHistosGENAntiS(const reco::Candidate * , TVector3 beamspot);
     void FillHistosGENKsNonAntiS(const reco::Candidate *, TVector3 beamspot );

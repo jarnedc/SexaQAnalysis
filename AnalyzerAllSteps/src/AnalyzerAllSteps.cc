@@ -42,6 +42,8 @@ void AnalyzerAllSteps::beginJob() {
      histos_th1f["h_GEN_AntiS_deltaR_daughters"] = dir_GEN_antiS.make<TH1F>(b+"h_GEN_AntiS_deltaR_daughters", "; #Delta R(Ks,#bar{#Lambda}); #entries ",200,0,20);
      histos_th1f["h_GEN_AntiS_deltaPhi_daughters"] = dir_GEN_antiS.make<TH1F>(b+"h_GEN_AntiS_deltaPhi_daughters", "; #Delta #Phi(Ks,#bar{#Lambda}); #entries ",200,-4,4);
      histos_th2f["h2_GEN_AntiS_deltaPhi_daughters_lxy_interactionVertex"] = dir_GEN_antiS.make<TH2F>(b+"h2_GEN_AntiS_deltaPhi_daughters_lxy_interactionVertex", "; #Delta #Phi(Ks,#bar{#Lambda}); Lxy(beampsot, antiS interaction vertex) ",200,-4,4,200,0,200);
+     histos_th1f["h_GEN_AntiS_CosAnglePAntiSPKs"] = dir_GEN_antiS.make<TH1F>(b+"h_GEN_AntiS_CosAnglePAntiSPKs", "; cos(angle(#vec(p_{Ks}),#vec(p_{S}))); #entries ",20000,-1.5,1.5);
+     histos_th1f["h_GEN_AntiS_CosAnglePAntiSPAntiLambda"] = dir_GEN_antiS.make<TH1F>(b+"h_GEN_AntiS_CosAnglePAntiSPAntiLambda", "; cos(angle(#vec(p_{#bar{#Lambda}}),#vec(p_{S}))); #entries ",20000,-1.5,1.5);
 
      TFileDirectory dir_GEN_KsNonAntiS = dir_GEN.mkdir("GEN_KsNonAntiS");
      histos_th1f["h_GEN_nKs"] = dir_GEN_KsNonAntiS.make<TH1F>(b+"h_GEN_nKs", "; #Ks/event; #entries ",20,0,20); 
@@ -53,6 +55,7 @@ void AnalyzerAllSteps::beginJob() {
      histos_th1f["h_GEN_KsNonAntiS_lxy"] = dir_GEN_KsNonAntiS.make<TH1F>(b+"h_GEN_KsNonAntiS_lxy", "; Ks lxy(beamspot, Ks creationvertex) (cm); #entries ",200,0,200);
      histos_th1f["h_GEN_KsNonAntiS_vz"] = dir_GEN_KsNonAntiS.make<TH1F>(b+"h_GEN_KsNonAntiS_vz", "; Ks vz(Ks creationvertex) (cm); #entries ",600,-300,300);
      histos_th1f["h_GEN_KsNonAntiS_dxy"] = dir_GEN_KsNonAntiS.make<TH1F>(b+"h_GEN_KsNonAntiS_dxy", "; Ks dxy(beamspot) (cm); #entries ",400,-20,20);
+     histos_th1f["h_GEN_KsNonAntiS_XYpointingAngle"] = dir_GEN_KsNonAntiS.make<TH1F>(b+"h_GEN_KsNonAntiS_XYpointingAngle", "; cos[(#vec{l_{xy}}(Ks daughter).#vec{p_{xy}}(Ks))/(||#vec{l_{xy}}(Ks daughter)||.||#vec{p_{xy}}(Ks)||)]; #entries ",20000,-1.5,1.5);
 
      TFileDirectory dir_GEN_AntiLambdaNonAntiS = dir_GEN.mkdir("GEN_AntiLambdaNonAntiS");
      histos_th1f["h_GEN_nAntiLambda"] = dir_GEN_AntiLambdaNonAntiS.make<TH1F>(b+"h_GEN_nAntiLambda", "; # #bar{#Lambda}/event; #entries ",20,0,20); 
@@ -64,6 +67,7 @@ void AnalyzerAllSteps::beginJob() {
      histos_th1f["h_GEN_AntiLambdaNonAntiS_lxy"] = dir_GEN_AntiLambdaNonAntiS.make<TH1F>(b+"h_GEN_AntiLambdaNonAntiS_lxy", "; #bar{#Lambda} lxy(beamspot, #bar{#Lambda} creationvertex) (cm); #entries ",200,0,200);
      histos_th1f["h_GEN_AntiLambdaNonAntiS_vz"] = dir_GEN_AntiLambdaNonAntiS.make<TH1F>(b+"h_GEN_AntiLambdaNonAntiS_vz", "; #bar{#Lambda} vz(#bar{#Lambda} creationvertex) (cm); #entries ",600,-300,300);
      histos_th1f["h_GEN_AntiLambdaNonAntiS_dxy"] = dir_GEN_AntiLambdaNonAntiS.make<TH1F>(b+"h_GEN_AntiLambdaNonAntiS_dxy", "; #bar{#Lambda} dxy(beamspot) (cm); #entries ",400,-20,20);
+     histos_th1f["h_GEN_AntiLambdaNonAntiS_XYpointingAngle"] = dir_GEN_AntiLambdaNonAntiS.make<TH1F>(b+"h_GEN_AntiLambdaNonAntiS_XYpointingAngle", "; AntiLambdaNonAntiS cos[(#vec{l_{xy}}(#bar{#Lambda daughter}).#vec{p_{xy}}(#bar{#Lambda}))/(||#vec{l_{xy}}(#bar{#Lambda daughter})||.||#vec{p_{xy}}(#bar{#Lambda})||)]; #entries ",20000,-1.5,1.5);
 
      TFileDirectory dir_GEN_KsAntiS = dir_GEN.mkdir("GEN_KsAntiS");
      histos_th1f["h_GEN_KsAntiS_pdgId"] = dir_GEN_KsAntiS.make<TH1F>(b+"h_GEN_KsAntiS_pdgId", "; KsAntiS pdgId ; #entries ",10000,-5000,5000);
@@ -75,6 +79,7 @@ void AnalyzerAllSteps::beginJob() {
      histos_th1f["h_GEN_KsAntiS_lxy"] = dir_GEN_KsAntiS.make<TH1F>(b+"h_GEN_KsAntiS_lxy", "; KsAntiS lxy(beamspot, KsAntiS creationvertex) (cm); #entries ",200,0,200);
      histos_th1f["h_GEN_KsAntiS_vz"] = dir_GEN_KsAntiS.make<TH1F>(b+"h_GEN_KsAntiS_vz", "; KsAntiS vz(KsAntiS creationvertex) (cm); #entries ",600,-300,300);
      histos_th1f["h_GEN_KsAntiS_dxy"] = dir_GEN_KsAntiS.make<TH1F>(b+"h_GEN_KsAntiS_dxy", "; KsAntiS dxy(beamspot) (cm); #entries ",400,-20,20);
+     histos_th1f["h_GEN_KsAntiS_XYpointingAngle"] = dir_GEN_KsAntiS.make<TH1F>(b+"h_GEN_KsAntiS_XYpointingAngle", "; cos[(#vec{l_{xy}}(Ks daughter).#vec_{xy}{p}(Ks))/(||#vec{l_{xy}}(Ks daughter)||.||#vec{p_{xy}}(Ks)||)] ; #entries ",20000,-1.5,1.5);
 
      TFileDirectory dir_GEN_AntiLambdaAntiS = dir_GEN.mkdir("GEN_AntiLambdaAntiS");
      histos_th1f["h_GEN_AntiLambdaAntiS_pdgId"] = dir_GEN_AntiLambdaAntiS.make<TH1F>(b+"h_GEN_AntiLambdaAntiS_pdgId", "; #bar{#Lambda} pdgID; #entries ",10000,-5000,5000);
@@ -86,6 +91,7 @@ void AnalyzerAllSteps::beginJob() {
      histos_th1f["h_GEN_AntiLambdaAntiS_lxy"] = dir_GEN_AntiLambdaAntiS.make<TH1F>(b+"h_GEN_AntiLambdaAntiS_lxy", "; AntiLambdaAntiS lxy(beamspot, AntiLambdaAntiS creationvertex) (cm); #entries ",200,0,200);
      histos_th1f["h_GEN_AntiLambdaAntiS_vz"] = dir_GEN_AntiLambdaAntiS.make<TH1F>(b+"h_GEN_AntiLambdaAntiS_vz", "; AntiLambdaAntiS vz(AntiLambdaAntiS creationvertex) (cm); #entries ",600,-300,300);
      histos_th1f["h_GEN_AntiLambdaAntiS_dxy"] = dir_GEN_AntiLambdaAntiS.make<TH1F>(b+"h_GEN_AntiLambdaAntiS_dxy", "; AntiLambdaAntiS dxy(beamspot) (cm); #entries ",400,-20,20);
+     histos_th1f["h_GEN_AntiLambdaAntiS_XYpointingAngle"] = dir_GEN_AntiLambdaAntiS.make<TH1F>(b+"h_GEN_AntiLambdaAntiS_XYpointingAngle", "; AntiLambdaAntiS cos[(#vec{l_{xy}}(#bar{#Lambda} daughter).#vec{p_{xy}}(#bar{#Lambda}))/(||#vec{l_{xy}}(#bar{#Lambda daughter})||.||#vec{p_{xy}}(#bar{#Lambda})||)] ; #entries ",20000,-1.5,1.5);
 
      TFileDirectory dir_RECO = m_fs->mkdir("RECO"); 
 
@@ -255,7 +261,6 @@ void AnalyzerAllSteps::beginJob() {
 
 void AnalyzerAllSteps::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) {
 
-cout << "-3" << endl;
  
   //beamspot
   edm::Handle<reco::BeamSpot> h_bs;
@@ -267,8 +272,8 @@ cout << "-3" << endl;
 
   //SIM particles: normal Gen particles or PlusGEANT
   edm::Handle<vector<reco::GenParticle>> h_genParticles;
-  iEvent.getByToken(m_genParticlesToken_GEN, h_genParticles);
-  //iEvent.getByToken(m_genParticlesToken_SIM_GEANT, h_genParticles);
+  //iEvent.getByToken(m_genParticlesToken_GEN, h_genParticles);
+  iEvent.getByToken(m_genParticlesToken_SIM_GEANT, h_genParticles);
 
   //General tracks particles
   edm::Handle<vector<reco::Track>> h_generalTracks;
@@ -286,7 +291,6 @@ cout << "-3" << endl;
   edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0L;
   iEvent.getByToken(m_V0LToken, h_V0L);
 
-cout << "-2" << endl;
 
   //beamspot
   TVector3 beamspot(0,0,0);
@@ -296,11 +300,9 @@ cout << "-2" << endl;
 	beamspotVariance.SetXYZ(pow(h_bs->x0Error(),2),pow(h_bs->y0Error(),2),pow(h_bs->z0Error(),2));			
   }
 
-cout << "-1" << endl;
   TVector3 FirstOfflinePV(0.,0.,0.);
   if(h_offlinePV.isValid()){ FirstOfflinePV.SetX(h_offlinePV->at(0).x()); FirstOfflinePV.SetY(h_offlinePV->at(0).y()); FirstOfflinePV.SetZ(h_offlinePV->at(0).z());}
 
-cout << "0" << endl;
   int nAntiSThisEvent = 0;
   int nAntiSInteractThisEvent = 0;
   int nKsThisEvent = 0;
@@ -378,12 +380,18 @@ cout << "0" << endl;
 
 void AnalyzerAllSteps::FillHistosGENAntiS(const reco::Candidate  * GENantiS, TVector3 beamspot){
 
+	TVector3 momentumGENantiS(GENantiS->px(),GENantiS->py(),GENantiS->pz());
 	histos_th1f["h_GEN_nAntiSTotal"]->Fill(0);	
 	histos_th1f["h_GEN_AntiS_pt"]->Fill(GENantiS->pt());	
 	histos_th1f["h_GEN_AntiS_eta"]->Fill(GENantiS->eta());	
 	histos_th1f["h_GEN_AntiS_phi"]->Fill(GENantiS->phi());
 		
 	if(GENantiS->numberOfDaughters()==2){
+		TVector3 momentumKs(GENantiS->daughter(0)->px(),GENantiS->daughter(0)->py(),GENantiS->daughter(0)->pz());
+		TVector3 momentumAntiLambda(GENantiS->daughter(1)->px(),GENantiS->daughter(1)->py(),GENantiS->daughter(1)->pz());
+		if(abs(GENantiS->daughter(1)->pdgId())==pdgIdKs){momentumKs.SetX(GENantiS->daughter(1)->px());momentumKs.SetY(GENantiS->daughter(1)->py());momentumKs.SetZ(GENantiS->daughter(1)->pz());}
+		if(GENantiS->daughter(0)->pdgId()==pdgIdAntiLambda){momentumAntiLambda.SetX(GENantiS->daughter(0)->px());momentumAntiLambda.SetY(GENantiS->daughter(0)->py());momentumAntiLambda.SetZ(GENantiS->daughter(0)->pz());}
+
 		double deltaPhiDaughters = reco::deltaPhi(GENantiS->daughter(0)->phi(),GENantiS->daughter(1)->phi());
 		double deltaEtaDaughters = GENantiS->daughter(0)->eta()-GENantiS->daughter(1)->eta();
 		double deltaRDaughters = sqrt(deltaPhiDaughters*deltaPhiDaughters+deltaEtaDaughters*deltaEtaDaughters);
@@ -392,6 +400,9 @@ void AnalyzerAllSteps::FillHistosGENAntiS(const reco::Candidate  * GENantiS, TVe
 		histos_th1f["h_GEN_AntiS_deltaR_daughters"]->Fill(deltaRDaughters);
 		histos_th1f["h_GEN_AntiS_deltaPhi_daughters"]->Fill(deltaPhiDaughters);
 		histos_th2f["h2_GEN_AntiS_deltaPhi_daughters_lxy_interactionVertex"]->Fill(deltaPhiDaughters,lxyInteractionVertexAntiS);
+		histos_th1f["h_GEN_AntiS_CosAnglePAntiSPKs"]->Fill(CosOpeningsAngle(momentumKs,momentumGENantiS));
+		histos_th1f["h_GEN_AntiS_CosAnglePAntiSPAntiLambda"]->Fill(CosOpeningsAngle(momentumAntiLambda,momentumGENantiS));
+		
 	}	
 
 }
@@ -399,9 +410,11 @@ void AnalyzerAllSteps::FillHistosGENAntiS(const reco::Candidate  * GENantiS, TVe
 
 void AnalyzerAllSteps::FillHistosGENKsNonAntiS(const reco::Candidate  * GENKsNonAntiS, TVector3 beamspot){
 	TVector3 KsCreationVertex(GENKsNonAntiS->vx(),GENKsNonAntiS->vy(),GENKsNonAntiS->vz());
+	
 	double Lxy = lxy(beamspot,KsCreationVertex);
 	TVector3 KsMomentum(GENKsNonAntiS->px(),GENKsNonAntiS->py(),GENKsNonAntiS->pz());
 	double dxy = dxy_signed_line_point(KsCreationVertex,KsMomentum,beamspot);
+	double xypointingAngle = XYpointingAngle(GENKsNonAntiS,beamspot);
 	histos_th1f["h_GEN_KsNonAntiS_pt"]->Fill(GENKsNonAntiS->pt());	
 	histos_th1f["h_GEN_KsNonAntiS_eta"]->Fill(GENKsNonAntiS->eta());	
 	histos_th1f["h_GEN_KsNonAntiS_phi"]->Fill(GENKsNonAntiS->phi());	
@@ -410,6 +423,7 @@ void AnalyzerAllSteps::FillHistosGENKsNonAntiS(const reco::Candidate  * GENKsNon
 	histos_th1f["h_GEN_KsNonAntiS_lxy"]->Fill(Lxy);	
 	histos_th1f["h_GEN_KsNonAntiS_vz"]->Fill(GENKsNonAntiS->vz());	
 	histos_th1f["h_GEN_KsNonAntiS_dxy"]->Fill(dxy);	
+	if(GENKsNonAntiS->numberOfDaughters() == 2)histos_th1f["h_GEN_KsNonAntiS_XYpointingAngle"]->Fill(xypointingAngle);	
 }
 
 void AnalyzerAllSteps::FillHistosGENAntiLambdaNonAntiS(const reco::Candidate  * GENAntiLambdaNonAntiS, TVector3 beamspot){
@@ -417,6 +431,8 @@ void AnalyzerAllSteps::FillHistosGENAntiLambdaNonAntiS(const reco::Candidate  * 
 	double Lxy = lxy(beamspot,AntiLambdaCreationVertex);
 	TVector3 AntiLambdaMomentum(GENAntiLambdaNonAntiS->px(),GENAntiLambdaNonAntiS->py(),GENAntiLambdaNonAntiS->pz());
 	double dxy = dxy_signed_line_point(AntiLambdaCreationVertex,AntiLambdaMomentum,beamspot);
+	double xypointingAngle = XYpointingAngle(GENAntiLambdaNonAntiS,beamspot);
+
 	histos_th1f["h_GEN_AntiLambdaNonAntiS_pt"]->Fill(GENAntiLambdaNonAntiS->pt());	
 	histos_th1f["h_GEN_AntiLambdaNonAntiS_eta"]->Fill(GENAntiLambdaNonAntiS->eta());	
 	histos_th1f["h_GEN_AntiLambdaNonAntiS_phi"]->Fill(GENAntiLambdaNonAntiS->phi());	
@@ -425,6 +441,7 @@ void AnalyzerAllSteps::FillHistosGENAntiLambdaNonAntiS(const reco::Candidate  * 
 	histos_th1f["h_GEN_AntiLambdaNonAntiS_lxy"]->Fill(Lxy);	
 	histos_th1f["h_GEN_AntiLambdaNonAntiS_vz"]->Fill(GENAntiLambdaNonAntiS->vz());	
 	histos_th1f["h_GEN_AntiLambdaNonAntiS_dxy"]->Fill(dxy);	
+	if(GENAntiLambdaNonAntiS->numberOfDaughters() == 2)histos_th1f["h_GEN_AntiLambdaNonAntiS_XYpointingAngle"]->Fill(xypointingAngle);	
 }
 
 
@@ -434,6 +451,8 @@ void AnalyzerAllSteps::FillHistosGENKsAntiS(const reco::Candidate  * GENKsAntiS,
 	double Lxy = lxy(beamspot,KsAntiSCreationVertex);
 	TVector3 KsAntiSMomentum(GENKsAntiS->px(),GENKsAntiS->py(),GENKsAntiS->pz());
 	double dxy = dxy_signed_line_point(KsAntiSCreationVertex,KsAntiSMomentum,beamspot);
+	double xypointingAngle = XYpointingAngle(GENKsAntiS,beamspot);
+
 	histos_th1f["h_GEN_KsAntiS_pdgId"]->Fill(GENKsAntiS->pdgId());	
 	histos_th1f["h_GEN_KsAntiS_pt"]->Fill(GENKsAntiS->pt());	
 	histos_th1f["h_GEN_KsAntiS_eta"]->Fill(GENKsAntiS->eta());	
@@ -442,7 +461,9 @@ void AnalyzerAllSteps::FillHistosGENKsAntiS(const reco::Candidate  * GENKsAntiS,
 	histos_th2f["h2_GEN_KsAntiS_vx_vz"]->Fill(GENKsAntiS->vx(),GENKsAntiS->vz());
 	histos_th1f["h_GEN_KsAntiS_lxy"]->Fill(Lxy);	
 	histos_th1f["h_GEN_KsAntiS_vz"]->Fill(GENKsAntiS->vz());	
-	histos_th1f["h_GEN_KsAntiS_dxy"]->Fill(dxy);	
+	histos_th1f["h_GEN_KsAntiS_dxy"]->Fill(dxy);
+	if(GENKsAntiS->numberOfDaughters() == 2)histos_th1f["h_GEN_KsAntiS_XYpointingAngle"]->Fill(xypointingAngle);
+		
 }
 
 void AnalyzerAllSteps::FillHistosGENAntiLambdaAntiS(const reco::Candidate  * GENAntiLambdaAntiS, TVector3 beamspot){
@@ -450,6 +471,8 @@ void AnalyzerAllSteps::FillHistosGENAntiLambdaAntiS(const reco::Candidate  * GEN
 	double Lxy = lxy(beamspot,AntiLambdaAntiSCreationVertex);
 	TVector3 AntiLambdaMomentum(GENAntiLambdaAntiS->px(),GENAntiLambdaAntiS->py(),GENAntiLambdaAntiS->pz());
 	double dxy = dxy_signed_line_point(AntiLambdaAntiSCreationVertex,AntiLambdaMomentum,beamspot);
+	double xypointingAngle = XYpointingAngle(GENAntiLambdaAntiS,beamspot);
+
 	histos_th1f["h_GEN_AntiLambdaAntiS_pdgId"]->Fill(GENAntiLambdaAntiS->pdgId());	
 	histos_th1f["h_GEN_AntiLambdaAntiS_pt"]->Fill(GENAntiLambdaAntiS->pt());	
 	histos_th1f["h_GEN_AntiLambdaAntiS_eta"]->Fill(GENAntiLambdaAntiS->eta());	
@@ -459,6 +482,8 @@ void AnalyzerAllSteps::FillHistosGENAntiLambdaAntiS(const reco::Candidate  * GEN
 	histos_th1f["h_GEN_AntiLambdaAntiS_lxy"]->Fill(Lxy);	
 	histos_th1f["h_GEN_AntiLambdaAntiS_vz"]->Fill(GENAntiLambdaAntiS->vz());	
 	histos_th1f["h_GEN_AntiLambdaAntiS_dxy"]->Fill(dxy);
+	if(GENAntiLambdaAntiS->numberOfDaughters() == 2)histos_th1f["h_GEN_AntiLambdaAntiS_XYpointingAngle"]->Fill(xypointingAngle);
+	
 }
 
 void AnalyzerAllSteps::FillHistoAllGranddaughtersCorrect(const reco::Candidate  * genParticle, edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0Ks, edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0L, int eventId){
@@ -504,10 +529,10 @@ void AnalyzerAllSteps::FillHistoAllGranddaughtersCorrect(const reco::Candidate  
 	}
 
 	if(KsRECOMatched && AntiLRECOMatched){//found for this single antiS both a reconstructed Ks and antiL daughter
-		cout << "found for this single GEN antiS both a reconstructed Ks and antiL daughter (based on deltR matching); event info: id " << eventId << endl;
 		reco::LeafCandidate::LorentzVector n_(0,0,0,0.939565);
 		double invMassAntiS = (matchedKs->p4()+matchedL->p4()-n_).mass();
 		histos_th1f["h_RECO_AntiS_m_matchedDaughtersFound"]->Fill(invMassAntiS);
+		cout << "found for this single GEN antiS both a reconstructed Ks and antiL daughter (based on deltR matching); event info: id " << eventId << "invariant mass from the two RECO daughters: " << invMassAntiS  << endl;
 		histos_th2f["h2_RECO_AntiS_m_matchedDaughtersFound_eventId"]->Fill(invMassAntiS, eventId);
 
 	}	
@@ -555,6 +580,8 @@ void AnalyzerAllSteps::FillHistosRECOAntiS(const reco::VertexCompositeCandidate 
 	double deltaPhiDaughters = reco::deltaPhi(RECOAntiS->daughter(0)->phi(),RECOAntiS->daughter(1)->phi());
 	double deltaEtaDaughters = RECOAntiS->daughter(0)->eta()-RECOAntiS->daughter(1)->eta();
 	double deltaRDaughters = sqrt(deltaPhiDaughters*deltaPhiDaughters+deltaEtaDaughters*deltaEtaDaughters);
+	reco::LeafCandidate::LorentzVector n_(0,0,0,0.939565);
+	double massAntiS = (RECOAntiS->p4()-n_).mass();
 	histos_th1f["h_RECO_AntiS_pt"]->Fill(RECOAntiS->pt());	
 	histos_th1f["h_RECO_AntiS_eta"]->Fill(RECOAntiS->eta());	
 	histos_th1f["h_RECO_AntiS_phi"]->Fill(RECOAntiS->phi());	
@@ -565,7 +592,7 @@ void AnalyzerAllSteps::FillHistosRECOAntiS(const reco::VertexCompositeCandidate 
 
 	//the stuff we cut on:
 	histos_th1f["h_RECO_AntiS_lxy"]->Fill(Lxy);	
-	histos_th1f["h_RECO_AntiS_error_lxy"]->Fill(deltaRDaughters);
+	histos_th1f["h_RECO_AntiS_error_lxy"]->Fill(error_Lxy);
 	histos_th1f["h_RECO_AntiS_deltaRDaughters"]->Fill(deltaRDaughters);
 	histos_th1f["h_RECO_AntiS_deltaPhiDaughters"]->Fill(deltaPhiDaughters);
 	//is the deltaR distribution good for background cut?	
@@ -575,14 +602,14 @@ void AnalyzerAllSteps::FillHistosRECOAntiS(const reco::VertexCompositeCandidate 
 	if(Lxy > 1.9)histos_th1f["h_RECO_AntiS_deltaPhiDaughters_Lxy_cut"]->Fill(deltaPhiDaughters);
 	if(Lxy > 1.9 && error_Lxy < 0.1)histos_th1f["h_RECO_AntiS_deltaPhiDaughters_Lxy_and_error_Lxy_cut"]->Fill(deltaPhiDaughters);
 
-	histos_th1f["h_RECO_AntiS_m"]->Fill(RECOAntiS->mass());
-	if(Lxy > 1.9)histos_th1f["h_RECO_AntiS_m_lxy_cut"]->Fill(RECOAntiS->mass());
+	histos_th1f["h_RECO_AntiS_m"]->Fill(massAntiS);
+	if(Lxy > 1.9)histos_th1f["h_RECO_AntiS_m_lxy_cut"]->Fill(massAntiS);
 	
-	if(deltaRDaughters < 3)histos_th1f["h_RECO_AntiS_m_deltaR_cut"]->Fill(RECOAntiS->mass());	
-	if(deltaRDaughters < 3 && Lxy > 1.9)histos_th1f["h_RECO_AntiS_m_lxy_and_deltaR_cut"]->Fill(RECOAntiS->mass());	
-	if(deltaRDaughters < 3 && Lxy > 1.9)histos_th2f["h2_RECO_AntiS_m_lxy_and_deltaR_cut_iEvent"]->Fill(RECOAntiS->mass(), eventId);	
-	if(deltaRDaughters < 3 && Lxy > 1.9)cout << "found a RECO antiS in this event which surives the deltaR cut and the Lxy cut; event info: id " << eventId << endl;	
-	if(deltaRDaughters < 3 && Lxy > 1.9 && error_Lxy < 0.1)histos_th1f["h_RECO_AntiS_m_lxy_and_error_lxy_and_deltaR_cut"]->Fill(RECOAntiS->mass());	
+	if(deltaRDaughters < 3)histos_th1f["h_RECO_AntiS_m_deltaR_cut"]->Fill(massAntiS);	
+	if(deltaRDaughters < 3 && Lxy > 1.9)histos_th1f["h_RECO_AntiS_m_lxy_and_deltaR_cut"]->Fill(massAntiS);	
+	if(deltaRDaughters < 3 && Lxy > 1.9)histos_th2f["h2_RECO_AntiS_m_lxy_and_deltaR_cut_iEvent"]->Fill(massAntiS, eventId);	
+	if(deltaRDaughters < 3 && Lxy > 1.9)cout << "found a RECO antiS in this event which surives the deltaR cut and the Lxy cut; event info: id " << eventId << " with inv mass : " << massAntiS << endl;	
+	if(deltaRDaughters < 3 && Lxy > 1.9 && error_Lxy < 0.1)histos_th1f["h_RECO_AntiS_m_lxy_and_error_lxy_and_deltaR_cut"]->Fill(massAntiS);	
 	
 	//for the RECO AntiS which survives the deltaR and Lxy cut find the closest matching GEN antiS and check what is the deltaR(GEN,RECO)
 	double bestDeltaRLxy_and_deltaRDaughtersCut = 999;
@@ -599,7 +626,7 @@ void AnalyzerAllSteps::FillHistosRECOAntiS(const reco::VertexCompositeCandidate 
 			}
 		}
 		//now fill this bestDeltaR in a 2D histo with the mass to see if the ones with properly RECO mass also have a small deltaR...
-		histos_th2f["h2_RECO_AntiS_m_lxy_and_deltaR_cut_vs_deltaR_best_GEN_match"]->Fill(RECOAntiS->mass(),bestDeltaRLxy_and_deltaRDaughtersCut);
+		histos_th2f["h2_RECO_AntiS_m_lxy_and_deltaR_cut_vs_deltaR_best_GEN_match"]->Fill(massAntiS,bestDeltaRLxy_and_deltaRDaughtersCut);
 	}
 
 	//for the RECO AntiS which survives the deltaR and Lxy cut and error_Lxy find the closest matching GEN antiS and check what is the deltaR(GEN,RECO)
@@ -617,13 +644,13 @@ void AnalyzerAllSteps::FillHistosRECOAntiS(const reco::VertexCompositeCandidate 
 			}
 		}
 		//now fill this bestDeltaR in a 2D histo with the mass to see if the ones with properly RECO mass also have a small deltaR...
-		histos_th2f["h2_RECO_AntiS_m_lxy_and_error_lxy_and_deltaR_cut_vs_deltaR_best_GEN_match"]->Fill(RECOAntiS->mass(),bestDeltaRLxy_and_errorLx_and_deltaRDaughtersCut);
+		histos_th2f["h2_RECO_AntiS_m_lxy_and_error_lxy_and_deltaR_cut_vs_deltaR_best_GEN_match"]->Fill(massAntiS,bestDeltaRLxy_and_errorLx_and_deltaRDaughtersCut);
 	}
 
 		
-	if(abs(deltaPhiDaughters) < 2.5 && abs(deltaPhiDaughters) > 1)histos_th1f["h_RECO_AntiS_m_deltaPhi_cut"]->Fill(RECOAntiS->mass());	
-	if(abs(deltaPhiDaughters) < 2.5 && abs(deltaPhiDaughters) > 1 && Lxy > 1.9)histos_th1f["h_RECO_AntiS_m_lxy_and_deltaPhi_cut"]->Fill(RECOAntiS->mass());	
-	if(abs(deltaPhiDaughters) < 2.5 && abs(deltaPhiDaughters) > 1 && Lxy > 1.9 && error_Lxy < 0.1)histos_th1f["h_RECO_AntiS_m_lxy_and_error_lxy_and_deltaPhi_cut"]->Fill(RECOAntiS->mass());	
+	if(abs(deltaPhiDaughters) < 2.5 && abs(deltaPhiDaughters) > 1)histos_th1f["h_RECO_AntiS_m_deltaPhi_cut"]->Fill(massAntiS);	
+	if(abs(deltaPhiDaughters) < 2.5 && abs(deltaPhiDaughters) > 1 && Lxy > 1.9)histos_th1f["h_RECO_AntiS_m_lxy_and_deltaPhi_cut"]->Fill(massAntiS);	
+	if(abs(deltaPhiDaughters) < 2.5 && abs(deltaPhiDaughters) > 1 && Lxy > 1.9 && error_Lxy < 0.1)histos_th1f["h_RECO_AntiS_m_lxy_and_error_lxy_and_deltaPhi_cut"]->Fill(massAntiS);	
 		
 
 
@@ -869,6 +896,29 @@ double AnalyzerAllSteps::std_dev_lxy(double vx, double vy, double vx_var, double
         double lxy_b_std_dev = sqrt(lxy_std_dev_nominator/lxy_std_dev_denominator);
         return lxy_b_std_dev;
 
+}
+
+//function to return the cos of the angle between the momentum of the particle and it's displacement vector. This is for a V0 particle, so you need the V0 to decay to get it's interaction vertex
+double AnalyzerAllSteps::XYpointingAngle(const reco::Candidate  * particle, TVector3 beamspot){
+      double angleXY = -2;
+      if(particle->numberOfDaughters() == 2){
+	      TVector3 decayVertexParticle(particle->daughter(0)->vx(),particle->daughter(0)->vy(),particle->daughter(0)->vz());	 
+	      double dx = decayVertexParticle.X()-beamspot.X();
+	      double dy = decayVertexParticle.Y()-beamspot.Y();
+	      double px = particle->px();
+	      double py = particle->py();
+	      angleXY = (dx*px+dy*py)/(sqrt(dx*dx+dy*dy)*sqrt(px*px+py*py));
+      }
+      return angleXY;
+	
+}
+
+double AnalyzerAllSteps::CosOpeningsAngle(TVector3 vec1, TVector3 vec2){
+
+  double nom = vec1.X()*vec2.X()+vec1.Y()*vec2.Y()+vec1.Z()*vec2.Z();
+  double denom = sqrt(vec1.X()*vec1.X()+vec1.Y()*vec1.Y()+vec1.Z()*vec1.Z())*sqrt(vec2.X()*vec2.X()+vec2.Y()*vec2.Y()+vec2.Z()*vec2.Z());
+  return nom/denom;
+	
 }
 
 void AnalyzerAllSteps::endJob()

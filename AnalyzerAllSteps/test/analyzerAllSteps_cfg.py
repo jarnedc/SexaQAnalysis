@@ -74,54 +74,39 @@ process.source = cms.Source("PoolSource",
       #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step1/CRAB_SimSexaq_7000Step1InputFiles/crab_Step1Sexaq_19042019_v3/190419_121537/0000/output_1.root',
 
       #Step2 output:
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_1.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_2.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_3.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_4.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_5.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_6.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_7.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_8.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_9.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_10.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_11.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_12.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_13.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_14.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_15.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_16.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_17.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_18.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_19.root',
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_20.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_1.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_2.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_3.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_4.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_5.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_6.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_7.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_8.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_9.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_10.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_11.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_12.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_13.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_14.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_15.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_16.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_17.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_18.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_19.root',
+      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Step2/CRAB_SimSexaq_7000Step2InputFiles/crab_Step2Sexaq_20042019_v1/190420_063702/0000/output_20.root'
 
       #Skimming output:
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_1.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_2.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_3.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_4.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_5.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_6.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_7.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_8.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_9.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_10.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_11.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_12.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_13.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_14.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_15.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_16.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_17.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_18.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_19.root',		
-#      'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0000/output_20.root',		
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0001/output_1208.root',		
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0005/output_5582.root',		
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0005/output_5747.root',		
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0005/output_5516.root',		
+      #'file:///pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/CRAB_SimSexaq_7000SkimmedInputFiles/crab_SkimmingSexaq_20042019_v1/190420_150422/0006/output_6445.root',		
 
 	#real data:
 	#'file:/pnfs/iihe/cms/store/user/jdeclerc/SinglePhoton/SinglePhoton_Run2016E-07Aug17-v1/181021_132023/0000/events_skimmed_2016_trialD_1.root'
 	
 	#background ref:
-	'file:/pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/crmc/Sexaquark_13TeV_trial10_backgroundReference/crmc_Sexaq_2229.root'
+	#'file:/pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/crmc/Sexaquark_13TeV_trial10_backgroundReference/crmc_Sexaq_2229.root'
 
     ),
   duplicateCheckMode = cms.untracked.string ("noDuplicateCheck")
@@ -143,9 +128,9 @@ process.TFileService = cms.Service('TFileService',
  #   fileName = cms.string('test_GEN.root')
  #   fileName = cms.string('test_GENSIM.root')
  #   fileName = cms.string('test_Step1.root')
- #   fileName = cms.string('test_Step2.root')
+    fileName = cms.string('test_Step2.root')
  #   fileName = cms.string('test_Skimming.root')
  #   fileName = cms.string('test_realDataSinglePhoton.root')
-    fileName = cms.string('test_backgroundRef.root')
+ #   fileName = cms.string('test_backgroundRef.root')
 	
 )
