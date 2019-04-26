@@ -4,6 +4,7 @@
 
 Analyzer_Steven::Analyzer_Steven(edm::ParameterSet const& pset):
   m_isData(pset.getUntrackedParameter<bool>("isData")),
+
   m_bsTag(pset.getParameter<edm::InputTag>("beamspot")),
   m_genParticlesTag_GEN(pset.getParameter<edm::InputTag>("genCollection_GEN")),
   m_genParticlesTag_SIM_GEANT(pset.getParameter<edm::InputTag>("genCollection_SIM_GEANT")),
@@ -32,18 +33,13 @@ void Analyzer_Steven::beginJob() {
     TFileDirectory dir_generalTracks = m_fs->mkdir("generalTracks");
     histos_th1f[b+"h_tracks_deltaR"]= dir_generalTracks.make<TH1F>(b+"h_tracks_deltaR", b+"h_tracks_deltaR; deltaR(track, daughter of V0) ",1000,0,10);
     histos_th1f[b+"h_tracks_deltaR_min"]= dir_generalTracks.make<TH1F>(b+"h_tracks_deltaR_min", b+"h_tracks_deltaR_min; deltaR(track, daughter of V0) ",1000,0,10);
-   histos_teff[b+"tracks_reco_eff_daughters_antiS"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS",b+"tracks_reco_eff_daughters_antiS; 0 = tracks no daughters of antiS, 1 = tracks daughters of the antiS",2,0,2);
-   histos_teff[b+"tracks_reco_eff_daughters_antiS_pt"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS_pt",b+"tracks_reco_eff_daughters_antiS_pt; pt of V0 daughters (GeV)",100,0,10);
-   histos_teff[b+"tracks_reco_eff_daughters_antiS_vxy"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS_vxy",b+"tracks_reco_eff_daughters_antiS_vxy; vxy of V0 daughters (cm)",200,0,100);
-   histos_teff[b+"tracks_reco_eff_daughters_antiS_surv_track_cuts_pt"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS_surv_track_cuts_pt",b+"tracks_reco_eff_daughters_antiS_surv_track_cuts_pt; pt of V0 daughters (GeV)",100,0,10);
-   histos_teff[b+"tracks_reco_eff_no_daughters_antiS_pt"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_no_daughters_antiS_pt",b+"tracks_reco_eff_no_daughters_antiS_pt; pt of V0 daughters (GeV)",100,0,10);
-   histos_teff[b+"tracks_reco_eff_no_daughters_antiS_vxy"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_no_daughters_antiS_vxy",b+"tracks_reco_eff_no_daughters_antiS_vxy; vxy of V0 daughters (cm)",200,0,100);
-   histos_teff[b+"tracks_reco_eff_no_daughters_antiS_pt_vxy_smaller_3p5"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_no_daughters_antiS_pt_vxy_smaller_3p5",b+"tracks_reco_eff_no_daughters_antiS_pt_vxy_smaller_3p5; pt of V0 daughters (GeV)",100,0,10);
-
-
-
-  
-
+    histos_teff[b+"tracks_reco_eff_daughters_antiS"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS",b+"tracks_reco_eff_daughters_antiS; 0 = tracks no daughters of antiS, 1 = tracks daughters of the antiS",2,0,2);
+    histos_teff[b+"tracks_reco_eff_daughters_antiS_pt"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS_pt",b+"tracks_reco_eff_daughters_antiS_pt; pt of V0 daughters (GeV)",100,0,10);
+    histos_teff[b+"tracks_reco_eff_daughters_antiS_vxy"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS_vxy",b+"tracks_reco_eff_daughters_antiS_vxy; vxy of V0 daughters (cm)",200,0,100);
+    histos_teff[b+"tracks_reco_eff_daughters_antiS_surv_track_cuts_pt"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_daughters_antiS_surv_track_cuts_pt",b+"tracks_reco_eff_daughters_antiS_surv_track_cuts_pt; pt of V0 daughters (GeV)",100,0,10);
+    histos_teff[b+"tracks_reco_eff_no_daughters_antiS_pt"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_no_daughters_antiS_pt",b+"tracks_reco_eff_no_daughters_antiS_pt; pt of V0 daughters (GeV)",100,0,10);
+    histos_teff[b+"tracks_reco_eff_no_daughters_antiS_vxy"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_no_daughters_antiS_vxy",b+"tracks_reco_eff_no_daughters_antiS_vxy; vxy of V0 daughters (cm)",200,0,100);
+    histos_teff[b+"tracks_reco_eff_no_daughters_antiS_pt_vxy_smaller_3p5"] = dir_generalTracks.make<TEfficiency>(b+"tracks_reco_eff_no_daughters_antiS_pt_vxy_smaller_3p5",b+"tracks_reco_eff_no_daughters_antiS_pt_vxy_smaller_3p5; pt of V0 daughters (GeV)",100,0,10);
 
    //V0 particles
    TFileDirectory dir_V0s = m_fs->mkdir("V0s");
@@ -53,7 +49,10 @@ void Analyzer_Steven::beginJob() {
    histos_th1f[b+"GEN_Ks_pt"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_pt", b+"GEN_Ks_pt; pt(GeV)", 100, 0, 10);
    histos_th1f[b+"GEN_Ks_eta"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_eta", b+"GEN_Ks_eta; eta", 100, -4, 4);
    histos_th1f[b+"GEN_Ks_phi"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_phi", b+"GEN_Ks_phi; phi(rad)", 200, -10, 10);
-   histos_th1f[b+"GEN_Ks_lxy"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_lxy", b+"GEN_Ks_lxy; lxy(cm)", 1000, 0, 100);
+   histos_th1f[b+"GEN_Ks_lxy"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_lxy", b+"GEN_Ks_lxy; lxy(beamspot, Ks production vertex)(cm)", 1000, 0, 100);
+   histos_th1f[b+"GEN_Ks_dxy"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_dxy", b+"GEN_Ks_dxy; dxy(cm)", 1000, -100, 100);
+   histos_th1f[b+"GEN_Ks_lxy_daughter"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_lxy_daughter", b+"GEN_Ks_lxy_daughter; lxy(beamspot, L production vertex)(cm)", 1000, 0, 100);
+   histos_th2f[b+"GEN_Ks_lxy_daughter_dxy"]= dir_V0s_GEN_Ks_kinematics.make<TH2F>(b+"GEN_Ks_lxy_daughter_dxy", b+"GEN_Ks_lxy_daughter_dxy; lxy(beamspot, L production vertex)(cm); dxy", 100, 0, 100,200,-100,100);
    histos_th2f[b+"GEN_Ks_lxy_pt"]= dir_V0s_GEN_Ks_kinematics.make<TH2F>(b+"GEN_Ks_lxy_pt", b+"GEN_Ks_lxy_pt; lxy(cm); pt(GeV)", 1000, 0, 100, 100, 0, 10);
    histos_th1f[b+"GEN_Ks_vz"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_vz", b+"GEN_Ks_vz; vz(cm)", 2000, -100, 100);
    histos_th1f[b+"GEN_Ks_ndaughters"]= dir_V0s_GEN_Ks_kinematics.make<TH1F>(b+"GEN_Ks_ndaughters", b+"GEN_Ks_ndaughters; #daughters", 10, 0, 10);
@@ -66,7 +65,13 @@ void Analyzer_Steven::beginJob() {
    histos_th1f[b+"V0s_Ks_pt"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_pt", b+"V0s_Ks_pt; pt(GeV)", 100, 0, 10);
    histos_th1f[b+"V0s_Ks_eta"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_eta", b+"V0s_Ks_eta; eta", 100, -4, 4);
    histos_th1f[b+"V0s_Ks_phi"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_phi", b+"V0s_Ks_phi; phi(rad)", 200, -10, 10);
+   histos_th1f[b+"V0s_Ks_vx"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_vx", b+"V0s_Ks_vx; vx of Ks (cm)", 2000, -100, 100);
+   histos_th1f[b+"V0s_Ks_vx_beamspot"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_vx_beamspot", b+"V0s_Ks_vx_beamspot; x distance between beamspot and Ks vertex (cm)", 2000, -100, 100);
+   histos_th1f[b+"V0s_Ks_vy"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_vy", b+"V0s_Ks_vy; vy of Ks (cm)", 2000, -100, 100);
+   histos_th1f[b+"V0s_Ks_vy_beamspot"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_vy_beamspot", b+"V0s_Ks_vx; y distance between beamspot and Ks vertex (cm)", 2000, -100, 100);
    histos_th1f[b+"V0s_Ks_lxy"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_lxy", b+"V0s_Ks_lxy; lxy(cm)", 1000, 0, 100);
+   histos_th1f[b+"V0s_Ks_dxy"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_dxy", b+"V0s_Ks_dxy; dxy(cm)", 1000, 0, 100);
+   histos_th2f[b+"V0s_Ks_lxy_dxy"]= dir_V0s_RECO_Ks_kinematics.make<TH2F>(b+"V0s_Ks_lxy_dxy", b+"V0s_Ks_lxy_dxy; lxy(cm); dxy(cm)", 100, 0, 100, 200, -100, 100);
    histos_th1f[b+"V0s_Ks_vz"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_vz", b+"V0s_Ks_vz; vz(cm)", 2000, -100, 100);
    histos_th1f[b+"V0s_Ks_ndaughters"]= dir_V0s_RECO_Ks_kinematics.make<TH1F>(b+"V0s_Ks_ndaughters", b+"V0s_Ks_ndaughters; #daughters", 10, 0, 10);
 
@@ -128,7 +133,7 @@ void Analyzer_Steven::beginJob() {
    histos_teff[b+"V0_Ks_reconstructed_p"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_p",b+"V0_Ks_reconstructed_p; p(GeV)",300,0,30);
    histos_teff[b+"V0_Ks_reconstructed_vxy"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_vxy",b+"V0_Ks_reconstructed_vxy; vxy(cm)",100,0,100);
    histos_teff[b+"V0_Ks_reconstructed_lxy"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_lxy",b+"V0_Ks_reconstructed_lxy; lxy (beamspot, Ks creation vertex)(cm)",1000,0,100);
-   histos_teff[b+"V0_Ks_reconstructed_decay_lxy"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_decay_lxy",b+"V0_Ks_reconstructed_decay_lxy; lxy (beamspot, Ks decay vertex)(cm)",200,0,100);
+   histos_teff[b+"V0_Ks_reconstructed_decay_lxy"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_decay_lxy",b+"V0_Ks_reconstructed_decay_lxy; lxy (beamspot, Ks decay vertex)(cm)",30,0,100);
    histos_teff[b+"V0_Ks_reconstructed_dxy"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_dxy",b+"V0_Ks_reconstructed_dxy; dxy (beamspot, Ks)(cm)",400,-100,100);
    histos_teff[b+"V0_Ks_reconstructed_vz"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_vz",b+"V0_Ks_reconstructed_vz; vz(cm)",200,-100,100);
    histos_teff[b+"V0_Ks_reconstructed_eta"] = dir_V0s_matched_Ks.make<TEfficiency>(b+"V0_Ks_reconstructed_eta",b+"V0_Ks_reconstructed_eta; eta",100,-4,4);
@@ -143,7 +148,10 @@ void Analyzer_Steven::beginJob() {
    histos_th1f[b+"GEN_L_pt"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_pt", b+"GEN_L_pt; pt(GeV)", 100, 0, 10);
    histos_th1f[b+"GEN_L_eta"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_eta", b+"GEN_L_eta; eta", 100, -4, 4);
    histos_th1f[b+"GEN_L_phi"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_phi", b+"GEN_L_phi; phi(rad)", 200, -10, 10);
-   histos_th1f[b+"GEN_L_lxy"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_lxy", b+"GEN_L_lxy; lxy(cm)", 1000, 0, 100);
+   histos_th1f[b+"GEN_L_lxy"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_lxy", b+"GEN_L_lxy; lxy(cm)(beamspot, L creation vertex)", 1000, 0, 100);
+   histos_th1f[b+"GEN_L_dxy"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_dxy", b+"GEN_L_dxy; dxy(cm)", 1000, 0, 100);
+   histos_th1f[b+"GEN_L_lxy_daughter"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_lxy_daughter", b+"GEN_L_lxy_daughter; lxy(beamspot,L decay vertex)(cm)", 1000, 0, 100);
+   histos_th2f[b+"GEN_L_lxy_daughter_dxy"]= dir_V0s_GEN_L_kinematics.make<TH2F>(b+"GEN_L_lxy_daughter_dxy", b+"GEN_L_lxy_daughter_dxy; lxy(beamspot,L decay vertex)(cm); dxy (cm)", 100, 0, 100, 200, -100, 100);
    histos_th2f[b+"GEN_L_lxy_pt"]= dir_V0s_GEN_L_kinematics.make<TH2F>(b+"GEN_L_lxy_pt", b+"GEN_L_lxy_pt; lxy(cm); pt(GeV)", 1000, 0, 100, 100, 0, 10);
    histos_th1f[b+"GEN_L_vz"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_vz", b+"GEN_L_vz; vz(cm)", 2000, -100, 100);
    histos_th1f[b+"GEN_L_ndaughters"]= dir_V0s_GEN_L_kinematics.make<TH1F>(b+"GEN_L_ndaughters", b+"GEN_L_ndaughters; #daughters", 10, 0, 10);
@@ -156,7 +164,13 @@ void Analyzer_Steven::beginJob() {
    histos_th1f[b+"V0s_L_pt"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_pt", b+"V0s_L_pt; pt(GeV)", 100, 0, 10);
    histos_th1f[b+"V0s_L_eta"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_eta", b+"V0s_L_eta; eta", 100, -4, 4);
    histos_th1f[b+"V0s_L_phi"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_phi", b+"V0s_L_phi; phi(rad)", 200, -10, 10);
+   histos_th1f[b+"V0s_L_vx"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_vx", b+"V0s_L_vx; vx of L (cm)", 2000, -100, 100);
+   histos_th1f[b+"V0s_L_vx_beamspot"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_vx_beamspot", b+"V0s_L_vx_beamspot; x distance between beamspot and L vertex (cm)", 2000, -100, 100);
+   histos_th1f[b+"V0s_L_vy"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_vy", b+"V0s_L_vy; vy of L (cm)", 2000, -100, 100);
+   histos_th1f[b+"V0s_L_vy_beamspot"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_vy_beamspot", b+"V0s_L_vy_beamspot; y distance between beamspot and L vertex (cm)", 2000, -100, 100);
    histos_th1f[b+"V0s_L_lxy"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_lxy", b+"V0s_L_lxy; lxy(cm)", 1000, 0, 100);
+   histos_th1f[b+"V0s_L_dxy"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_dxy", b+"V0s_L_dxy; dxy(cm)", 1000, -100, 100);
+   histos_th2f[b+"V0s_L_lxy_dxy"]= dir_V0s_RECO_L_kinematics.make<TH2F>(b+"V0s_L_lxy_dxy", b+"V0s_L_lxy_dxy; lxy(cm); dxy(cm)", 100, 0, 100, 200, -100, 100);
    histos_th1f[b+"V0s_L_vz"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_vz", b+"V0s_L_vz; vz(cm)", 2000, -100, 100);
    histos_th1f[b+"V0s_L_ndaughters"]= dir_V0s_RECO_L_kinematics.make<TH1F>(b+"V0s_L_ndaughters", b+"V0s_L_ndaughters; #daughters", 10, 0, 10);
 
@@ -219,7 +233,7 @@ void Analyzer_Steven::beginJob() {
    histos_teff[b+"V0_L_reconstructed_p"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_p",b+"V0_L_reconstructed_p; p(GeV)",300,0,30);
    histos_teff[b+"V0_L_reconstructed_vxy"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_vxy",b+"V0_L_reconstructed_vxy; vxy(cm)",100,0,100);
    histos_teff[b+"V0_L_reconstructed_lxy"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_lxy",b+"V0_L_reconstructed_lxy; lxy (beamspot, L creation vertex)(cm)",1000,0,100);
-   histos_teff[b+"V0_L_reconstructed_decay_lxy"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_decay_lxy",b+"V0_L_reconstructed_decay_lxy; lxy (beamspot, L decay vertex)(cm)",200,0,100);
+   histos_teff[b+"V0_L_reconstructed_decay_lxy"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_decay_lxy",b+"V0_L_reconstructed_decay_lxy; lxy (beamspot, L decay vertex)(cm)",30,0,100);
    histos_teff[b+"V0_L_reconstructed_dxy"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_dxy",b+"V0_L_reconstructed_dxy; dxy (beamspot, L)(cm)",400,-100,100);
    histos_teff[b+"V0_L_reconstructed_vz"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_vz",b+"V0_L_reconstructed_vz; vz(cm)",200,-100,100);
    histos_teff[b+"V0_L_reconstructed_eta"] = dir_V0s_matched_L.make<TEfficiency>(b+"V0_L_reconstructed_eta",b+"V0_L_reconstructed_eta; eta",100,-4,4);
@@ -240,8 +254,6 @@ void Analyzer_Steven::beginJob() {
 void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& iSetup) {
 
 
-//  cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------"<< endl; 
- 
   //beamspot
   edm::Handle<reco::BeamSpot> h_bs;
   iEvent.getByToken(m_bsToken, h_bs);
@@ -284,7 +296,6 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
 	beamspot.SetXYZ(bx_x,bx_y,bx_z);
 	
   }
-
  
   //look at all the GEN Ks and Lambda, split up between Ks and Lambda with antiS and no antiS mother, and check the RECO eff of the pi+-, proton. Is there a difference between Ks and Lambda from and not from the antiS???
  if(h_genParticles_SIM_GEANT.isValid() && h_generalTracks.isValid()){
@@ -321,8 +332,8 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
 					cout << "found an antiS V0 daughter track" << endl;
 				
 
-				 	//now check if this specific track survives the track cuts in the V0Fitter:
-					   // fill vectors of TransientTracks and TrackRefs after applying preselection cuts
+				 	      //now check if this specific track survives the track cuts in the V0Fitter (this piece of code is direclty copy pasted from V0Fitter.cc):
+					      //fill vectors of TransientTracks and TrackRefs after applying preselection cuts
 					      const reco::Track * tmpTrack = matchingTrack;
 					      double ipsigXY = std::abs(tmpTrack->dxy(*theBeamSpot)/tmpTrack->dxyError());
 					      double ipsigZ = std::abs(tmpTrack->dz(referencePos)/tmpTrack->dzError());
@@ -367,17 +378,31 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
  }//if(h_genParticles_SIM_GEANT.isValid())
  
 
-  //the kinematics of the GenParticlesPlusGeant Ks
-  if(h_genParticles_SIM_GEANT.isValid())
-  {
+ //the kinematics of the GenParticlesPlusGeant Ks
+ if(h_genParticles_SIM_GEANT.isValid())
+ {
     for(unsigned int k = 0; k < h_genParticles_SIM_GEANT->size(); k++){
         if(fabs(h_genParticles_SIM_GEANT->at(k).pdgId())==310){
 			histos_th1f[b+"GEN_Ks_pt"]->Fill(h_genParticles_SIM_GEANT->at(k).pt());				
 			histos_th1f[b+"GEN_Ks_eta"]->Fill(h_genParticles_SIM_GEANT->at(k).eta());				
 			histos_th1f[b+"GEN_Ks_phi"]->Fill(h_genParticles_SIM_GEANT->at(k).phi());				
+			
 			TVector3 xyz_Ks(h_genParticles_SIM_GEANT->at(k).vx(),h_genParticles_SIM_GEANT->at(k).vy(),h_genParticles_SIM_GEANT->at(k).vz());
 			Double_t lxy_Ks = lxy(beamspot,xyz_Ks);
 			histos_th1f[b+"GEN_Ks_lxy"]->Fill(lxy_Ks);
+			
+			TVector3 p_Ks(h_genParticles_SIM_GEANT->at(k).px(),h_genParticles_SIM_GEANT->at(k).py(),h_genParticles_SIM_GEANT->at(k).pz());
+			Double_t dxy_Ks = dxy_signed_line_point(xyz_Ks,p_Ks,beamspot);	
+			histos_th1f[b+"GEN_Ks_dxy"]->Fill(dxy_Ks);
+
+			if(h_genParticles_SIM_GEANT->at(k).numberOfDaughters() == 2){	
+				TVector3 xyz_Ks_daughter(h_genParticles_SIM_GEANT->at(k).daughter(0)->vx(),h_genParticles_SIM_GEANT->at(k).daughter(0)->vy(),h_genParticles_SIM_GEANT->at(k).daughter(0)->vz());
+				Double_t lxy_Ks_daughter = lxy(beamspot,xyz_Ks_daughter);
+				histos_th1f[b+"GEN_Ks_lxy_daughter"]->Fill(lxy_Ks_daughter);
+				histos_th2f[b+"GEN_Ks_lxy_daughter_dxy"]->Fill(lxy_Ks_daughter,dxy_Ks);
+			}
+			
+
 			histos_th2f[b+"GEN_Ks_lxy_pt"]->Fill(lxy_Ks,h_genParticles_SIM_GEANT->at(k).pt());
 			histos_th1f[b+"GEN_Ks_vz"]->Fill(h_genParticles_SIM_GEANT->at(k).vz());
 			histos_th1f[b+"GEN_Ks_ndaughters"]->Fill(h_genParticles_SIM_GEANT->at(k).numberOfDaughters());
@@ -394,9 +419,20 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
 		histos_th1f[b+"V0s_Ks_pt"]->Fill(h_V0Ks->at(k).pt());				
 		histos_th1f[b+"V0s_Ks_eta"]->Fill(h_V0Ks->at(k).eta());				
 		histos_th1f[b+"V0s_Ks_phi"]->Fill(h_V0Ks->at(k).phi());				
+		histos_th1f[b+"V0s_Ks_vx"]->Fill(h_V0Ks->at(k).vx());				
+		histos_th1f[b+"V0s_Ks_vx_beamspot"]->Fill(h_V0Ks->at(k).vx()-beamspot.X());				
+		histos_th1f[b+"V0s_Ks_vy"]->Fill(h_V0Ks->at(k).vy());				
+		histos_th1f[b+"V0s_Ks_vy_beamspot"]->Fill(h_V0Ks->at(k).vy()-beamspot.Y());				
+		
 		TVector3 xyz_Ks(h_V0Ks->at(k).vx(),h_V0Ks->at(k).vy(),h_V0Ks->at(k).vz());
 		Double_t lxy_Ks = lxy(beamspot,xyz_Ks);
 		histos_th1f[b+"V0s_Ks_lxy"]->Fill(lxy_Ks);
+		
+		TVector3 p_Ks(h_V0Ks->at(k).px(),h_V0Ks->at(k).py(),h_V0Ks->at(k).pz());
+		Double_t dxy_Ks = dxy_signed_line_point(xyz_Ks,p_Ks,beamspot);
+		histos_th1f[b+"V0s_Ks_dxy"]->Fill(dxy_Ks);
+		histos_th2f[b+"V0s_Ks_lxy_dxy"]->Fill(lxy_Ks,dxy_Ks);
+	
 		histos_th1f[b+"V0s_Ks_vz"]->Fill(h_V0Ks->at(k).vz());
 		histos_th1f[b+"V0s_Ks_ndaughters"]->Fill(h_V0Ks->at(k).numberOfDaughters());
 		
@@ -407,13 +443,27 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
   if(h_genParticles_SIM_GEANT.isValid())
   {
     for(unsigned int l = 0; l < h_genParticles_SIM_GEANT->size(); l++){
-        if(fabs(h_genParticles_SIM_GEANT->at(l).pdgId())==3112){
+        if(fabs(h_genParticles_SIM_GEANT->at(l).pdgId())==3122){
 			histos_th1f[b+"GEN_L_pt"]->Fill(h_genParticles_SIM_GEANT->at(l).pt());				
 			histos_th1f[b+"GEN_L_eta"]->Fill(h_genParticles_SIM_GEANT->at(l).eta());				
 			histos_th1f[b+"GEN_L_phi"]->Fill(h_genParticles_SIM_GEANT->at(l).phi());				
+			
 			TVector3 xyz_L(h_genParticles_SIM_GEANT->at(l).vx(),h_genParticles_SIM_GEANT->at(l).vy(),h_genParticles_SIM_GEANT->at(l).vz());
 			Double_t lxy_L = lxy(beamspot,xyz_L);
 			histos_th1f[b+"GEN_L_lxy"]->Fill(lxy_L);
+			
+			TVector3 p_L(h_genParticles_SIM_GEANT->at(l).px(),h_genParticles_SIM_GEANT->at(l).py(),h_genParticles_SIM_GEANT->at(l).pz());
+			Double_t dxy_L = dxy_signed_line_point(xyz_L,p_L,beamspot);	
+			histos_th1f[b+"GEN_L_dxy"]->Fill(dxy_L);
+
+			if(h_genParticles_SIM_GEANT->at(l).numberOfDaughters() == 2){	
+				TVector3 xyz_L_daughter(h_genParticles_SIM_GEANT->at(l).daughter(0)->vx(),h_genParticles_SIM_GEANT->at(l).daughter(0)->vy(),h_genParticles_SIM_GEANT->at(l).daughter(0)->vz());
+				Double_t lxy_L_daughter = lxy(beamspot,xyz_L_daughter);
+				histos_th1f[b+"GEN_L_lxy_daughter"]->Fill(lxy_L_daughter);
+				histos_th2f[b+"GEN_L_lxy_daughter_dxy"]->Fill(lxy_L_daughter,dxy_L);
+					
+		 	}
+	
 			histos_th2f[b+"GEN_L_lxy_pt"]->Fill(lxy_L,h_genParticles_SIM_GEANT->at(l).pt());
 			histos_th1f[b+"GEN_L_vz"]->Fill(h_genParticles_SIM_GEANT->at(l).vz());
 			histos_th1f[b+"GEN_L_ndaughters"]->Fill(h_genParticles_SIM_GEANT->at(l).numberOfDaughters());
@@ -429,10 +479,20 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
 	for(unsigned int l = 0; l<h_V0L->size(); l++){
 		histos_th1f[b+"V0s_L_pt"]->Fill(h_V0L->at(l).pt());				
 		histos_th1f[b+"V0s_L_eta"]->Fill(h_V0L->at(l).eta());				
-		histos_th1f[b+"V0s_L_phi"]->Fill(h_V0L->at(l).phi());				
+		histos_th1f[b+"V0s_L_phi"]->Fill(h_V0L->at(l).phi());
+		histos_th1f[b+"V0s_L_vx"]->Fill(h_V0L->at(l).vx());				
+		histos_th1f[b+"V0s_L_vx_beamspot"]->Fill(h_V0L->at(l).vx()-beamspot.X());				
+		histos_th1f[b+"V0s_L_vy"]->Fill(h_V0L->at(l).vy());				
+		histos_th1f[b+"V0s_L_vy_beamspot"]->Fill(h_V0L->at(l).vy()-beamspot.Y());				
 		TVector3 xyz_L(h_V0L->at(l).vx(),h_V0L->at(l).vy(),h_V0L->at(l).vz());
 		Double_t lxy_L = lxy(beamspot,xyz_L);
 		histos_th1f[b+"V0s_L_lxy"]->Fill(lxy_L);
+		
+		TVector3 p_L(h_V0L->at(l).px(),h_V0L->at(l).py(),h_V0L->at(l).pz());
+		Double_t dxy_L = dxy_signed_line_point(xyz_L,p_L,beamspot);
+		histos_th1f[b+"V0s_L_dxy"]->Fill(dxy_L);
+		histos_th2f[b+"V0s_L_lxy_dxy"]->Fill(lxy_L,dxy_L);
+	
 		histos_th1f[b+"V0s_L_vz"]->Fill(h_V0L->at(l).vz());
 		histos_th1f[b+"V0s_L_ndaughters"]->Fill(h_V0L->at(l).numberOfDaughters());
 		
@@ -687,7 +747,7 @@ void Analyzer_Steven::analyze(edm::Event const& iEvent, edm::EventSetup const& i
    }
   }     
 		
-
+//the collection containing the vertexed S+n candidates, this collection is only available after running the Skimming modules
 if(h_sCands.isValid()) {
         unsigned int n_sCands = h_sCands->size();
         for (unsigned int i = 0; i < n_sCands; ++i) { 

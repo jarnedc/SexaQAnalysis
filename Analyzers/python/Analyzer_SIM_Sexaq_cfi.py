@@ -3,6 +3,7 @@ import FWCore.ParameterSet.Config as cms
 Analyzer_SIM_Sexaq = cms.EDAnalyzer('Analyzer_SIM_Sexaq',
     isData = cms.untracked.bool(True),
     beamspot = cms.InputTag("offlineBeamSpot"),
+    offlinePV = cms.InputTag("offlinePrimaryVertices","","RECO"),
     genCollection_GEN =  cms.InputTag("genParticles","","HLT"),
     genCollection_SIM_GEANT =  cms.InputTag("genParticlesPlusGEANT","","SIM"),
     generalTracksCollection =  cms.InputTag("generalTracks","","RECO"),

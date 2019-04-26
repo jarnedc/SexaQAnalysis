@@ -72,6 +72,7 @@ class Analyzer_SIM_Sexaq : public edm::EDAnalyzer
     edm::Service<TFileService> m_fs;
  
     edm::InputTag m_bsTag;
+    edm::InputTag m_offlinePVTag;
     edm::InputTag m_genParticlesTag_GEN;
     edm::InputTag m_genParticlesTag_SIM_GEANT;
     edm::InputTag m_generalTracksTag;
@@ -80,6 +81,7 @@ class Analyzer_SIM_Sexaq : public edm::EDAnalyzer
     edm::InputTag m_V0LTag;
 
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
+    edm::EDGetTokenT<vector<reco::Vertex>> m_offlinePVToken;
     edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken_GEN;
     edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken_SIM_GEANT;
     edm::EDGetTokenT<vector<reco::Track>> m_generalTracksToken;
