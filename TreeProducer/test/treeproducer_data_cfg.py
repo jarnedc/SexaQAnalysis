@@ -44,7 +44,8 @@ process.source = cms.Source("PoolSource",
     # 'file:///user/lowette/SexaQ/RunIISummer16DR80_MinBias_TuneCUETP8M1_13TeV-pythia8_GEN-SIM-RECO_NoPU_RECO_80X_mcRun2_asymptotic_v14-v1_100000_00150044-D075-E611-AAE8-001E67505A2D.root',
     # 'file:///user/lowette/SexaQ/Run2016H_SingleMuon_AOD_07Aug17-v1_10000_F068EC7F-FB96-E711-96FF-7845C4FC3BFF.root',
     #Simulated Xi events:
-     'file:///user/jdeclerc/Analysis/ParticleGun/CMSSW_8_0_21/src/XiGun_GENSIM_IIDD_10k_events_decay_length_0cm_no_EvtGen_step2.root',
+     #'file:/user/jdeclerc/CMSSW_8_0_30/src/runSTEP2_Sexaq/SUS-RunIISummer16DR80Premix-00068_IIDD_step2_trial2_noDataMixing.root',
+     'file:///user/jdeclerc/Analysis/ParticleGun/CMSSW_8_0_21/src/XiGun_GENSIM_IIDD_10k_events_decay_length_5cm_no_EvtGen_step2.root',
    # 'file:///user/jdeclerc/Analysis/dataSamples/ZeroBiasData/D07C27A2-5690-E711-844F-B083FED429D5.root'
    #'file:///user/jdeclerc/Analysis/ParticleGun/CMSSW_8_0_21/src/f2prime1525_GENSIM_IIDD_0point5to10GeV1k_MODIFIEDBRANCHINGRATIOS_MODPHI_MODBEAMSPOT_0cm_step2.root'
    )
@@ -136,7 +137,7 @@ process.out = cms.OutputModule("PoolOutputModule",
     'keep *_*_*_SEXAQ'
   ),
 #  fileName = cms.untracked.string("events_skimmed_2017_trialC.root"),
-  fileName = cms.untracked.string("events_skimmed_2017_trialD.root"),
+  fileName = cms.untracked.string("events_skimmed_XiGun_GENSIM_IIDD_10k_events_decay_length_5cm_no_EvtGen_step2.root"),
   SelectEvents = cms.untracked.PSet(
     SelectEvents = cms.vstring('p')
   )

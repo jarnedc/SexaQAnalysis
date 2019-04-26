@@ -1069,7 +1069,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
 	}
   }
-/*
+
   if(h_Kshorts.isValid()){
 	for (unsigned int k = 0; k < h_Kshorts->size(); ++k) {
 		histos_th1f[b+"h_Kshort_mass"]->Fill(h_Kshorts->at(k).mass());
@@ -1134,7 +1134,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 
 	}
   }
-*/
+
  if(h_Lambdas.isValid() && h_Kshorts.isValid()){
  for (unsigned int l = 0; l < h_Lambdas->size(); ++l) { //loop over reco V0 Lambdas
 	for (unsigned int k = 0; k < h_Kshorts->size(); ++k) { //loop over reco Kshorts	
@@ -1419,7 +1419,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			//angular correlations of the daughter:
 			//for the S candidates
 		        if(h_sCands->at(i).charge() == 1){	
-				histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]->Fill(delta_phi);
+			/*	histos_th1f[b+"h_Sdaughters_L0_Ks_delta_phi"]->Fill(delta_phi);
 				histos_th1f[b+"h_Sdaughters_L0_Ks_delta_eta"]->Fill(delta_eta);
 				histos_th1f[b+"h_Sdaughters_L0_Ks_openings_angle"]->Fill(opening_angle);
 				histos_th2f[b+"h_Sdaughters_L0_Ks_lxy_S_b_signed_openings_angle"]->Fill(lxy_S_b, opening_angle);
@@ -1477,7 +1477,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				if(lxy_S_b < 1.9 && lxy_S_b_std_dev > 0.01)histos_th2f[b+"h_Sdaughters_L0_Ks_delta_phi_delta_eta_S_vertex_beamspot_dist_smaller_1.9cm_and_error_larger_0.01cm"]->Fill(delta_phi,delta_eta);
 */
 				//look at the kinematics of the S candidates in the reconance
-				if(fabs(delta_phi) < 0.1 && fabs(delta_eta) > 0.5 && fabs(delta_eta) < 3){
+			/*	if(fabs(delta_phi) < 0.1 && fabs(delta_eta) > 0.5 && fabs(delta_eta) < 3){
        		                        histos_th1f[b+"h_s_candidates_mass_in_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).mass());
 					histos_th1f[b+"h_s_candidates_pt_in_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).pt());
 					histos_th1f[b+"h_s_candidates_p_in_delta_phi_delta_eta_corr"]->Fill(h_sCands->at(i).p());
@@ -1568,7 +1568,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 					histos_th1f[b+"h_s_candidates_Dz_others"]->Fill(Dz_S_PV);
 					histos_th1f[b+"h_s_candidates_delta_Dz_Kshort_Lambda_others"]->Fill(delta_Dz_Kshort_Lambda);
 				}
-			  
+			 */ 
 			  //ok, we have the lxy > 1.9 and error lxy < 0.1 cm cut (this last one needs to be tuned a bit depending on the resolution we get from the signal simulation). Problem is that we still have some background from Ks and Lambda that get combined beyond 1.9cm. Delta_phi seemed a valid option to cut on at first, but as a matter of fact is maybe not so interesting.... So let's try to find another variable to cut on.
 			TLorentzVector p4n(0,0,0,0);
 			p4n.SetPxPyPzE(0,0,0,0.939565);
@@ -1593,8 +1593,9 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 				  histos_th2f[b+"h_S_opening_angle_delta_eta_error_lxy_cuts"]->Fill( opening_angle, delta_eta);
 			  }
 			  //if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1 && fabs(delta_phi) > 0.5 && fabs(delta_eta) < 2 && opening_angle > 0.5 && opening_angle < 2 && delta_R < 3 && p4_L_boosted_COM.Pz() > -p4_Ks_boosted_COM.Pz() - 0.3 && p4_L_boosted_COM.Pz() < -p4_Ks_boosted_COM.Pz() + 0.3){
-			  if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1 && fabs(delta_phi) > 0.5 && fabs(delta_eta) < 2 && opening_angle > 0.5 && opening_angle < 2 && delta_R < 3){
+			  //if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1 && fabs(delta_phi) > 0.5 && fabs(delta_eta) < 2 && opening_angle > 0.5 && opening_angle < 2 && delta_R < 3){
 			  //if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1 && opening_angle > 0.5 && opening_angle < 2 && delta_R < 3){ --> too much background
+			  if(lxy_S_b > 1.9 && lxy_S_b_std_dev < 0.1 && fabs(delta_phi) > 0.5){
 
 				//antiS particle                                
                                 histos_th1f[b+"h_S_p_lxy_and_error_lxy_and_delta_phi_cuts"]->Fill(h_sCands->at(i).p());
@@ -1637,7 +1638,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
 			
 			}
 			//for the anti-S candidates
-			if(h_sCands->at(i).charge() == -1){
+/*			if(h_sCands->at(i).charge() == -1){
 
 				histos_th1f[b+"h_anti_Sdaughters_L0_Ks_delta_phi"]->Fill(delta_phi);
 				histos_th1f[b+"h_anti_Sdaughters_L0_Ks_delta_eta"]->Fill(delta_eta);
@@ -1805,7 +1806,7 @@ void Analyzer_V0_angular_correlation::analyze(edm::Event const& iEvent, edm::Eve
                         	}	
 			
 			}
-			//distances to beamspot and PV
+*/			//distances to beamspot and PV
 			histos_th1f[b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);
 			if(lxy_S_b_std_dev<0.1)histos_th1f[b+"h_r_candidates_lxy_signed_after_LambdaKshortVertexFilter_error_lxy_smaller_0p1"]->Fill(lxy_S_b_signed);
 			if(delta_phi > 1 && delta_phi < 2.5 && lxy_S_b_std_dev<0.1)histos_th1f[b+"h_r_candidates_lxy_signed_delta_phi_between_1_and_2p5_error_lxy_smaller_0p1_after_LambdaKshortVertexFilter"]->Fill(lxy_S_b_signed);

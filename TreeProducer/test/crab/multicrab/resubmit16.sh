@@ -14,4 +14,5 @@ do
     crab resubmit -d $D
     #crab status -d  $D --verboseErrors
     #crab kill -d $D
+    echo ----------------------------------------------------------------------------------------------------
 done

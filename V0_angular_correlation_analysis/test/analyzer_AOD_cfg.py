@@ -46,6 +46,7 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 rangeOfStrings=[str(i) for i in range(1,74)] 
 tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/SingleMuon_Run2016G-07Aug17-v1/181021_130627/0000/events_skimmed_2016_trialD_' + x + '.root' for x in rangeOfStrings])
 
+
 #Min Bias MC (no Pile-up)
 #rangeOfStrings=[str(i) for i in (1,2,3,4,5,6,7,8,9,10,11,13,14,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,36,37,38,39,40,41,42,43,44,45,47,48,49,50,51,53,54,55,56,57,58,59,61,64,65,66,67,68,69,70,72,73,74,75,76,77,83,84,85,86,89,90,91,92,93,95,96,97)] #starting from 14, because something is wrong with 13
 #tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/MinBias_TuneCUETP8M1_13TeV-pythia8/MinBias_asData_2_010818/181019_181540/0000/Xi1820_0cm_displacement_' + x + '.root' for x in rangeOfStrings])
@@ -80,12 +81,13 @@ tupleOfFiles=tuple(['file:///pnfs/iihe/cms/store/user/jdeclerc/SingleMuon/Single
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-		*tupleOfFiles #the * is to unpack the tuple of filenames
+	*tupleOfFiles #the * is to unpack the tuple of filenames
 #      "dccp:///pnfs/iihe/cms/store/user/lowette/SingleMuon/SingleMuon_Run2016G/180205_152747/0000/events_skimmed_100.root"
 
-#      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/Xi1820_5cm_displacement.root'
+      #'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_Xi1820_0cm.root'
+#      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_sexaq_crmc.root'
 #      'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_8_0_30/src/SexaQAnalysis/V0_correlation_ZeroBias_single_file.root',
-
+#	'file:///user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/events_skimmed_XiGun_GENSIM_IIDD_10k_events_decay_length_5cm_no_EvtGen_step2.root'	
 		
     )
 )
@@ -102,7 +104,9 @@ process.p = cms.Path(
 
 # Output
 process.TFileService = cms.Service('TFileService',
-    fileName = cms.string('SingleMuon_Dxy_Dz_calc.root')
+#    fileName = cms.string('analyzed_events_skimmed_sexaq_crmc.root')
+    fileName = cms.string('analyzed_VO_analyzer_sexaq_Step2.root')
 #    fileName = cms.string('MinBias_no_pile_up.root')
 #    fileName = cms.string('WJets_with_pile_up.root')
+#    fileName = cms.string('XiGun_0_displacement.root')
 )

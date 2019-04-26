@@ -45,8 +45,8 @@ process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
 
 process.source = cms.Source("PoolSource",
     fileNames = cms.untracked.vstring(
-	'dcap://maite.iihe.ac.be/pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial4_NO_PU/events_skimmed_MC_Sexaq_IIDD.root',
-		
+	'dcap://maite.iihe.ac.be/pnfs/iihe/cms/store/user/jdeclerc/crmc_Sexaq/Skimmed/Sexaquark_13TeV_trial4_neutron_mass_0/events_skimmed_MC_Sexaq_IIDD.root',
+  			
     ),
     duplicateCheckMode = cms.untracked.string ("noDuplicateCheck")
 )
