@@ -72,8 +72,8 @@ class AnalyzerAllSteps : public edm::EDAnalyzer
     void FillHistosGENKsAntiS(const reco::Candidate *, TVector3 beamspot );
     void FillHistosGENAntiLambdaAntiS(const reco::Candidate *,TVector3 beamspot );
     void FillHistoAllGranddaughtersCorrect(const reco::Candidate  * genParticle, edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0Ks, edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0L, int eventId);
-    void FillHistosRECOKs(const reco::VertexCompositeCandidate * RECOKs, TVector3 beamspot);
-    void FillHistosRECOAntiLambda(const reco::VertexCompositeCandidate * RECOAntiLambda, TVector3 beamspot);
+    void FillHistosRECOKs(const reco::VertexCompositeCandidate * RECOKs, TVector3 beamspot,edm::Handle<vector<reco::GenParticle>> h_genParticles);
+    void FillHistosRECOLambda(const reco::VertexCompositeCandidate * RECOAntiLambda, TVector3 beamspot,edm::Handle<vector<reco::GenParticle>> h_genParticles);
     void FillHistosRECOAntiS(const reco::VertexCompositeCandidate * RECOAntiS, TVector3 beamspot,TVector3 beamspotVariance, edm::Handle<vector<reco::GenParticle>>  h_genParticles, int eventId);
     void RecoEvaluationKsNonAntiS(const reco::Candidate  * genParticle, edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0Ks,  TVector3 beamspot);
     void RecoEvaluationKsAntiS(const reco::Candidate  * genParticle, edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0Ks,  TVector3 beamspot);
