@@ -1,7 +1,7 @@
 from WMCore.Configuration import Configuration
 
-day = "25042019"
-version = "v2"
+day = "01042019"
+version = "v1"
 
 config = Configuration()
 config.section_('General')
@@ -15,13 +15,13 @@ config.JobType.psetName = 'analyzerAllSteps_cfg.py'
 
 config.section_('Data') 
 config.Data.unitsPerJob = 1 
-config.Data.totalUnits = 6997 
+config.Data.totalUnits = 2447 
 config.Data.publication = False 
 config.Data.splitting = 'FileBased' 
 config.Data.outLFNDirBase = '/store/user/jdeclerc/crmc_Sexaq/Analyzed_Skimmed' 
 config.Data.userInputFiles = open('/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/AnalyzerAllSteps/test/crab/inputFilesAllSkimmed.txt').readlines() 
 #config.Data.userInputFiles = open('/user/jdeclerc/Analysis/SexaQuark/CMSSW_9_4_7/src/SexaQAnalysis/AnalyzerAllSteps/test/crab/inputFilesAllSkimmedNoKsAntiLambdaPtCutsAndEtaCuts.txt').readlines() 
-config.Data.outputPrimaryDataset = "CRAB_AnalyzerAllStepsOldSkimming"+day+'_'+version
+config.Data.outputPrimaryDataset = "CRAB_AnalyzerAllStepsBackground_cosThetaXYCutDisabled"+day+'_'+version
 
 config.section_('User') 
 config.User.voGroup = 'becms'
