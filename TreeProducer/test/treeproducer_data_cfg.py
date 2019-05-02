@@ -73,8 +73,8 @@ process.genParticlePlusGEANT = cms.EDProducer("GenPlusSimParticleProducer",
 process.load("SexaQAnalysis.Skimming.LambdaKshortFilter_cfi")
 process.lambdaKshortFilter.genCollection = cms.InputTag("genParticlePlusGEANT")
 process.lambdaKshortFilter.isData = True
-process.lambdaKshortFilter.minPtLambda = 1.5 # gives pT(proton,pion)>0.5GeV
-process.lambdaKshortFilter.minPtKshort = 0.9 # gives pT(pion,pion)>0.5GeV
+process.lambdaKshortFilter.minPtLambda = 0. # gives pT(proton,pion)>0.5GeV
+process.lambdaKshortFilter.minPtKshort = 0. # gives pT(pion,pion)>0.5GeV
 process.lambdaKshortFilter.checkLambdaDaughters = True
 process.lambdaKshortFilter.prescaleFalse = 0
 
