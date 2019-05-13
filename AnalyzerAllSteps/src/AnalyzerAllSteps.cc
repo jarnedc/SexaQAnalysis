@@ -12,15 +12,21 @@ AnalyzerAllSteps::AnalyzerAllSteps(edm::ParameterSet const& pset):
   m_sCandsTag(pset.getParameter<edm::InputTag>("sexaqCandidates")),
   m_V0KsTag(pset.getParameter<edm::InputTag>("V0KsCollection")),
   m_V0LTag(pset.getParameter<edm::InputTag>("V0LCollection")),
+  m_trackAssociatorTag(pset.getParameter<edm::InputTag>("trackAssociators")),
+  m_TPTag(pset.getParameter<edm::InputTag>("TrackingParticles")),
 
   m_bsToken    (consumes<reco::BeamSpot>(m_bsTag)),
   m_offlinePVToken    (consumes<vector<reco::Vertex>>(m_offlinePVTag)),
   m_genParticlesToken_GEN(consumes<vector<reco::GenParticle> >(m_genParticlesTag_GEN)),
   m_genParticlesToken_SIM_GEANT(consumes<vector<reco::GenParticle> >(m_genParticlesTag_SIM_GEANT)),
-  m_generalTracksToken(consumes<vector<reco::Track> >(m_generalTracksTag)),
+  //m_generalTracksToken(consumes<vector<reco::Track> >(m_generalTracksTag)),
+  m_generalTracksToken(consumes<View<reco::Track> >(m_generalTracksTag)),
   m_sCandsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_sCandsTag)),
   m_V0KsToken(consumes<vector<reco::VertexCompositeCandidate> >(m_V0KsTag)),
-  m_V0LToken(consumes<vector<reco::VertexCompositeCandidate> >(m_V0LTag))
+  m_V0LToken(consumes<vector<reco::VertexCompositeCandidate> >(m_V0LTag)),
+  m_trackAssociatorToken(consumes<reco::TrackToTrackingParticleAssociator> (m_trackAssociatorTag)),
+  m_TPToken(consumes<vector<TrackingParticle> >(m_TPTag))
+  
 
 
 {
@@ -303,7 +309,8 @@ void AnalyzerAllSteps::analyze(edm::Event const& iEvent, edm::EventSetup const& 
   iEvent.getByToken(m_genParticlesToken_SIM_GEANT, h_genParticles);
 
   //General tracks particles
-  edm::Handle<vector<reco::Track>> h_generalTracks;
+  //edm::Handle<vector<reco::Track>> h_generalTracks;
+  edm::Handle<View<reco::Track>> h_generalTracks;
   iEvent.getByToken(m_generalTracksToken, h_generalTracks);
 
   //lambdaKshortVertexFilter sexaquark candidates
@@ -318,6 +325,14 @@ void AnalyzerAllSteps::analyze(edm::Event const& iEvent, edm::EventSetup const& 
   edm::Handle<vector<reco::VertexCompositeCandidate> > h_V0L;
   iEvent.getByToken(m_V0LToken, h_V0L);
 
+  //trackingparticle collection
+  edm::Handle<TrackingParticleCollection>  h_TP ;
+  iEvent.getByToken(m_TPToken,h_TP);
+  TrackingParticleCollection const & TPColl = *(h_TP.product());
+  //track associator on hits
+  edm::Handle< reco::TrackToTrackingParticleAssociator>  h_trackAssociator;
+  iEvent.getByToken(m_trackAssociatorToken, h_trackAssociator);
+
 
   //beamspot
   TVector3 beamspot(0,0,0);
@@ -329,6 +344,42 @@ void AnalyzerAllSteps::analyze(edm::Event const& iEvent, edm::EventSetup const& 
 
   TVector3 FirstOfflinePV(0.,0.,0.);
   if(h_offlinePV.isValid()){ FirstOfflinePV.SetX(h_offlinePV->at(0).x()); FirstOfflinePV.SetY(h_offlinePV->at(0).y()); FirstOfflinePV.SetZ(h_offlinePV->at(0).z());}
+
+
+  //evaluate tracking performance
+  std::cout << "---->going to try to open the collections needed for Track Hit association: " << std::endl;
+  std::cout << "validity of generalTracks: " << h_generalTracks.isValid() << std::endl;
+  std::cout << "validity of TP: " << h_TP.isValid() << endl;
+  std::cout << "validity of trackAssociator: " << h_trackAssociator.isValid() << endl;
+  if(h_generalTracks.isValid() && h_TP.isValid() && h_trackAssociator.isValid()){
+	for(size_t i=0; i<TPColl.size(); ++i) {
+	  bool matchingTrackFound = false;
+	  const reco::Track *matchedTrackPointer = nullptr;
+	  TrackingParticleRef tpr(h_TP,i);
+	  edm::Handle<reco::TrackToTrackingParticleAssociator> theAssociator;
+	  reco::SimToRecoCollection simRecCollL;
+	  reco::SimToRecoCollection const * simRecCollP=nullptr;
+	  simRecCollL = std::move(h_trackAssociator->associateSimToReco(h_generalTracks,h_TP));
+	  simRecCollP = &simRecCollL;
+          reco::SimToRecoCollection const & simRecColl = *simRecCollP;
+
+	  if(simRecColl.find(tpr) != simRecColl.end()){
+	  auto const & rt = simRecColl[tpr];
+	  if (rt.size()!=0) {
+	    // isRecoMatched = true; // UNUSED
+	    matchedTrackPointer = rt.begin()->first.get();
+	    //cout << "Jarne:  TrackingParticle #" << i << " with pt,eta,phi:  << << tp.pt() << ", "  << tp.eta() << " , " << tp.phi() <<  " ASSOCIATED with quality:" << rt.begin()->second << endl;
+	    matchingTrackFound = true;
+	  }
+	  }else{
+	    //<< "Jarne:   TrackingParticle #" << i
+	    //<< " with pt,eta,phi: "<< tp.pt() << " , " < tp.eta() << " , " << tp.phi() << " , "< " NOT associated to any reco::Track" << endl;
+	    matchingTrackFound = false;
+	  }
+        
+	  std::cout << "Track matching result: " << matchingTrackFound << " ,for a GEN track with a pt of " << tpr->pt() << " and a RECO matched track with a pt of " << matchedTrackPointer->pt() << std::endl;	
+	}
+  }
 
   int nAntiSThisEvent = 0;
   int nAntiSInteractThisEvent = 0;

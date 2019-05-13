@@ -47,8 +47,11 @@ using namespace std;
 #include "DataFormats/Math/interface/deltaPhi.h"
 #include "DataFormats/Candidate/interface/Candidate.h"
 
-
-  
+//matching on hits specific:
+#include "SimDataFormats/Associations/interface/VertexToTrackingVertexAssociator.h"
+#include "SimDataFormats/Associations/interface/TrackToTrackingParticleAssociator.h"
+#include "SimDataFormats/TrackingAnalysis/interface/TrackingParticle.h"
+ 
 class AnalyzerAllSteps : public edm::EDAnalyzer
  {
   public:
@@ -103,16 +106,23 @@ class AnalyzerAllSteps : public edm::EDAnalyzer
     edm::InputTag m_sCandsTag;
     edm::InputTag m_V0KsTag;
     edm::InputTag m_V0LTag;
+    edm::InputTag m_trackAssociatorTag;
+    edm::InputTag m_TPTag;
+
 
     edm::EDGetTokenT<reco::BeamSpot> m_bsToken;
     edm::EDGetTokenT<vector<reco::Vertex>> m_offlinePVToken;
     edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken_GEN;
     edm::EDGetTokenT<vector<reco::GenParticle>> m_genParticlesToken_SIM_GEANT;
-    edm::EDGetTokenT<vector<reco::Track>> m_generalTracksToken;
+    //edm::EDGetTokenT<vector<reco::Track>> m_generalTracksToken;
+    edm::EDGetTokenT<View<reco::Track>> m_generalTracksToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_sCandsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_V0KsToken;
     edm::EDGetTokenT<vector<reco::VertexCompositeCandidate> > m_V0LToken;
-    
+    edm::EDGetTokenT<reco::TrackToTrackingParticleAssociator>  m_trackAssociatorToken;
+    edm::EDGetTokenT<vector<TrackingParticle> > m_TPToken;
+   
+ 
     int verbose=1;
     
     TString a = ""; //"WjetsMC" "ZeroBias" "MET" "MinBiasMC" "SingleMuon"
