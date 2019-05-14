@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-
+from RecoVertex.V0Producer.generalV0Candidates_cff import *
 ### CMSSW command line parameter parser
 from FWCore.ParameterSet.VarParsing import VarParsing
 options = VarParsing('python')
@@ -103,7 +103,8 @@ process.load("SexaQAnalysis.TreeProducer.Treeproducer_AOD_cfi")
 
 process.p = cms.Path(
 #  process.genParticlePlusGEANT *
-  process.tree* 
+  process.generalV0Candidates* 
+  process.tree*
   process.nEvTotal *
   process.InitialProducer * 
   process.lambdaKshortFilter *
@@ -145,3 +146,10 @@ process.out = cms.OutputModule("PoolOutputModule",
 )
 
 process.output_step = cms.EndPath(process.out)
+
+
+iFileName = "configDump_cfg.py"
+file = open(iFileName,'w')
+file.write(str(process.dumpPython()))
+
+file.close()
