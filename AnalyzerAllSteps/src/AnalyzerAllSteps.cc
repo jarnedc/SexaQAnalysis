@@ -347,10 +347,6 @@ void AnalyzerAllSteps::analyze(edm::Event const& iEvent, edm::EventSetup const& 
 
 
   //evaluate tracking performance
-  std::cout << "---->going to try to open the collections needed for Track Hit association: " << std::endl;
-  std::cout << "validity of generalTracks: " << h_generalTracks.isValid() << std::endl;
-  std::cout << "validity of TP: " << h_TP.isValid() << endl;
-  std::cout << "validity of trackAssociator: " << h_trackAssociator.isValid() << endl;
   if(h_generalTracks.isValid() && h_TP.isValid() && h_trackAssociator.isValid()){
 	for(size_t i=0; i<TPColl.size(); ++i) {
 	  bool matchingTrackFound = false;
@@ -364,20 +360,20 @@ void AnalyzerAllSteps::analyze(edm::Event const& iEvent, edm::EventSetup const& 
           reco::SimToRecoCollection const & simRecColl = *simRecCollP;
 
 	  if(simRecColl.find(tpr) != simRecColl.end()){
-	  auto const & rt = simRecColl[tpr];
-	  if (rt.size()!=0) {
-	    // isRecoMatched = true; // UNUSED
-	    matchedTrackPointer = rt.begin()->first.get();
-	    //cout << "Jarne:  TrackingParticle #" << i << " with pt,eta,phi:  << << tp.pt() << ", "  << tp.eta() << " , " << tp.phi() <<  " ASSOCIATED with quality:" << rt.begin()->second << endl;
-	    matchingTrackFound = true;
-	  }
+		  auto const & rt = simRecColl[tpr];
+		  if (rt.size()!=0) {
+		    // isRecoMatched = true; // UNUSED
+		    matchedTrackPointer = rt.begin()->first.get();
+		    //cout << "Jarne:  TrackingParticle #" << i << " with pt,eta,phi:  << << tp.pt() << ", "  << tp.eta() << " , " << tp.phi() <<  " ASSOCIATED with quality:" << rt.begin()->second << endl;
+		    matchingTrackFound = true;
+	  	    std::cout << "Track matching result: " << matchingTrackFound << " ,for a GEN track with a pt of " << tpr->pt() << " and a RECO matched track with a pt of " << matchedTrackPointer->pt() << std::endl;	
+		  }
 	  }else{
-	    //<< "Jarne:   TrackingParticle #" << i
-	    //<< " with pt,eta,phi: "<< tp.pt() << " , " < tp.eta() << " , " << tp.phi() << " , "< " NOT associated to any reco::Track" << endl;
-	    matchingTrackFound = false;
+		    //<< "Jarne:   TrackingParticle #" << i
+		    //<< " with pt,eta,phi: "<< tp.pt() << " , " < tp.eta() << " , " << tp.phi() << " , "< " NOT associated to any reco::Track" << endl;
+		    matchingTrackFound = false;
 	  }
         
-	  std::cout << "Track matching result: " << matchingTrackFound << " ,for a GEN track with a pt of " << tpr->pt() << " and a RECO matched track with a pt of " << matchedTrackPointer->pt() << std::endl;	
 	}
   }
 
